@@ -32,7 +32,7 @@
       const res = await fetch(IIQ_CONTACT.ajax, { method: 'POST', body: data, credentials: 'same-origin' });
       const json = await res.json();
       if (json && json.success) {
-        renderConfirmation(json.data && json.data.message ? json.data.message : 'Thanks — we got your note.');
+        renderConfirmation();
       } else {
         showError(json && json.data && json.data.message ? json.data.message : 'Something went wrong.');
       }
@@ -43,12 +43,18 @@
     }
   });
 
-  function renderConfirmation(message) {
+  function renderConfirmation() {
     const wrap = document.createElement('div');
     wrap.setAttribute('role', 'status');
     wrap.setAttribute('aria-live', 'polite');
     wrap.style.cssText = 'padding:32px 0;font-family:Aeonik,sans-serif;font-size:18px;color:var(--fg-primary);';
-    wrap.innerHTML = `<p style="margin:0 0 12px;font-weight:500;">${escapeHtml(message)}</p><p style="margin:0;color:var(--fg-secondary);font-size:14px;">We'll be in touch from a real human, usually within a business day.</p>`;
+    wrap.innerHTML =
+      '<p style="margin:0 0 12px;font-weight:500;font-size:24px;">Thanks. We’ll be in touch.</p>' +
+      '<p style="margin:0;color:var(--fg-secondary);font-size:14px;line-height:1.55;">' +
+      'Someone on our team will reach out within one business day. In the meantime, feel free to ' +
+      '<a href="/how-it-works/" style="color:var(--ignite-500);text-decoration:underline;">see how it works</a>, or ' +
+      '<a href="/ontology/" style="color:var(--ignite-500);text-decoration:underline;">read about the ontology</a>.' +
+      '</p>';
     form.replaceWith(wrap);
   }
 

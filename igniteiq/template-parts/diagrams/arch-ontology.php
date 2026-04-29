@@ -4,7 +4,7 @@
   <!-- Top header strip -->
   <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 22px;border-bottom:1px solid var(--border-subtle);background:var(--bg-canvas, #fff);font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);">
     <span>YOUR DATA WAREHOUSE</span>
-    <span style="display:inline-flex;align-items:center;gap:8px;color:var(--ignite-500);">&#9679; V4.2</span>
+    <span style="display:inline-flex;align-items:center;gap:8px;color:var(--ignite-500);">● V4.2</span>
   </div>
 
   <div style="position:relative;width:100%;aspect-ratio:1200 / 600;">
@@ -222,7 +222,7 @@
       <div style="padding:8px 12px;border-bottom:1px solid var(--border-default);letter-spacing:0.16em;text-transform:uppercase;font-size:10px;">JOB OBJECT</div>
       <div style="padding:10px 12px;display:grid;grid-template-columns:1fr auto;row-gap:6px;column-gap:12px;">
         <span style="color:var(--fg-tertiary);">Status</span>
-        <span><span style="color:var(--ignite-500);">&#9679; </span>Dispatched</span>
+        <span><span style="color:var(--ignite-500);">● </span>Dispatched</span>
         <span style="color:var(--fg-tertiary);">Value</span>
         <span>$1,840</span>
         <span style="color:var(--fg-tertiary);">Technician</span>
@@ -232,15 +232,15 @@
         <span style="color:var(--fg-tertiary);">Margin</span>
         <span>38.4%</span>
         <span style="color:var(--fg-tertiary);">Callback risk</span>
-        <span>Low <span style="color:var(--ignite-500);">&#8600;</span></span>
+        <span>Low <span style="color:var(--ignite-500);">↘</span></span>
       </div>
     </div>
   </div>
 
   <!-- Bottom legend strip -->
   <div style="padding:20px 32px;border-top:1px solid var(--border-default);background:var(--bg-canvas, #fff);display:flex;justify-content:center;align-items:center;gap:18px;flex-wrap:wrap;">
-    <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);">&#9679; Built on your cloud</span>
-    <span style="font-size:13px;color:var(--fg-secondary);">Every line of business &mdash; every job, customer, technician, truck &mdash; resolved into one model that lives in your warehouse and is queried by the framework.</span>
+    <span style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);">● Built on your cloud</span>
+    <span style="font-size:13px;color:var(--fg-secondary);">Every line of business — every job, customer, technician, truck — resolved into one model that lives in your warehouse and is queried by the framework.</span>
   </div>
 </div>
 

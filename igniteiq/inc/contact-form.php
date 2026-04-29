@@ -9,9 +9,9 @@ if (!defined('ABSPATH')) exit;
 
 const IIQ_CONTACT_TOPICS = [
     'I want a demo',
-    'Evaluating vs another platform',
-    'Partnership',
-    'Press',
+    'I’m evaluating IgniteIQ vs. another platform',
+    'Partnership / integration',
+    'Press / analyst',
     'Other',
 ];
 

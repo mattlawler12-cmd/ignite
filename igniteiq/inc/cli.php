@@ -135,11 +135,15 @@ if (!class_exists('IgniteIQ_CLI')) {
         }
 
         // ───────────────────────────────────────────────────────────
-        // HOME
+        // HOME — App.js render order:
+        // HeroStatement → HeroEditorial → WhyItMattersSection (01)
+        // → ProblemSection (02) → ArchStackDiagram (03 The stack)
+        // → WhatChangesSection (04) → InvestInOutcomesSection (05 The path)
+        // → DeploymentSection (06) → CTASection
         // ───────────────────────────────────────────────────────────
         private static function page_home() {
             return [
-                // HeroStatement (App.jsx — showStatement default true, statement='decision')
+                // HeroStatement (Hero.js, App.js: showStatement=true, statement='decision')
                 [
                     'acf_fc_layout'  => 'hero_statement',
                     'eyebrow'        => '',
@@ -147,17 +151,30 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['line' => 'The Decision Engine for Modern Trades.'],
                     ],
                     'subhead' => 'Your business makes a thousand decisions a day. IgniteIQ makes every one faster, smarter, and right — running on enterprise-grade infrastructure deployed inside your cloud.',
-                    'primary_cta' => ['label' => 'Get started today', 'url' => '/contact/'],
-                    'secondary_cta' => ['label' => 'How it works', 'url' => '/how-it-works/'],
+                    'primary_cta'   => ['label' => '', 'url' => ''],
+                    'secondary_cta' => ['label' => '', 'url' => ''],
                     'stats' => [
                         ['value' => '< 7 days', 'label' => 'Time to deployed'],
-                        ['value' => '25+',       'label' => 'Systems unified'],
-                        ['value' => '100%',      'label' => 'Customer-owned'],
-                        ['value' => 'v4.2',      'label' => 'Framework version'],
+                        ['value' => '25+',      'label' => 'Systems unified'],
+                        ['value' => '100%',     'label' => 'Customer-owned'],
+                        ['value' => 'v4.2',     'label' => 'Framework version'],
                     ],
                 ],
 
-                // WhyItMattersSection (SectionsA.jsx)
+                // HeroEditorial (Hero.js, App.js: hero='editorial', headline='team')
+                [
+                    'acf_fc_layout'  => 'hero_editorial',
+                    'eyebrow'        => '',
+                    'headline_lines' => [
+                        ['line' => 'Built by the operators who ran the trucks.'],
+                    ],
+                    'body' => "<p>The team that helped build ServiceTitan, alongside operators who've run the trucks and the dispatch board, building the intelligence layer the trades have been waiting for. Owned by you. Deployed in days.</p>",
+                    'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
+                    'secondary_cta' => ['label' => 'How it works',      'url' => '/how-it-works/'],
+                    'dark' => false,
+                ],
+
+                // WhyItMattersSection (SectionsA.js, index="01" label="Why this matters")
                 [
                     'acf_fc_layout' => 'section_prose',
                     '_settings' => [
@@ -165,14 +182,15 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Why this matters',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow'   => '',
-                    'headline'  => "The companies that win the next decade won't be the ones with the best software. They’ll be the ones who own their intelligence.",
+                    'eyebrow'  => '',
+                    'headline' => "The companies that win the next decade won't be the ones with the best software. They’ll be the ones who own their intelligence.",
+                    'style'    => 'single',
                     'paragraphs' => [
-                        ['paragraph' => 'Every advantage in this industry gets copied. A new tool. A new tactic. A new vendor. The infrastructure underneath your business doesn’t. Owning your intelligence is the only advantage that compounds - and the operators who build it will outlast the ones who rent it.'],
+                        ['paragraph' => '<p>Every advantage in this industry gets copied. A new tool. A new tactic. A new vendor. The infrastructure underneath your business doesn’t. Owning your intelligence is the only advantage that compounds - and the operators who build it will outlast the ones who rent it.</p>'],
                     ],
                 ],
 
-                // ProblemSection (SectionsA.jsx)
+                // ProblemSection (SectionsA.js, index="02" label="The problem")
                 [
                     'acf_fc_layout' => 'section_split',
                     '_settings' => [
@@ -180,15 +198,15 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'The problem',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow'   => '',
-                    'headline'  => 'Every home services business is a decision-making engine. The data underneath is blurry.',
-                    'body'      => "<p>A \$15M HVAC company makes thousands of micro-decisions a day — which job to dispatch, which lead to call back, which technician to send where. The compounding quality of those decisions separates a 12% margin company from a 22% margin company.</p>\n<p>Today those decisions are made on data spread across 15 to 25 disconnected systems — siloed, duplicated, often contradictory. The AI tools sold into this market promise to fix it and consistently fail. The foundation underneath was never ready.</p>\n<p><strong>AI without clean, structured data is expensive guessing.</strong></p>",
-                    'media_slot' => 'diagram',
+                    'eyebrow'  => '',
+                    'headline' => 'Every home services business is a decision-making engine. The data underneath is blurry.',
+                    'body'     => "<p>A \$15M HVAC company makes thousands of micro-decisions a day — which job to dispatch, which lead to call back, which technician to send where. The compounding quality of those decisions separates a 12% margin company from a 22% margin company.</p>\n<p>Today those decisions are made on data spread across 15 to 25 disconnected systems — siloed, duplicated, often contradictory. The AI tools sold into this market promise to fix it and consistently fail. The foundation underneath was never ready.</p>\n<p><strong>AI without clean, structured data is expensive guessing.</strong></p>",
+                    'media_slot'  => 'diagram',
                     'diagram_key' => 'operator-stack',
-                    'reverse'   => false,
+                    'reverse'  => false,
                 ],
 
-                // ArchStackDiagram on home (App.jsx: index=03 label="The stack")
+                // ArchStackDiagram on home (App.js: index="03", label="The stack")
                 [
                     'acf_fc_layout' => 'diagram',
                     '_settings' => [
@@ -196,18 +214,18 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'The stack',
                         'theme_variant' => 'light',
                     ],
-                    'diagram_key' => 'stack',
-                    'caption'     => '',
-                    'index'         => '03',
-                    'label'         => 'The stack',
-                    'header_label'  => 'How it all fits together',
-                    'headline_left' => 'One model of your business.',
+                    'diagram_key'    => 'stack',
+                    'caption'        => '',
+                    'index'          => '03',
+                    'label'          => 'The stack',
+                    'header_label'   => 'How it all fits together',
+                    'headline_left'  => 'One model of your business.',
                     'headline_right' => 'Every product, every object, every system reads from it.',
-                    'body' => 'IgniteIQ deploys a data warehouse inside your cloud, unifies every operational system into a single ontology, and runs AI products on top of it. The whole stack is built to do one thing - make every decision your business makes sharper than the one before it.',
-                    'closing_line' => 'Every decision — faster, smarter, and right.',
+                    'body'           => 'IgniteIQ deploys a data warehouse inside your cloud, unifies every operational system into a single ontology, and runs AI products on top of it. The whole stack is built to do one thing - make every decision your business makes sharper than the one before it.',
+                    'closing_line'   => 'Every decision — faster, smarter, and right.',
                 ],
 
-                // WhatChangesSection (SectionsA.jsx)
+                // WhatChangesSection (SectionsA.js, index="04" label="What changes for you")
                 [
                     'acf_fc_layout' => 'section_pillars',
                     '_settings' => [
@@ -215,12 +233,11 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'What changes for you',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => '',
+                    'eyebrow'  => '',
                     'headline' => 'Better decisions. What changes for you?',
-                    'intro' => 'When data is structured the right way, decisions change. Answers come faster, quality improves, and trust becomes automatic — turning everyday decisions into a competitive advantage.',
-                    'columns' => '3',
-                    'style' => 'bars',
-                    'scenarios' => [],
+                    'intro'    => 'When data is structured the right way, decisions change. Answers come faster, quality improves, and trust becomes automatic — turning everyday decisions into a competitive advantage.',
+                    'columns'  => '3',
+                    'style'    => 'bars',
                     'items' => [
                         [
                             'index_number' => '01',
@@ -238,9 +255,23 @@ if (!class_exists('IgniteIQ_CLI')) {
                             'body'  => 'A single source of truth. Every answer is traceable to the underlying data, scoped inside your environment, and consistent across every team that asks.',
                         ],
                     ],
+                    'scenarios' => [
+                        [
+                            'tag'  => 'Speed · Dispatch',
+                            'body' => 'A dispatcher reroutes a tech because the system saw the higher-margin job before they did. Margin per truck-hour goes up by Friday.',
+                        ],
+                        [
+                            'tag'  => 'Quality · Pricing',
+                            'body' => 'A regional price change ships in a day, and the downstream effect on margin is visible by the next service call — not the next quarter.',
+                        ],
+                        [
+                            'tag'  => 'Trust · Marketing',
+                            'body' => 'Last week’s spend gets attributed to the channel that actually drove revenue, not the one that claimed it. Next week’s budget shifts in an hour.',
+                        ],
+                    ],
                 ],
 
-                // InvestInOutcomesSection (InvestInOutcomes.jsx)
+                // InvestInOutcomesSection (InvestInOutcomes.js, index="05" label="The path")
                 [
                     'acf_fc_layout' => 'section_pillars',
                     '_settings' => [
@@ -248,11 +279,11 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'The path',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => '',
+                    'eyebrow'  => '',
                     'headline' => 'Invest in outcomes. Not experiments.',
-                    'intro' => 'Growth isn’t built on guesswork - it’s built on clarity, control, and systems that compound. A proven path from fragmented data to operational intelligence in weeks, with value that strengthens at every step.',
-                    'columns' => '3',
-                    'style' => 'bars',
+                    'intro'    => 'Growth isn’t built on guesswork - it’s built on clarity, control, and systems that compound. A proven path from fragmented data to operational intelligence in weeks, with value that strengthens at every step.',
+                    'columns'  => '3',
+                    'style'    => 'bars',
                     'items' => [
                         [
                             'index_number' => '01',
@@ -270,9 +301,10 @@ if (!class_exists('IgniteIQ_CLI')) {
                             'body'  => 'We give you the insight and predictability to make high-stakes decisions without hesitation — from budget allocation to hiring to expansion. When the data is right and the system is clear, you move with conviction instead of guesswork.',
                         ],
                     ],
+                    'scenarios' => [],
                 ],
 
-                // DeploymentSection (SectionsA.jsx)
+                // DeploymentSection (SectionsA.js, index="06" label="Deployment")
                 [
                     'acf_fc_layout' => 'section_stack',
                     '_settings' => [
@@ -280,19 +312,19 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Deployment',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => 'Time to live',
+                    'eyebrow'  => 'Time to live',
                     'headline' => 'What used to take a year. Shipped in a week.',
-                    'body' => 'IgniteIQ deploys real infrastructure - a data warehouse in your cloud, your data unified into the ontology, AI products running on top - in seven days. Not a pilot. Not a slide deck. Production infrastructure from day one.',
-                    'layout' => 'timeline-horizontal',
+                    'body'     => 'IgniteIQ deploys real infrastructure - a data warehouse in your cloud, your data unified into the ontology, AI products running on top - in seven days. Not a pilot. Not a slide deck. Production infrastructure from day one.',
+                    'layout'   => 'timeline-horizontal',
                     'items' => [
-                        ['step' => 'Day 0', 'title' => 'Contract signed',     'body' => 'Workspace provisioned in your cloud.'],
-                        ['step' => 'Day 2', 'title' => 'Systems connected',   'body' => '15–25 source systems wired into the warehouse.'],
-                        ['step' => 'Day 5', 'title' => 'Ontology activated',  'body' => 'Jobs, leads, technicians, invoices resolved into one model.'],
-                        ['step' => 'Day 7', 'title' => 'Live decisions',      'body' => 'Analytics + agents shipping decisions to operators.'],
+                        ['step' => 'Day 0', 'title' => 'Contract signed',    'body' => 'Workspace provisioned in your cloud.'],
+                        ['step' => 'Day 2', 'title' => 'Systems connected',  'body' => '15–25 source systems wired into the warehouse.'],
+                        ['step' => 'Day 5', 'title' => 'Ontology activated', 'body' => 'Jobs, leads, technicians, invoices resolved into one model.'],
+                        ['step' => 'Day 7', 'title' => 'Live decisions',     'body' => 'Analytics + agents shipping decisions to operators.'],
                     ],
                 ],
 
-                // CTASection (SectionsB.jsx)
+                // CTASection (SectionsB.js)
                 [
                     'acf_fc_layout' => 'cta_banner',
                     '_settings' => [
@@ -300,21 +332,24 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Get started today',
                         'theme_variant' => 'dark',
                     ],
-                    'headline' => 'Own Your Intelligence.',
-                    'body'     => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
+                    'headline'      => 'Own Your Intelligence.',
+                    'body'          => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
                     'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
                     'secondary_cta' => ['label' => 'How it works',      'url' => '/how-it-works/'],
-                    'variant' => 'dark',
+                    'variant'       => 'dark',
                 ],
             ];
         }
 
         // ───────────────────────────────────────────────────────────
-        // HOW IT WORKS
+        // HOW IT WORKS — Architecture.js render order:
+        // ArchHero → ArchTwoHalves (01) → PlatformStackDiagram (02)
+        // → ArchHeadless (03) → ArchHowItDeploys (04) → ArchSecurity (05)
+        // → ArchCTA
         // ───────────────────────────────────────────────────────────
         private static function page_how_it_works() {
             return [
-                // ArchHero (Architecture.jsx)
+                // ArchHero (Architecture.js)
                 [
                     'acf_fc_layout' => 'hero_editorial',
                     'eyebrow'        => 'Architecture · v4.2',
@@ -322,13 +357,14 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['line' => 'Built on your cloud.'],
                         ['line' => 'Run on your data.'],
                     ],
-                    'body'           => '<p>The IgniteIQ architecture is built around one premise: your warehouse, your data, and the intelligence layer all run inside your cloud account. Modular, replaceable, and continuously compounding it\'s intelligence.</p>',
-                    'primary_cta'    => ['label' => 'Get started today', 'url' => '/contact/'],
-                    'secondary_cta'  => ['label' => 'See the ontology', 'url' => '/ontology/'],
-                    'dark'           => true,
+                    'body'          => "<p>The IgniteIQ architecture is built around one premise: your warehouse, your data, and the intelligence layer all run inside your cloud account. Modular, replaceable, and continuously compounding it's intelligence.</p>",
+                    'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
+                    'secondary_cta' => ['label' => 'See the ontology',  'url' => '/ontology/'],
+                    'dark'          => true,
                 ],
 
-                // ArchTwoHalves
+                // ArchTwoHalves (Architecture.js, index="01" label="How it runs")
+                // Renders headline + body + ArchOntologyScene diagram below.
                 [
                     'acf_fc_layout' => 'section_split',
                     '_settings' => [
@@ -336,34 +372,40 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'How it runs',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => '',
+                    'eyebrow'  => '',
                     'headline' => 'Your warehouse holds your data. Our intelligence framework runs alongside it.',
-                    'body' => '<p>The IgniteIQ architecture deploys directly into your owned enterprise-grade cloud account — provisioned for you. Every line of business — every job, customer, technician, truck — gets resolved into a single model that lives in your warehouse and is queried by the framework. Your data never leaves your IAM.</p>',
-                    'media_slot' => 'diagram',
+                    'body'     => '<p>The IgniteIQ architecture deploys directly into your owned enterprise-grade cloud account — provisioned for you. Every line of business — every job, customer, technician, truck — gets resolved into a single model that lives in your warehouse and is queried by the framework. Your data never leaves your IAM.</p>',
+                    'media_slot'  => 'diagram',
                     'diagram_key' => 'arch-ontology',
-                    'reverse' => false,
+                    'reverse'     => false,
                 ],
 
-                // ArchLayerStack / PlatformStackDiagram (diagram=platform-stack)
+                // PlatformStackDiagram (PlatformStack.js, index="02" label="The stack")
+                // FIDELITY EXCEPTION: the platform-stack diagram component renders
+                // its own headline ("The most intelligent infrastructure in home
+                // services") and DATA/LOGIC/ACTIONS pillars internally. The
+                // `diagram` layout's headline_left/right and body fields are
+                // unused for platform-stack rendering; we still populate header
+                // metadata so the section index/label render correctly.
                 [
                     'acf_fc_layout' => 'diagram',
                     '_settings' => [
                         'section_index' => '02',
-                        'section_label' => 'The platform stack',
-                        'theme_variant' => 'sunken',
+                        'section_label' => 'The stack',
+                        'theme_variant' => 'light',
                     ],
-                    'diagram_key' => 'platform-stack',
-                    'caption'     => '',
-                    'index'         => '02',
-                    'label'         => 'The platform stack',
-                    'header_label'  => 'The IgniteIQ platform',
-                    'headline_left' => 'Five layers.',
-                    'headline_right' => 'One ontology underneath every one.',
-                    'body' => 'The platform is composed of five layers — interface, agents, tools, ontology, data — running inside your cloud, talking to your warehouse under a scoped role.',
-                    'closing_line' => 'Versioned. Auditable. Shipped as code.',
+                    'diagram_key'    => 'platform-stack',
+                    'caption'        => '',
+                    'index'          => '02',
+                    'label'          => 'The stack',
+                    'header_label'   => 'The stack',
+                    'headline_left'  => 'The most intelligent',
+                    'headline_right' => 'infrastructure in home services',
+                    'body'           => '',
+                    'closing_line'   => '',
                 ],
 
-                // ArchHeadless — headless explainer + 5-row contrast table
+                // ArchHeadless (Architecture.js, index="03" label="Headless by design")
                 [
                     'acf_fc_layout' => 'section_contrast',
                     '_settings' => [
@@ -371,11 +413,11 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Headless by design',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => 'Headless by design',
-                    'headline' => 'The product is the infrastructure.',
+                    'eyebrow'         => 'Headless by design',
+                    'headline'        => 'The product is the infrastructure.',
                     'headline_accent' => 'The interface is your choice.',
-                    'body_left' => '<p>IgniteIQ is headless by design. In software, <strong>"headless"</strong> means a product where the underlying platform - the data, the logic, the actions - is decoupled from any single user interface. The platform runs underneath; the interface is interchangeable. It can be a dashboard, a spreadsheet, a Slack message, a custom app, or no human surface at all.</p>',
-                    'body_right' => '<p>The IgniteIQ infrastructure runs inside your cloud. The output can live in our studio if you want a place to start. It can flow into the tools your team already uses. It can power custom applications your developers build on top of it. And it can be acted on directly by AI agents and automations without any human surface at all. The platform doesn\'t depend on the head - and that\'s the point. The world\'s largest enterprise software companies are spending years rebuilding their products this way. We started here.</p>',
+                    'body_left'       => '<p>IgniteIQ is headless by design. In software, <strong>"headless"</strong> means a product where the underlying platform - the data, the logic, the actions - is decoupled from any single user interface. The platform runs underneath; the interface is interchangeable. It can be a dashboard, a spreadsheet, a Slack message, a custom app, or no human surface at all.</p>',
+                    'body_right'      => "<p>The IgniteIQ infrastructure runs inside your cloud. The output can live in our studio if you want a place to start. It can flow into the tools your team already uses. It can power custom applications your developers build on top of it. And it can be acted on directly by AI agents and automations without any human surface at all. The platform doesn't depend on the head - and that's the point. The world's largest enterprise software companies are spending years rebuilding their products this way. We started here.</p>",
                     'table_header_old' => 'The old model',
                     'table_header_new' => 'The headless model',
                     'rows' => [
@@ -387,19 +429,40 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                 ],
 
-                // ArchSecurity
+                // ArchHowItDeploys (Architecture.js, index="04" label="How it deploys")
+                [
+                    'acf_fc_layout' => 'section_stack',
+                    '_settings' => [
+                        'section_index' => '04',
+                        'section_label' => 'How it deploys',
+                        'theme_variant' => 'light',
+                    ],
+                    'eyebrow'  => 'From contract to live',
+                    'headline' => 'Deployed Fast. Decades of Value.',
+                    'body'     => 'Versioned. Auditable. Every deployment ships through the same defined process — and every framework update flows back to every operator on the platform.',
+                    'layout'   => 'grid-3col',
+                    'items' => [
+                        ['step' => 'Day 0',   'title' => 'Workspace provisioned',    'body' => 'Snowflake/BigQuery account stood up under your credentials. Ontology framework v4.2 deployed as code.'],
+                        ['step' => 'Day 1–2', 'title' => 'Source systems connected', 'body' => 'CRM, dispatch, accounting, marketing. 15–25 systems. Pipelines land raw data into your warehouse.'],
+                        ['step' => 'Day 3–5', 'title' => 'Ontology activated',       'body' => 'Resolution layer maps source records into ontology entities. Identity stitching runs across systems.'],
+                        ['step' => 'Day 6–7', 'title' => 'Live decisions',           'body' => 'Armory Intel queries the resolved ontology. Signal monitors it. Agents act on it. All inside your cloud.'],
+                        ['step' => 'Ongoing', 'title' => 'Versioned, compounding',   'body' => 'Framework updates ship via git. New entities, edge cases, and patterns flow back from every deployment.'],
+                    ],
+                ],
+
+                // ArchSecurity (Architecture.js, index="05" label="Security model")
                 [
                     'acf_fc_layout' => 'section_pillars',
                     '_settings' => [
-                        'section_index' => '04',
+                        'section_index' => '05',
                         'section_label' => 'Security model',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow' => 'Security',
+                    'eyebrow'  => 'Security',
                     'headline' => 'Your data, safe. Secured. Governed.',
-                    'intro' => '',
-                    'columns' => '3',
-                    'style' => 'grid-divided',
+                    'intro'    => '',
+                    'columns'  => '3',
+                    'style'    => 'grid-divided',
                     'items' => [
                         ['index_number' => '01', 'title' => 'Customer cloud isolation', 'body' => 'IgniteIQ never holds your data outside your account. There is no shared multi-tenant warehouse.'],
                         ['index_number' => '02', 'title' => 'Scoped credentials',       'body' => 'The framework reads under a least-privilege role. Read scope is documented and audited per-deployment.'],
@@ -408,96 +471,97 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['index_number' => '05', 'title' => 'SOC 2 in-flight',          'body' => 'Type II audit underway. Standard enterprise controls, security questionnaires, and DPA available.'],
                         ['index_number' => '06', 'title' => 'No PII training',          'body' => 'No customer data is used to train models outside the customer environment. Period.'],
                     ],
+                    'scenarios' => [],
                 ],
 
-                // ArchDeploymentLifecycle / ArchHowItDeploys
-                [
-                    'acf_fc_layout' => 'section_stack',
-                    '_settings' => [
-                        'section_index' => '05',
-                        'section_label' => 'Deployment lifecycle',
-                        'theme_variant' => 'light',
-                    ],
-                    'eyebrow' => 'From contract to live',
-                    'headline' => 'Deployed Fast. Decades of Value.',
-                    'body' => 'Versioned. Auditable. Every deployment ships through the same defined process — and every framework update flows back to every operator on the platform.',
-                    'layout' => 'grid-3col',
-                    'items' => [
-                        ['step' => 'Day 0',     'title' => 'Workspace provisioned',     'body' => 'Snowflake/BigQuery account stood up under your credentials. Ontology framework v4.2 deployed as code.'],
-                        ['step' => 'Day 1–2',   'title' => 'Source systems connected',  'body' => 'CRM, dispatch, accounting, marketing. 15–25 systems. Pipelines land raw data into your warehouse.'],
-                        ['step' => 'Day 3–5',   'title' => 'Ontology activated',        'body' => 'Resolution layer maps source records into ontology entities. Identity stitching runs across systems.'],
-                        ['step' => 'Day 6–7',   'title' => 'Live decisions',            'body' => 'Armory Intel queries the resolved ontology. Signal monitors it. Agents act on it. All inside your cloud.'],
-                        ['step' => 'Ongoing',   'title' => 'Versioned, compounding',    'body' => 'Framework updates ship via git. New entities, edge cases, and patterns flow back from every deployment.'],
-                    ],
-                ],
-
-                // ArchCTA
+                // ArchCTA (Architecture.js)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => ['section_index' => '', 'section_label' => 'Ready to deploy', 'theme_variant' => 'dark'],
-                    'headline' => 'Get started today.',
-                    'body'     => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
+                    '_settings' => [
+                        'section_index' => '',
+                        'section_label' => 'Ready to deploy',
+                        'theme_variant' => 'dark',
+                    ],
+                    'headline'      => 'Get started today.',
+                    'body'          => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
                     'primary_cta'   => ['label' => 'Start the conversation', 'url' => '/contact/'],
                     'secondary_cta' => ['label' => 'Back to overview',       'url' => '/'],
-                    'variant' => 'dark',
+                    'variant'       => 'dark',
                 ],
             ];
         }
 
         // ───────────────────────────────────────────────────────────
-        // ONTOLOGY
+        // ONTOLOGY — Ontology.js render order:
+        // OntologyHero → WhatIsAnOntology (01) → WhyHomeServices (02)
+        // → ArchStackDiagram (03 The flow) → CoreEntities (04)
+        // → HowItDeploys (05) → CTASection
         // ───────────────────────────────────────────────────────────
         private static function page_ontology() {
             return [
-                // OntologyHero
+                // OntologyHero (Ontology.js)
                 [
                     'acf_fc_layout' => 'hero_editorial',
-                    'eyebrow' => '● The ontology · v4.2',
+                    'eyebrow'        => '● The ontology · v4.2',
                     'headline_lines' => [
                         ['line' => 'Ontology is the nouns and verbs of how your business actually runs.'],
                     ],
                     'body' => "<p>Every home services business runs on a web of interconnected relationships - jobs, customers, technicians, calls, invoices - moving and changing every hour. An ontology is the layer that encodes those relationships into a shared model: the ground truth of how your business is actually operating. It's the difference between a company that runs on assumptions scattered across fifteen systems, and a company that runs on a single, shared definition of itself.</p>",
-                    'primary_cta'   => ['label' => 'See how it deploys',    'url' => '/how-it-works/'],
-                    'secondary_cta' => ['label' => 'Get started today',     'url' => '/contact/'],
+                    'primary_cta'   => ['label' => 'See how it deploys', 'url' => '/how-it-works/'],
+                    'secondary_cta' => ['label' => 'Get started today',  'url' => '/contact/'],
                     'dark' => false,
                 ],
 
-                // WhatIsAnOntology
+                // WhatIsAnOntology (Ontology.js, index="01" label="The concept")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => ['section_index' => '01', 'section_label' => 'The concept', 'theme_variant' => 'sunken'],
-                    'eyebrow' => '',
+                    '_settings' => [
+                        'section_index' => '01',
+                        'section_label' => 'The concept',
+                        'theme_variant' => 'sunken',
+                    ],
+                    'eyebrow'  => '',
                     'headline' => 'Great decisions require three things. The ontology encodes all of them.',
-                    'intro' => '',
-                    'columns' => '3',
-                    'style' => 'bordered',
+                    'intro'    => '',
+                    'columns'  => '3',
+                    'style'    => 'bordered',
                     'items' => [
                         ['index_number' => '01', 'title' => 'Data',    'body' => 'The current state of your business. Every job, customer, technician, invoice, and call from every system, resolved into a single set of objects with shared definitions.'],
                         ['index_number' => '02', 'title' => 'Logic',   'body' => 'How your business thinks about those objects. The rules — how margin is calculated, how a callback is defined, how a lead becomes a job — modeled so every tool and every agent applies them the same way.'],
                         ['index_number' => '03', 'title' => 'Actions', 'body' => 'What your business does about it. Dispatching, pricing, reordering, escalating. The ontology models the decisions a business takes so AI and humans can take those decisions inside the same system.'],
                     ],
+                    'scenarios' => [],
                 ],
 
-                // WhyHomeServices
+                // WhyHomeServices (Ontology.js, index="02" label="Why home services")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => ['section_index' => '02', 'section_label' => 'Why home services', 'theme_variant' => 'dark'],
-                    'eyebrow' => '',
-                    'headline' => "Generic ontologies don't know what a callback costs you.",
-                    'intro' => 'The AI tools sold into home services promise to make your business smarter. They can\'t. The data underneath them is fragmented, contradictory, and shaped for someone else\'s industry. We didn\'t start from a blank slate - the IgniteIQ ontology was built next to operators, inside the trucks, on the dispatch board, in the books, and shaped specifically for the economics of HVAC, electrical, plumbing, and the rest of the trades.',
-                    'columns' => '3',
-                    'style' => 'bordered',
-                    'items' => [
-                        ['index_number' => '01', 'title' => 'The economics are unit-based.',          'body' => 'Margin per job. Cost per lead. Revenue per technician hour. The ontology is wired to the unit economics that actually matter — not adapted from retail or SaaS.'],
-                        ['index_number' => '02', 'title' => 'The data is messy and operational.',      'body' => 'Field-typed by techs. Reconciled across CRM, dispatch, accounting. The ontology resolves naming, ID, and timing conflicts that would crash a generic model.'],
-                        ['index_number' => '03', 'title' => 'The decisions repeat across operators.',  'body' => 'The 12 core entities — Job, Lead, Customer, Technician, Invoice, Equipment, Channel, Call, Dispatch, Payment, Inventory, Membership — are the operational DNA of every home services business.'],
+                    '_settings' => [
+                        'section_index' => '02',
+                        'section_label' => 'Why home services',
+                        'theme_variant' => 'dark',
                     ],
+                    'eyebrow'  => '',
+                    'headline' => "Generic ontologies don't know what a callback costs you.",
+                    'intro'    => "The AI tools sold into home services promise to make your business smarter. They can't. The data underneath them is fragmented, contradictory, and shaped for someone else's industry. We didn't start from a blank slate - the IgniteIQ ontology was built next to operators, inside the trucks, on the dispatch board, in the books, and shaped specifically for the economics of HVAC, electrical, plumbing, and the rest of the trades.",
+                    'columns'  => '3',
+                    'style'    => 'bordered',
+                    'items' => [
+                        ['index_number' => '01', 'title' => 'The economics are unit-based.',         'body' => 'Margin per job. Cost per lead. Revenue per technician hour. The ontology is wired to the unit economics that actually matter — not adapted from retail or SaaS.'],
+                        ['index_number' => '02', 'title' => 'The data is messy and operational.',    'body' => 'Field-typed by techs. Reconciled across CRM, dispatch, accounting. The ontology resolves naming, ID, and timing conflicts that would crash a generic model.'],
+                        ['index_number' => '03', 'title' => 'The decisions repeat across operators.', 'body' => 'The 12 core entities — Job, Lead, Customer, Technician, Invoice, Equipment, Channel, Call, Dispatch, Payment, Inventory, Membership — are the operational DNA of every home services business.'],
+                    ],
+                    'scenarios' => [],
                 ],
 
-                // ArchStackDiagram inside Ontology page
+                // ArchStackDiagram on ontology page (Ontology.js: index="03", headerLabel="The flow")
                 [
                     'acf_fc_layout' => 'diagram',
-                    '_settings' => ['section_index' => '03', 'section_label' => 'The flow', 'theme_variant' => 'light'],
+                    '_settings' => [
+                        'section_index' => '03',
+                        'section_label' => 'The flow',
+                        'theme_variant' => 'light',
+                    ],
                     'diagram_key'    => 'stack',
                     'caption'        => '',
                     'index'          => '03',
@@ -509,69 +573,98 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'closing_line'   => 'Your business makes a thousand decisions a day. We make every one faster, smarter, and right.',
                 ],
 
-                // CoreEntities
+                // CoreEntities — KPI strip (Ontology.js, index="04" label="The 12 core entities")
                 [
                     'acf_fc_layout' => 'section_stats',
-                    '_settings' => ['section_index' => '04', 'section_label' => 'The 12 core entities', 'theme_variant' => 'light'],
+                    '_settings' => [
+                        'section_index' => '04',
+                        'section_label' => 'The 12 core entities',
+                        'theme_variant' => 'light',
+                    ],
                     'headline' => "A home services business isn't simple. The ontology makes it usable.",
-                    'style' => 'bare',
+                    'style'    => 'bare',
                     'stats' => [
-                        ['value' => '200+',       'label' => 'Object types',    'footnote' => ''],
-                        ['value' => '5,000+',     'label' => 'Relationships',   'footnote' => ''],
-                        ['value' => '25+',        'label' => 'Source systems',  'footnote' => ''],
-                        ['value' => 'Continuous', 'label' => 'Resolution',      'footnote' => ''],
+                        ['value' => '200+',       'label' => 'Object types',   'footnote' => "A single mid-size operator runs on hundreds of distinct object types, thousands of relationships, and dozens of source systems that don't agree on what any of them mean. The IgniteIQ ontology resolves all of it — into a model that's queryable, governable, and built to compound as your business grows."],
+                        ['value' => '5,000+',     'label' => 'Relationships',  'footnote' => ''],
+                        ['value' => '25+',        'label' => 'Source systems', 'footnote' => ''],
+                        ['value' => 'Continuous', 'label' => 'Resolution',     'footnote' => ''],
                     ],
                 ],
 
-                // CoreEntities supporting blocks
+                // CoreEntities — supporting block trio (Ontology.js, same index 04)
+                // FIDELITY EXCEPTION: the export renders the KPI strip and the
+                // 3-column "One customer, not four / One job / One technician"
+                // grid inside the same component. Splitting into two flexible-
+                // content rows preserves the copy verbatim using the closest
+                // schema layouts (section_stats + section_pillars).
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => ['section_index' => '04', 'section_label' => 'Resolved', 'theme_variant' => 'light'],
-                    'eyebrow' => '',
+                    '_settings' => [
+                        'section_index' => '04',
+                        'section_label' => 'The 12 core entities',
+                        'theme_variant' => 'light',
+                    ],
+                    'eyebrow'  => '',
                     'headline' => '',
-                    'intro' => 'A single mid-size operator runs on hundreds of distinct object types, thousands of relationships, and dozens of source systems that don\'t agree on what any of them mean. The IgniteIQ ontology resolves all of it — into a model that\'s queryable, governable, and built to compound as your business grows.',
-                    'columns' => '3',
-                    'style' => 'bordered',
+                    'intro'    => '',
+                    'columns'  => '3',
+                    'style'    => 'bordered',
                     'items' => [
-                        ['index_number' => '01', 'title' => 'One customer, not four.',         'body' => 'The same homeowner might exist as four different records across CRM, dispatch, billing, and call tracking. The ontology resolves them into a single customer object — with one history, one value, one definition.'],
-                        ['index_number' => '02', 'title' => 'One job, across every system.',   'body' => 'A "job" in ServiceTitan is not the same as a "job" in your accounting system or your marketing platform. The ontology reconciles every source into one job object, so every tool downstream — analytics, dispatch, AI agents — speaks the same language.'],
+                        ['index_number' => '01', 'title' => 'One customer, not four.',           'body' => 'The same homeowner might exist as four different records across CRM, dispatch, billing, and call tracking. The ontology resolves them into a single customer object — with one history, one value, one definition.'],
+                        ['index_number' => '02', 'title' => 'One job, across every system.',     'body' => 'A "job" in ServiceTitan is not the same as a "job" in your accounting system or your marketing platform. The ontology reconciles every source into one job object, so every tool downstream — analytics, dispatch, AI agents — speaks the same language.'],
                         ['index_number' => '03', 'title' => 'One technician, with full context.', 'body' => 'Dispatch knows their schedule. Payroll knows their hours. Certifications live somewhere else entirely. The ontology rolls them into one technician object that every part of the business can query.'],
                     ],
-                ],
-
-                // HowItDeploys (ontology page)
-                [
-                    'acf_fc_layout' => 'section_stats',
-                    '_settings' => ['section_index' => '05', 'section_label' => 'How it deploys', 'theme_variant' => 'sunken'],
-                    'headline' => 'The ontology ships into your warehouse as code.',
-                    'style' => 'bare',
-                    'stats' => [
-                        ['value' => 'Versioned code',   'label' => 'Ships as',     'footnote' => ''],
-                        ['value' => 'Your warehouse',   'label' => 'Lives in',     'footnote' => ''],
-                        ['value' => '< 7 days',         'label' => 'Time to live', 'footnote' => ''],
-                        ['value' => 'Continuous',       'label' => 'Updates',      'footnote' => 'The IgniteIQ ontology deploys directly into your cloud account — Snowflake, BigQuery, or Databricks — and resolves your operational data in seven days.'],
+                    'scenarios' => [
+                        [
+                            'tag'  => 'The point',
+                            'body' => 'What looks like fifteen disconnected systems on the surface is one business underneath. The ontology is the layer where it finally acts like one.',
+                        ],
                     ],
                 ],
 
-                // CTA
+                // HowItDeploys (Ontology.js, index="05" label="How it deploys")
+                [
+                    'acf_fc_layout' => 'section_stats',
+                    '_settings' => [
+                        'section_index' => '05',
+                        'section_label' => 'How it deploys',
+                        'theme_variant' => 'sunken',
+                    ],
+                    'headline' => 'The ontology ships into your warehouse as code.',
+                    'style'    => 'bare',
+                    'stats' => [
+                        ['value' => 'Versioned code', 'label' => 'Ships as',     'footnote' => "The IgniteIQ ontology deploys directly into your cloud account — Snowflake, BigQuery, or Databricks — and resolves your operational data in seven days. Every framework update flows back to every operator on the platform, so the ontology gets sharper every month without a re-implementation. Versioned. Auditable. In your warehouse, not ours."],
+                        ['value' => 'Your warehouse', 'label' => 'Lives in',     'footnote' => ''],
+                        ['value' => '< 7 days',       'label' => 'Time to live', 'footnote' => ''],
+                        ['value' => 'Continuous',     'label' => 'Updates',      'footnote' => ''],
+                    ],
+                ],
+
+                // CTASection (SectionsB.js, shared with home)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => ['section_index' => '', 'section_label' => 'Get started today', 'theme_variant' => 'dark'],
-                    'headline' => 'Own Your Intelligence.',
-                    'body'     => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
+                    '_settings' => [
+                        'section_index' => '',
+                        'section_label' => 'Get started today',
+                        'theme_variant' => 'dark',
+                    ],
+                    'headline'      => 'Own Your Intelligence.',
+                    'body'          => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
                     'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
                     'secondary_cta' => ['label' => 'How it works',      'url' => '/how-it-works/'],
-                    'variant' => 'dark',
+                    'variant'       => 'dark',
                 ],
             ];
         }
 
         // ───────────────────────────────────────────────────────────
-        // COMPANY
+        // COMPANY — Company.js render order:
+        // CompanyHero → WhatWeAre (01) → FoundingStory (02)
+        // → MissionPrinciples (03) → TeamDeep (03 The team) → ContactSection
         // ───────────────────────────────────────────────────────────
         private static function page_company() {
             return [
-                // CompanyHero
+                // CompanyHero (Company.js)
                 [
                     'acf_fc_layout' => 'hero_editorial',
                     'eyebrow'        => '● Company',
@@ -580,31 +673,39 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['line' => 'Architects who modernized the industry.'],
                         ['line' => 'Innovators building what’s next.'],
                     ],
-                    'body'           => '',
-                    'primary_cta'    => ['label' => 'Get started today', 'url' => '/contact/'],
-                    'secondary_cta'  => ['label' => 'How it works',      'url' => '/how-it-works/'],
-                    'dark'           => false,
+                    'body'          => '',
+                    'primary_cta'   => ['label' => '', 'url' => ''],
+                    'secondary_cta' => ['label' => '', 'url' => ''],
+                    'dark'          => false,
                 ],
 
-                // WhatWeAre
+                // WhatWeAre (Company.js, index="01" label="We’re not an AI company")
                 [
                     'acf_fc_layout' => 'section_split',
-                    '_settings' => ['section_index' => '01', 'section_label' => 'We’re not an AI company', 'theme_variant' => 'light'],
-                    'eyebrow' => '',
+                    '_settings' => [
+                        'section_index' => '01',
+                        'section_label' => 'We’re not an AI company',
+                        'theme_variant' => 'light',
+                    ],
+                    'eyebrow'  => '',
                     'headline' => 'We’re not an AI company.',
-                    'body' => '<p>We’re not here to sell you a new flashy tool. We build the infrastructure that makes your systems, tools, and AI actually work. We don’t rent access. We build it. You keep it.</p>',
-                    'media_slot' => 'diagram',
+                    'body'     => '<p>We’re not here to sell you a new flashy tool. We build the infrastructure that makes your systems, tools, and AI actually work. We don’t rent access. We build it. You keep it.</p>',
+                    'media_slot'  => 'diagram',
                     'diagram_key' => 'boundary',
-                    'reverse' => false,
+                    'reverse'  => false,
                 ],
 
-                // FoundingStory
+                // FoundingStory (Company.js, index="02" label="The founding story")
                 [
                     'acf_fc_layout' => 'section_prose',
-                    '_settings' => ['section_index' => '02', 'section_label' => 'The founding story', 'theme_variant' => 'sunken'],
-                    'eyebrow' => '',
+                    '_settings' => [
+                        'section_index' => '02',
+                        'section_label' => 'The founding story',
+                        'theme_variant' => 'sunken',
+                    ],
+                    'eyebrow'  => '',
                     'headline' => "We've been on every side of this problem.",
-                    'style' => 'split',
+                    'style'    => 'split',
                     'paragraphs' => [
                         ['paragraph' => "<p>Our founder ran an electrical and HVAC company. He built and exited the largest independent customer acquisition agency in the trades. He's sat in the truck, on the dispatch board, and across the table from operators trying to make sense of seven systems that don't talk to each other.</p>"],
                         ['paragraph' => '<p>Two of our senior engineering leaders helped build ServiceTitan from the inside — one as Executive Architect across every API, one as VP of Engineering. They know home services data at the schema level better than almost anyone in the industry.</p>'],
@@ -613,80 +714,95 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                 ],
 
-                // MissionPrinciples
+                // MissionPrinciples (Company.js, index="03" label="What we believe")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => ['section_index' => '03', 'section_label' => 'What we believe', 'theme_variant' => 'light'],
-                    'eyebrow' => '',
+                    '_settings' => [
+                        'section_index' => '03',
+                        'section_label' => 'What we believe',
+                        'theme_variant' => 'light',
+                    ],
+                    'eyebrow'  => '',
                     'headline' => 'Three things we believe about the next decade of home services.',
-                    'intro' => '',
-                    'columns' => '3',
-                    'style' => 'top-border',
+                    'intro'    => '',
+                    'columns'  => '3',
+                    'style'    => 'top-border',
                     'items' => [
-                        ['index_number' => '01', 'title' => 'Your data is yours.',         'body' => 'It lives in your cloud. The vendor that won’t agree to that is renting you back your own business.'],
-                        ['index_number' => '02', 'title' => 'Intelligence compounds.',     'body' => 'Every week the system gets sharper. Every decision gets faster. The operators who build on solid foundations outlast every cycle of new tools.'],
+                        ['index_number' => '01', 'title' => 'Your data is yours.',             'body' => 'It lives in your cloud. The vendor that won’t agree to that is renting you back your own business.'],
+                        ['index_number' => '02', 'title' => 'Intelligence compounds.',         'body' => 'Every week the system gets sharper. Every decision gets faster. The operators who build on solid foundations outlast every cycle of new tools.'],
                         ['index_number' => '03', 'title' => 'Infrastructure beats interface.', 'body' => 'Dashboards are wallpaper. Foundations are leverage. The companies that win this decade will be the ones that built the foundation, not the ones that licensed the dashboard.'],
                     ],
+                    'scenarios' => [],
                 ],
 
-                // TeamDeep
+                // TeamDeep (Company.js, index="03" label="The team")
                 [
                     'acf_fc_layout' => 'section_team',
-                    '_settings' => ['section_index' => '03', 'section_label' => 'The team', 'theme_variant' => 'light'],
-                    'headline' => 'The only team in the category with this combination.',
+                    '_settings' => [
+                        'section_index' => '03',
+                        'section_label' => 'The team',
+                        'theme_variant' => 'light',
+                    ],
+                    'headline'     => 'The only team in the category with this combination.',
                     'avatar_style' => 'square',
                     'members' => [
                         [
-                            'name' => 'Scott Rayden',
-                            'role' => 'Founder & CEO',
-                            'bio'  => 'Built and exited an electrical / HVAC company. Ran the largest independent customer acquisition agency in the U.S. — 350 employees, $2B/yr managed media. Six M&A transactions, $150M+ in exit value. Has lived the operator side of the problem and the marketing side of the system gap.',
+                            'name'  => 'Scott Rayden',
+                            'role'  => 'Founder & CEO',
+                            'bio'   => 'Built and exited an electrical / HVAC company. Ran the largest independent customer acquisition agency in the U.S. — 350 employees, $2B/yr managed media. Six M&A transactions, $150M+ in exit value. Has lived the operator side of the problem and the marketing side of the system gap.',
                             'photo' => false,
                         ],
                         [
-                            'name' => 'Ryan Sciandri',
-                            'role' => 'CTO',
-                            'bio'  => 'Former Executive Architect at ServiceTitan. Led API development across every department of the platform. Knows home services data at the schema level better than almost anyone in the industry — and knows where the seams are.',
+                            'name'  => 'Ryan Sciandri',
+                            'role'  => 'CTO',
+                            'bio'   => 'Former Executive Architect at ServiceTitan. Led API development across every department of the platform. Knows home services data at the schema level better than almost anyone in the industry — and knows where the seams are.',
                             'photo' => false,
                         ],
                         [
-                            'name' => 'Darren Merritt',
-                            'role' => 'VP of Engineering',
-                            'bio'  => 'Former VP of Engineering at ServiceTitan. Most recently CPO at PipeDreams, a PE-backed home services roll-up. Brings the operator perspective on what breaks at scale and how to engineer for it.',
+                            'name'  => 'Darren Merritt',
+                            'role'  => 'VP of Engineering',
+                            'bio'   => 'Former VP of Engineering at ServiceTitan. Most recently CPO at PipeDreams, a PE-backed home services roll-up. Brings the operator perspective on what breaks at scale and how to engineer for it.',
                             'photo' => false,
                         ],
                         [
-                            'name' => 'Josh Scott',
-                            'role' => 'Go To Market',
-                            'bio'  => 'Leads the deployment motion that turns a signed contract into a live, producing intelligence engine in days, not months. Owns the customer experience from kickoff through compounding production use.',
+                            'name'  => 'Josh Scott',
+                            'role'  => 'Go To Market',
+                            'bio'   => 'Leads the deployment motion that turns a signed contract into a live, producing intelligence engine in days, not months. Owns the customer experience from kickoff through compounding production use.',
                             'photo' => false,
                         ],
                         [
-                            'name' => 'Matt Lawler',
-                            'role' => 'Marketing',
-                            'bio'  => 'Shapes the product surface that operators actually live in — the Armory dashboards, the agent workflows, the ontology authoring tools. Translates how operators run their business into an interface that runs on top of the framework.',
+                            'name'  => 'Matt Lawler',
+                            'role'  => 'Marketing',
+                            'bio'   => 'Shapes the product surface that operators actually live in — the Armory dashboards, the agent workflows, the ontology authoring tools. Translates how operators run their business into an interface that runs on top of the framework.',
                             'photo' => false,
                         ],
                     ],
                 ],
 
-                // ContactSection
+                // ContactSection (Company.js — same copy as ArchCTA)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => ['section_index' => '', 'section_label' => 'Ready to deploy', 'theme_variant' => 'dark'],
-                    'headline' => 'Get started today.',
-                    'body'     => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
+                    '_settings' => [
+                        'section_index' => '',
+                        'section_label' => 'Ready to deploy',
+                        'theme_variant' => 'dark',
+                    ],
+                    'headline'      => 'Get started today.',
+                    'body'          => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
                     'primary_cta'   => ['label' => 'Start the conversation', 'url' => '/contact/'],
                     'secondary_cta' => ['label' => 'Back to overview',       'url' => '/'],
-                    'variant' => 'dark',
+                    'variant'       => 'dark',
                 ],
             ];
         }
 
         // ───────────────────────────────────────────────────────────
-        // CONTACT
+        // CONTACT — Contact.js render order:
+        // ContactHero → ContactBody (form + offices)
         // ───────────────────────────────────────────────────────────
         private static function page_contact() {
             return [
+                // ContactHero (Contact.js)
                 [
                     'acf_fc_layout' => 'hero_minimal',
                     'eyebrow'        => '● Contact',
@@ -696,16 +812,29 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'body' => '<p>Tell us a bit about your business. We’ll come back to you within one business day with the right person on our side of the table.</p>',
                 ],
+
+                // ContactBody — form + offices side panel
+                // FIDELITY EXCEPTION: the export's left column lists offices
+                // (San Diego HQ — 1234 Kettner Blvd, Suite 500, San Diego, CA
+                // 92101; San Francisco — 600 Montgomery St, 12th Floor, San
+                // Francisco, CA 94111) plus hello@igniteiq.com / +1 (619)
+                // 555-0114. The `form` layout has no fields for office data,
+                // so this content is omitted from the seed and lives in the
+                // Contact form template / Site Settings instead.
                 [
                     'acf_fc_layout' => 'form',
-                    '_settings' => ['section_index' => '01', 'section_label' => 'Send us a note', 'theme_variant' => 'light'],
-                    'form_type'  => 'contact',
+                    '_settings' => [
+                        'section_index' => '01',
+                        'section_label' => 'Send us a note',
+                        'theme_variant' => 'light',
+                    ],
+                    'form_type' => 'contact',
                 ],
             ];
         }
 
         // ───────────────────────────────────────────────────────────
-        // SIGN IN
+        // SIGN IN — SignIn.js
         // ───────────────────────────────────────────────────────────
         private static function page_signin() {
             return [
@@ -720,8 +849,12 @@ if (!class_exists('IgniteIQ_CLI')) {
                 ],
                 [
                     'acf_fc_layout' => 'form',
-                    '_settings' => ['section_index' => '01', 'section_label' => 'Sign in', 'theme_variant' => 'light'],
-                    'form_type'  => 'signin',
+                    '_settings' => [
+                        'section_index' => '01',
+                        'section_label' => 'Sign in',
+                        'theme_variant' => 'light',
+                    ],
+                    'form_type' => 'signin',
                 ],
             ];
         }
