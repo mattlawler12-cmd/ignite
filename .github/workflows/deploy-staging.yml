@@ -37,7 +37,7 @@ jobs:
         uses: wpengine/github-action-wpe-site-deploy@v3
         with:
           WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
-          WPE_ENV: REPLACE_ME
+          WPE_ENV: igniteiqstg
           SRC_PATH: "igniteiq/"
           REMOTE_PATH: "wp-content/themes/igniteiq-v2/"
           FLAGS: "-azvr --inplace --delete --exclude=.* --exclude=node_modules"
