@@ -187,6 +187,7 @@ if (function_exists('acf_add_local_field_group')) {
                             $iiq_cta_group('he_primary', 'Primary CTA', 'primary_cta'),
                             $iiq_cta_group('he_secondary', 'Secondary CTA', 'secondary_cta'),
                             ['key' => 'field_iiq_he_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1],
+                            ['key' => 'field_iiq_he_size_variant', 'label' => 'Size variant', 'name' => 'size_variant', 'type' => 'select', 'choices' => ['' => 'Default', 'compact' => 'Compact (ArchHero)'], 'default_value' => '', 'allow_null' => 1, 'return_format' => 'value'],
                         ],
                     ],
 
@@ -348,6 +349,20 @@ if (function_exists('acf_add_local_field_group')) {
                                 ]],
                             ],
                             ['key' => 'field_iiq_ss_reverse', 'label' => 'Reverse', 'name' => 'reverse', 'type' => 'true_false', 'ui' => 1],
+                        ],
+                    ],
+
+                    // ─── section_stacked_prose_diagram ───
+                    'layout_iiq_section_stacked_prose_diagram' => [
+                        'key'        => 'layout_iiq_section_stacked_prose_diagram',
+                        'name'       => 'section_stacked_prose_diagram',
+                        'label'      => 'Section: Stacked Prose + Diagram',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_sspd_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_sspd_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_sspd_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_sspd_diagram_type', 'label' => 'Diagram type', 'name' => 'diagram_type', 'type' => 'text', 'instructions' => 'Slug under template-parts/diagrams/ (e.g. arch-ontology, platform-stack, stack, operator-stack, boundary)'],
                         ],
                     ],
 

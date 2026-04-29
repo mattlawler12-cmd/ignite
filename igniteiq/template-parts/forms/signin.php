@@ -12,8 +12,14 @@ if (!defined('ABSPATH')) exit;
  */
 ?>
 <!-- TODO: wire to real auth target when available. Currently a placeholder. -->
-<section data-reveal class="iiq-pad" style="min-height:calc(100vh - 70px);background:var(--bg-canvas);">
-  <div style="min-height:calc(100vh - 70px);display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
+<style>
+  /* Belt-and-suspenders: kill the global theme underline on signin eyebrow + link rows. */
+  .iiq-signin-eyebrow a,
+  .iiq-signin-eyebrow a:hover,
+  .iiq-signin-eyebrow a:focus { text-decoration: none !important; border-bottom: 0 !important; }
+</style>
+<section data-reveal class="iiq-pad" style="min-height:100vh;background:var(--bg-canvas);padding:0;">
+  <div style="min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
 
     <aside style="background:var(--ink-1000);color:var(--ink-50, #fff);padding:64px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;min-height:100%;">
       <div aria-hidden="true" style="position:absolute;top:-10%;right:-20%;width:70%;height:70%;background:radial-gradient(ellipse, rgba(239,68,68,0.18), transparent 60%);pointer-events:none;"></div>
@@ -35,13 +41,13 @@ if (!defined('ABSPATH')) exit;
     </aside>
 
     <main style="padding:48px 56px;display:flex;flex-direction:column;background:var(--bg-canvas);min-height:100%;">
-      <div style="display:flex;justify-content:flex-end;font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);">
+      <div class="iiq-signin-eyebrow" style="display:flex;justify-content:flex-end;font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);">
         <span>New here?</span>
-        <a href="<?= esc_url(home_url('/contact/')) ?>" style="margin-left:8px;color:var(--ignite-500);text-decoration:none;">Contact us</a>
+        <a href="<?= esc_url(home_url('/contact/')) ?>" style="margin-left:8px;color:var(--ignite-500);text-decoration:none;border-bottom:0;">Contact us</a>
       </div>
 
       <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-        <div style="width:100%;max-width:420px;">
+        <div class="iiq-signin-form-wrap" style="width:100%;max-width:620px;">
           <h2 style="font-family:'Aeonik',sans-serif;font-size:36px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;margin:0;color:var(--fg-primary);">Sign in</h2>
           <p style="margin-top:12px;font-size:15px;line-height:1.55;color:var(--fg-secondary);">Use your work email to access your workspace.</p>
 

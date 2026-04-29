@@ -115,7 +115,7 @@ $nonce = wp_create_nonce('iiq_contact');
 
         <div style="margin-top:8px;padding-top:24px;border-top:1px solid var(--border-default);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
           <span style="font-size:13px;color:var(--fg-tertiary);">We respond within one business day.</span>
-          <button type="submit" class="iiq-btn" style="appearance:none;border:none;cursor:pointer;background:var(--ignite-500);color:var(--ink-50);font-family:var(--font-display);font-weight:500;font-size:16px;letter-spacing:-0.01em;padding:14px 28px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;">Send message <span style="font-size:14px;">&rarr;</span></button>
+          <button type="submit" style="appearance:none;border:none;cursor:pointer;background:var(--ignite-500);color:var(--ink-50);font-family:var(--font-display);font-weight:500;font-size:16px;letter-spacing:-0.01em;text-transform:none;padding:14px 28px;border-radius:4px;display:inline-flex;align-items:center;gap:8px;">Send message <span style="font-size:14px;">&rarr;</span></button>
         </div>
       </form>
     </div>

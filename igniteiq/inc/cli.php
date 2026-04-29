@@ -156,7 +156,6 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'stats' => [
                         ['value' => '< 7 days', 'label' => 'Time to deployed'],
                         ['value' => '25+',      'label' => 'Systems unified'],
-                        ['value' => '100%',     'label' => 'Customer-owned'],
                         ['value' => 'v4.2',     'label' => 'Framework version'],
                     ],
                 ],
@@ -355,23 +354,22 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'primary_cta'   => ['label' => '', 'url' => ''],
                     'secondary_cta' => ['label' => '', 'url' => ''],
                     'dark'          => true,
+                    'size_variant'  => 'compact',
                 ],
 
                 // ArchTwoHalves (Architecture.js, index="01" label="How it runs")
-                // Renders headline + body + ArchOntologyScene diagram below.
+                // Renders headline + body + ArchOntologyScene diagram below in vertical stack.
                 [
-                    'acf_fc_layout' => 'section_split',
+                    'acf_fc_layout' => 'section_stacked_prose_diagram',
                     '_settings' => [
                         'section_index' => '01',
                         'section_label' => 'How it runs',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow'  => '',
-                    'headline' => 'Your warehouse holds your data. Our intelligence framework runs alongside it.',
-                    'body'     => '<p>The IgniteIQ architecture deploys directly into your owned enterprise-grade cloud account — provisioned for you. Every line of business — every job, customer, technician, truck — gets resolved into a single model that lives in your warehouse and is queried by the framework. Your data never leaves your IAM.</p>',
-                    'media_slot'  => 'diagram',
-                    'diagram_key' => 'arch-ontology',
-                    'reverse'     => false,
+                    'eyebrow'       => '',
+                    'headline'      => 'Your warehouse holds your data. Our intelligence framework runs alongside it.',
+                    'body'          => '<p>The IgniteIQ architecture deploys directly into your owned enterprise-grade cloud account — provisioned for you. Every line of business — every job, customer, technician, truck — gets resolved into a single model that lives in your warehouse and is queried by the framework. Your data never leaves your IAM.</p>',
+                    'diagram_type'  => 'arch-ontology',
                 ],
 
                 // PlatformStackDiagram (PlatformStack.js, index="02" label="The stack")
@@ -685,7 +683,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'headline' => 'We’re not an AI company.',
                     'body'     => '<p>We’re not here to sell you a new flashy tool. We build the infrastructure that makes your systems, tools, and AI actually work. We don’t rent access. We build it. You keep it.</p>',
                     'media_slot'  => 'diagram',
-                    'diagram_key' => 'boundary',
+                    'diagram_key' => '',
                     'reverse'  => false,
                 ],
 

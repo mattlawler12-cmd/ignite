@@ -20,7 +20,8 @@ function BoundaryDiagram() {
     style: {
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
-      gap: 32
+      gap: 32,
+      marginTop: 64
     }
   }, /*#__PURE__*/React.createElement("div", {
     style: {
