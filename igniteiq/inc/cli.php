@@ -185,18 +185,19 @@ if (!class_exists('IgniteIQ_CLI')) {
 
                 // ProblemSection (SectionsA.js, index="02" label="The problem")
                 [
-                    'acf_fc_layout' => 'section_split',
+                    'acf_fc_layout' => 'section_gap_split',
                     '_settings' => [
                         'section_index' => '02',
                         'section_label' => 'The problem',
                         'theme_variant' => 'light',
                     ],
-                    'eyebrow'  => '',
-                    'headline' => 'Every home services business is a decision-making engine. The data underneath is blurry.',
-                    'body'     => "<p>A \$15M HVAC company makes thousands of micro-decisions a day — which job to dispatch, which lead to call back, which technician to send where. The compounding quality of those decisions separates a 12% margin company from a 22% margin company.</p>\n<p>Today those decisions are made on data spread across 15 to 25 disconnected systems — siloed, duplicated, often contradictory. The AI tools sold into this market promise to fix it and consistently fail. The foundation underneath was never ready.</p>\n<p><strong>AI without clean, structured data is expensive guessing.</strong></p>",
-                    'media_slot'  => 'diagram',
-                    'diagram_key' => 'operator-stack',
-                    'reverse'  => false,
+                    'eyebrow'       => '',
+                    'headline_lead' => 'Every home services business is a decision-making engine.',
+                    'headline_gap'  => 'The data underneath is blurry.',
+                    'body_left'     => '<p>A $15M HVAC company makes thousands of micro-decisions a day — which job to dispatch, which lead to call back, which technician to send where. The compounding quality of those decisions separates a 12% margin company from a 22% margin company.</p>',
+                    'body_right'    => '<p>Today those decisions are made on data spread across 15 to 25 disconnected systems — siloed, duplicated, often contradictory. The AI tools sold into this market promise to fix it and consistently fail. The foundation underneath was never ready.</p>',
+                    'pull_quote'    => 'AI without clean, structured data is expensive guessing.',
+                    'diagram_key'   => 'operator-stack',
                 ],
 
                 // ArchStackDiagram on home (App.js: index="03", label="The stack")
@@ -800,7 +801,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'eyebrow'        => '● Contact',
                     'headline_lines' => [
                         ['line' => 'Let’s talk.'],
-                        ['line' => 'About your data, your decisions, and what compounds when both are yours.'],
+                        ['line' => 'About your data, your decisions, and what compounds when both are yours.', 'muted' => true],
                     ],
                     'body' => '<p>Tell us a bit about your business. We’ll come back to you within one business day with the right person on our side of the table.</p>',
                 ],

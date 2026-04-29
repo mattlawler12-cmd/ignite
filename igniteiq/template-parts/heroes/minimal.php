@@ -21,11 +21,28 @@ $total_lines = count($headline_lines);
         <?= esc_html($eyebrow) ?>
       </span>
     <?php endif; ?>
+    <?php
+      // Detect whether any line carries an explicit 'muted' flag (true OR false).
+      // If so, that flag drives per-line color exclusively. If no line declares
+      // 'muted', fall back to legacy auto-behavior (lead lines muted, last line
+      // primary) to preserve existing seeds (e.g. signin) that haven't migrated.
+      $has_explicit_muted = false;
+      foreach ($headline_lines as $row) {
+          if (is_array($row) && array_key_exists('muted', $row)) {
+              $has_explicit_muted = true;
+              break;
+          }
+      }
+    ?>
     <h1 style="font-family: var(--font-display); font-size: clamp(44px, 5.2vw, 88px); line-height: 1.06; font-weight: 600; letter-spacing: -0.04em; margin: 40px 0 0; color: var(--fg-primary); max-width: 1240px; text-wrap: balance;">
       <?php foreach ($headline_lines as $i => $row):
         $line = is_array($row) ? ($row['line'] ?? '') : $row;
-        $is_last = ($i === $total_lines - 1);
-        $is_muted = (!$is_last && $total_lines > 1);
+        if ($has_explicit_muted) {
+            $is_muted = (is_array($row) && !empty($row['muted']));
+        } else {
+            $is_last = ($i === $total_lines - 1);
+            $is_muted = (!$is_last && $total_lines > 1);
+        }
         $color = $is_muted ? 'var(--fg-tertiary)' : 'var(--fg-primary)';
       ?>
         <span style="display: block; color: <?= $color ?>;"><?= esc_html($line) ?></span>

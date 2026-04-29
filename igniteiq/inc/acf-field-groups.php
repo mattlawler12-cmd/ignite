@@ -366,6 +366,32 @@ if (function_exists('acf_add_local_field_group')) {
                         ],
                     ],
 
+                    // ─── section_gap_split ───
+                    'layout_iiq_section_gap_split' => [
+                        'key'        => 'layout_iiq_section_gap_split',
+                        'name'       => 'section_gap_split',
+                        'label'      => 'Section: Gap-Split',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_sgs_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_sgs_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_sgs_headline_gap', 'label' => 'Headline gap', 'name' => 'headline_gap', 'type' => 'text'],
+                            ['key' => 'field_iiq_sgs_body_left', 'label' => 'Body — left column', 'name' => 'body_left', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_sgs_body_right', 'label' => 'Body — right column', 'name' => 'body_right', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_sgs_pull_quote', 'label' => 'Pull quote', 'name' => 'pull_quote', 'type' => 'text'],
+                            [
+                                'key' => 'field_iiq_sgs_diagram_key',
+                                'label' => 'Diagram',
+                                'name' => 'diagram_key',
+                                'type' => 'select',
+                                'choices' => $iiq_diagram_choices,
+                                'return_format' => 'value',
+                                'allow_null' => 1,
+                            ],
+                        ],
+                    ],
+
                     // ─── section_stats ───
                     'layout_iiq_section_stats' => [
                         'key'        => 'layout_iiq_section_stats',
