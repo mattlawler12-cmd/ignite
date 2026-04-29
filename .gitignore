@@ -20,3 +20,6 @@ node_modules/
 exports/*
 !exports/.gitkeep
 !exports/README.md
+
+# Cowork plugin: source tracked, built artifact ignored
+cowork-plugin/*.plugin

@@ -120,7 +120,28 @@ Everything under `exports/` is gitignored except `.gitkeep` and `README.md`. Nev
 
 If you need a fresh diff outside the dialog flow (e.g. you ran the skill, made manual fixes, and want to see what's still missing), `/diff-iiq-export` (skill at `~/.claude/skills/diff-iiq-export/`) regenerates the same kind of comparison on demand. The watcher's `DIFF.md` is the same data, just pre-baked at unzip time.
 
-## 7. Don'ts
+## 7. Cowork plugin (multi-user port)
+
+The IgniteIQ port workflow can also run inside an Anthropic Cowork project, so
+either Matt or Scott can drop a Claude Design handoff URL into a chat and the
+port runs end-to-end without touching anyone's local launchd watcher.
+
+- Plugin source: `cowork-plugin/igniteiq-port/`
+- Built artifact: `cowork-plugin/igniteiq-port.plugin` (run `bash scripts/build-cowork-plugin.sh` to rebuild)
+- Bundled skills: fetch-iiq-design, diff-iiq-export, port-iiq-diff,
+  verify-iiq-fidelity, visual-iiq-diff
+- Connectors required: GitHub MCP (push access to mattlawler12-cmd/ignite)
+
+Install: drag-drop `igniteiq-port.plugin` into the Cowork desktop app inside
+the shared "IgniteIQ Website" project. See `cowork-plugin/igniteiq-port/README.md`
+for onboarding details.
+
+The local launchd watcher (`scripts/watch-exports.sh`) remains for Matt's
+solo workflow when he just wants to drop a zip into Google Drive instead.
+The two paths produce the same `exports/<dated>/` structure and are
+interchangeable downstream.
+
+## 8. Don'ts
 
 - Don't add new code to `igniteiq/inc/admin-seed-tool.php`. It's a temporary bridge for staging without SSH/WP-CLI and is being removed once staging is happy. Use WP-CLI (`wp igniteiq seed`) or the GitHub Action seed step instead.
 - Don't bypass `IgniteIQ_CLI::default_pages()` in `igniteiq/inc/cli.php` for seed copy. It's the single source of truth, paired with `template-parts/` markup. Don't hardcode copy in renderers as fallbacks for missing seed data.
