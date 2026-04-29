@@ -20,8 +20,23 @@ $btn_primary_style = $is_dark
 $btn_secondary_style = $is_dark
     ? 'background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.35);'
     : 'background:transparent;color:var(--ink-1000,#0F0F12);border:1px solid var(--border-subtle,#C9C5BD);';
+
+// Match export ArchCTA: padding '160px 32px' (160 top + 160 bottom),
+// not section default (120/140). Inline overrides win against utility class.
+$variant_attr = iiq_section_variant_style($resolved_variant);
+if ($variant_attr === '') {
+    $cta_pad_attr = ' style="padding-top:160px;padding-bottom:160px;"';
+} else {
+    // Splice padding overrides into existing inline style attribute.
+    $cta_pad_attr = preg_replace(
+        '/style="/',
+        'style="padding-top:160px;padding-bottom:160px;',
+        $variant_attr,
+        1
+    );
+}
 ?>
-<section data-reveal class="iiq-pad iiq-section-pad"<?= iiq_section_variant_style($resolved_variant) ?>>
+<section data-reveal class="iiq-pad iiq-section-pad"<?= $cta_pad_attr ?>>
     <div style="position:relative;max-width:960px;margin:0 auto;text-align:center;">
         <?php iiq_section_marker(); ?>
 

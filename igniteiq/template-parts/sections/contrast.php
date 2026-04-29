@@ -50,10 +50,10 @@ $variant      = iiq_section_variant();
             <div style="margin-top:96px;max-width:880px;margin-left:auto;margin-right:auto;border:1px solid var(--border-default);background:var(--bg-canvas);">
                 <!-- Header row -->
                 <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-default);">
-                    <div style="padding:20px 28px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);border-right:1px solid var(--border-default);font-size:14px;line-height:1.2;">
+                    <div style="padding:20px 28px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);border-right:1px solid var(--border-default);font-size:20px;line-height:1.2;">
                         <?= esc_html($header_old) ?>
                     </div>
-                    <div style="padding:20px 28px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);font-size:14px;line-height:1.2;">
+                    <div style="padding:20px 28px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);font-size:20px;line-height:1.2;">
                         <?= esc_html($header_new) ?>
                     </div>
                 </div>

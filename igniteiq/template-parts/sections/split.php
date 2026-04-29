@@ -14,7 +14,9 @@ $variant     = iiq_section_variant();
 
 // Optional asymmetric grid ratio sourced from _settings.column_ratio.
 // Defaults to '1fr 1fr' so existing split sections render unchanged.
-$_split_settings = function_exists('get_sub_field') ? get_sub_field('_settings') : null;
+// Use the shared resolver — `_settings` (underscore-prefixed) is filtered
+// out by ACF's `get_sub_field()` and must be retrieved by field key.
+$_split_settings = iiq_section_settings();
 $column_ratio    = is_array($_split_settings) && !empty($_split_settings['column_ratio'])
     ? (string) $_split_settings['column_ratio']
     : '1fr 1fr';

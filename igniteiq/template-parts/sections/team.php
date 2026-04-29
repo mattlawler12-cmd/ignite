@@ -37,7 +37,7 @@ $avatar_radius = $is_square ? '6px' : '50%';
         <?php endif; ?>
 
         <?php if (!empty($members) && is_array($members)): ?>
-            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;">
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);column-gap:24px;row-gap:40px;">
                 <?php foreach ($members as $m):
                     $name  = isset($m['name']) ? $m['name'] : '';
                     $role  = isset($m['role']) ? $m['role'] : '';

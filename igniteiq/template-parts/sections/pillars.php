@@ -133,7 +133,7 @@ $is_dark   = ($variant === 'dark');
                     </article>
 
                 <?php elseif ($style === 'grid-divided'): ?>
-                    <article<?= $reveal_attrs ?> style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:14px;">
+                    <article<?= $reveal_attrs ?> style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:14px;height:100%;">
                         <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:<?= $idx_color ?>;"><?= esc_html($idxnum) ?></span>
                         <?php if ($title): ?>
                             <h3 style="font-family:var(--font-display);font-size:18px;font-weight:600;letter-spacing:-0.01em;line-height:1.2;margin:0;color:<?= $title_color ?>;">

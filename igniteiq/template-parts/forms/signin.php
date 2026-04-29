@@ -18,8 +18,8 @@ if (!defined('ABSPATH')) exit;
   .iiq-signin-eyebrow a:hover,
   .iiq-signin-eyebrow a:focus { text-decoration: none !important; border-bottom: 0 !important; }
 </style>
-<section data-reveal class="iiq-pad" style="min-height:100vh;background:var(--bg-canvas);padding:0;">
-  <div style="min-height:100vh;display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
+<section data-reveal class="iiq-pad" style="min-height:100vh;background:var(--bg-canvas);padding:72px 0 0 0;">
+  <div style="min-height:calc(100vh - 72px);display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
 
     <aside style="background:var(--ink-1000);color:var(--ink-50, #fff);padding:64px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;min-height:100%;">
       <div aria-hidden="true" style="position:absolute;top:-10%;right:-20%;width:70%;height:70%;background:radial-gradient(ellipse, rgba(239,68,68,0.18), transparent 60%);pointer-events:none;"></div>
@@ -28,7 +28,7 @@ if (!defined('ABSPATH')) exit;
         <span style="font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);">&larr; Back to igniteiq.com</span>
       </a>
 
-      <div style="position:relative;max-width:480px;">
+      <div style="position:relative;max-width:460px;">
         <div style="font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-400, #f87171);margin-bottom:24px;display:inline-flex;align-items:center;gap:8px;">
           <span style="width:6px;height:6px;border-radius:50%;background:var(--ignite-500);"></span>
           Customer access
@@ -50,6 +50,7 @@ if (!defined('ABSPATH')) exit;
         <div class="iiq-signin-form-wrap" style="width:100%;max-width:540px;">
           <h2 style="font-family:'Aeonik',sans-serif;font-size:36px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;margin:0;color:var(--fg-primary);">Sign in</h2>
           <p style="margin-top:12px;font-size:15px;line-height:1.55;color:var(--fg-secondary);">Use your work email to access your workspace.</p>
+          <p data-iiq-signin-pending hidden style="margin-top:12px;font-size:15px;line-height:1.55;color:var(--fg-secondary);">Signing you in&hellip;</p>
 
           <form aria-disabled="true" onsubmit="event.preventDefault();" style="margin-top:40px;display:flex;flex-direction:column;gap:28px;">
             <div>
