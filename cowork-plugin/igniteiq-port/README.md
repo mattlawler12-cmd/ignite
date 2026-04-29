@@ -43,15 +43,15 @@ Five user-scoped skills, all routed via `/<name>`:
 
 ## Connect GitHub (first run)
 
-The skills push edits via the bundled GitHub MCP server. Each user supplies
-their own token at install time:
+The skills push edits using whatever GitHub auth Cowork's built-in
+connectors provide. The plugin doesn't bundle its own MCP config — Cowork
+manages connector lifecycle (auth refresh, scope management) for the whole
+project.
 
-1. Generate a fine-grained GitHub PAT with **Contents: read/write** scope on
+1. In Cowork → Settings → Connectors → GitHub, click Connect and complete
+   the OAuth flow. Make sure the auth has push access to
    `mattlawler12-cmd/ignite`.
-2. In Cowork → Settings → Connectors → GitHub MCP, paste the token. The
-   plugin reads it as `${GITHUB_TOKEN}` from `.mcp.json`.
-3. Verify the connector is green before running `/port-iiq-diff` for the
-   first time.
+2. Verify the connector shows green before running `/port-iiq-diff`.
 
 ## Use
 

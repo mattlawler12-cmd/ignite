@@ -83,7 +83,11 @@ build_once() {
     ok "valid JSON: $(basename "$file")"
   }
   validate_json "$PLUGIN_DIR/.claude-plugin/plugin.json"
-  validate_json "$PLUGIN_DIR/.mcp.json"
+  # .mcp.json is optional — Cowork plugins typically rely on the desktop app's
+  # built-in connector UI for MCP servers rather than bundling them.
+  if [[ -f "$PLUGIN_DIR/.mcp.json" ]]; then
+    validate_json "$PLUGIN_DIR/.mcp.json"
+  fi
 
   # 3. Lint each SKILL.md frontmatter
   local lint_errs=0
