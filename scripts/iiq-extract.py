@@ -9,7 +9,7 @@ Output: one unique string per line, length >= 4, sorted.
 import sys, re, html, os, glob
 from html.parser import HTMLParser
 
-SKIP_TAGS = {"script","style","noscript","template","svg","head"}
+SKIP_TAGS = {"script","style","noscript","template","head"}
 
 class TextExtract(HTMLParser):
     def __init__(self):

@@ -9,8 +9,9 @@ This in-repo copy is the source of truth — keep them in sync if you edit it.
 
 Triggered by a `launchd` agent whenever the shared Google Drive inbox changes.
 Drop a zip into the inbox; ~30 seconds later the export is unzipped into
-`exports/<YYYYMMDD>-<derived-name>/`, the `latest` symlink is repointed, and a
-macOS notification fires telling Matt to run `/diff-iiq-export`.
+`exports/<YYYYMMDD>-<derived-name>/`, the `latest` symlink is repointed,
+`DIFF.md` is pre-generated against live staging, and an actionable macOS
+dialog fires (Cancel / View diff / Open in Claude Code).
 
 ### What it does
 1. Polls every detected zip's size until 3 reads in a row are identical (guards
@@ -19,13 +20,38 @@ macOS notification fires telling Matt to run `/diff-iiq-export`.
    no symlink entries.
 3. Unzips into `exports/<YYYYMMDD>-<kebab-cased-name>/`.
 4. Repoints `exports/latest` (relative symlink).
-5. Sends a macOS notification.
-6. Marks the zip as processed in `exports/.processed/`.
+5. Pre-generates `DIFF.md` next to the export by running
+   `iiq-extract.py` against both the export and live staging, then `comm`-ing
+   the two sorted string lists. The dialog (next step) shows live counts
+   from this file.
+6. Fires an actionable `osascript display dialog` (see "Click-to-port dialog"
+   below).
+7. Marks the zip as processed in `exports/.processed/`.
+
+### Click-to-port dialog
+
+Once the export is unzipped and `DIFF.md` is on disk, the watcher fires a
+modal dialog with three buttons:
+
+- **Cancel** — Dismiss. Nothing happens. The export and DIFF.md still sit
+  on disk; you can run `/port-iiq-diff` later by hand. Also fires if the
+  10-minute dialog timeout elapses.
+- **View diff** — Opens `exports/<dated>/DIFF.md` in your default Markdown
+  viewer (whatever `open` resolves to). Read the porting backlog without
+  starting a Claude Code session.
+- **Open in Claude Code** (default) — Copies `/port-iiq-diff` to the
+  clipboard and opens Terminal in the repo root. Run `claude`, then ⌘V Enter
+  to fire the port skill. The skill reads `DIFF.md`, edits `cli.php` + the
+  matching template-parts, runs `php -l`, and prints a summary. It does NOT
+  commit or push — you do that yourself after a `bash deploy.sh` Local check.
+
+The size-stability-failed and unzip-failed paths still use a simple
+`display notification` (non-actionable) since there's nothing to click into.
 
 ### What it does NOT do
-- Does **not** run `/diff-iiq-export` automatically. The inbox is shared with
+- Does **not** run `/port-iiq-diff` automatically. The inbox is shared with
   Scott; running headless Claude with bypassed permissions on third-party input
-  is too risky. Matt runs the slash command manually after seeing the notification.
+  is too risky. The dialog is human-in-loop by design.
 - Does not commit, push, or touch any PHP file.
 
 ### Logs

@@ -2,12 +2,14 @@
 # Watcher fired by launchd whenever the Google Drive inbox changes.
 # Finds any *.zip not yet processed, waits for sync to complete, validates
 # the zip, unzips into exports/<YYYYMMDD>-<derived-name>/, repoints `latest`,
-# notifies Matt. Matt then runs `/diff-iiq-export` manually in Claude Code.
+# pre-generates DIFF.md (export-vs-staging string diff), then fires an
+# actionable osascript dialog. Matt clicks "Open in Claude Code" → Terminal
+# opens in the repo with `/port-iiq-diff` already on the clipboard.
 #
-# Why no auto-diff: the inbox is shared (Scott drops here too). Running
+# Why no auto-port: the inbox is shared (Scott drops here too). Running
 # headless Claude with bypassed permissions on third-party input is too
-# risky for what saves ~30s. The watcher does the file plumbing; the diff
-# stays under visual review.
+# risky. The watcher does the file plumbing + diff; the port stays
+# human-in-loop under visual review.
 #
 # Logs to exports/.watcher.log. Idempotent — uses .processed/ markers.
 
@@ -29,6 +31,7 @@ exec >> "$LOG" 2>&1
 ts() { date '+%Y-%m-%d %H:%M:%S'; }
 log() { echo "[$(ts)] $*"; }
 
+# Plain non-actionable notification, used for failure paths only.
 notify() {
   local title="$1" subtitle="$2" body="$3"
   /usr/bin/osascript -e "display notification \"${body//\"/\\\"}\" with title \"${title//\"/\\\"}\" subtitle \"${subtitle//\"/\\\"}\""
@@ -137,8 +140,82 @@ for zip in "${zips[@]}"; do
   cd "$EXPORTS" && ln -snf "$(basename "$target")" latest
   log "latest → $(basename "$target")"
 
-  # Notify Matt to run /diff-iiq-export.
-  notify "IgniteIQ export ready" "$(basename "$target")" "Run /diff-iiq-export in Claude Code"
+  # Pre-generate DIFF.md so the dialog has accurate counts and the user has
+  # something to read in "View diff". Also primes /port-iiq-diff's input.
+  # Resolve content dir (may be a `site/` subdir, `igniteiq-website/project/`, or flat)
+  CONTENT=$(find "$target" -maxdepth 4 -name index.html -print -quit)
+  M=0
+  X=0
+  if [ -n "$CONTENT" ]; then
+    CONTENT_DIR=$(dirname "$CONTENT")
+    STAGING="https://igniteiqstg.wpenginepowered.com"
+    EX="$HOME/scripts/igniteiq/iiq-extract.py"
+
+    python3 "$EX" "$CONTENT_DIR" | LC_ALL=C sort -u > "$target/.export-strings.txt"
+    {
+      for p in / /how-it-works/ /ontology/ /company/ /contact/ /signin/; do
+        curl -sL "$STAGING$p" 2>/dev/null; echo
+      done
+    } | python3 "$EX" | LC_ALL=C sort -u > "$target/.staging-strings.txt"
+
+    M=$(comm -23 "$target/.export-strings.txt" "$target/.staging-strings.txt" | wc -l | tr -d ' ')
+    X=$(comm -13 "$target/.export-strings.txt" "$target/.staging-strings.txt" | wc -l | tr -d ' ')
+
+    # Write a compact DIFF.md for human review
+    {
+      echo "# Diff: Claude Design export → live staging"
+      echo "Export: \`$(basename "$target")\`  ·  Staging: $STAGING"
+      echo "Generated: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+      echo
+      echo "Missing on staging: $M  ·  Extra on staging: $X"
+      echo
+      echo "## Missing on staging — porting backlog"
+      echo "Each item must end up on staging (in template-part PHP markup AND/OR cli.php seed row)."
+      echo
+      comm -23 "$target/.export-strings.txt" "$target/.staging-strings.txt" | awk '{ printf "- [ ] %s\n", $0 }'
+      echo
+      echo "## Extra on staging — review"
+      echo "Either outdated copy to remove OR WP-injected (admin bar, accessibility skip-links, RSS) — ignore those."
+      echo
+      comm -13 "$target/.export-strings.txt" "$target/.staging-strings.txt" | awk '{ printf "- %s\n", $0 }'
+    } > "$target/DIFF.md"
+
+    log "DIFF.md written: $M missing, $X extra"
+  else
+    log "no index.html found in $target — skipping diff generation"
+  fi
+
+  # Actionable dialog with three buttons. 10-minute timeout.
+  result=$(/usr/bin/osascript <<APPLESCRIPT 2>/dev/null
+try
+  with timeout of 600 seconds
+    set theResult to display dialog "$(printf 'New IgniteIQ export ready: %s.\\n\\n%d strings missing on staging.\\n%d extras on staging (review).' "$(basename "$target")" "${M:-0}" "${X:-0}")" buttons {"Cancel", "View diff", "Open in Claude Code"} default button "Open in Claude Code" with title "IgniteIQ export ready" with icon note
+    return button returned of theResult
+  end timeout
+on error
+  return "Cancel"
+end try
+APPLESCRIPT
+)
+
+  case "$result" in
+    "View diff")
+      /usr/bin/open "$target/DIFF.md"
+      log "user: View diff"
+      ;;
+    "Open in Claude Code")
+      # Prime clipboard with the slash command
+      printf '%s' "/port-iiq-diff" | /usr/bin/pbcopy
+      # Open the repo dir in Terminal so the user can fire `claude` there.
+      # macOS has no documented `claude --prompt` flag yet; this is the cleanest
+      # cross-version invocation. User pastes ⌘V Enter once Claude is running.
+      /usr/bin/open -a Terminal "$HOME/Desktop/igniteiq-theme-v2"
+      log "user: Open in Claude Code"
+      ;;
+    *)
+      log "user: Cancel (or dialog timed out)"
+      ;;
+  esac
 
   # Mark zip as processed so we don't redo it on the next watcher fire.
   touch "$marker"

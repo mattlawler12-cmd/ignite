@@ -100,7 +100,7 @@ See `exports/README.md` for full details. Two paths:
 
 **Cloud inbox (shared with Scott — preferred):**
 - Drop the zip into `~/Google Drive/My Drive/IgniteIQ/Claude Design Exports/`.
-- A `launchd` agent on Matt's Mac (`~/scripts/igniteiq/watch-exports.sh`, plist at `~/Library/LaunchAgents/com.igniteiq.export-watcher.plist`) watches the folder, validates the zip (≤500MB, no path-traversal, no symlinks), unzips into `exports/<YYYYMMDD>-<derived-name>/`, repoints `exports/latest`, and fires a macOS notification.
+- A `launchd` agent on Matt's Mac (`~/scripts/igniteiq/watch-exports.sh`, plist at `~/Library/LaunchAgents/com.igniteiq.export-watcher.plist`) watches the folder, validates the zip (≤500MB, no path-traversal, no symlinks), unzips into `exports/<YYYYMMDD>-<derived-name>/`, repoints `exports/latest`, pre-generates `DIFF.md` (export-vs-staging string diff), and fires an actionable macOS dialog (Cancel / View diff / Open in Claude Code).
 - Requires Full Disk Access granted to `/bin/bash` (System Settings → Privacy & Security → Full Disk Access). Without it, the watcher can't read Google Drive contents from a launchd context. See `scripts/README.md` for setup.
 
 **Manual (offline / fallback):**
@@ -111,12 +111,14 @@ Everything under `exports/` is gitignored except `.gitkeep` and `README.md`. Nev
 
 ## 6. Port process (the loop)
 
-1. Export drops in cloud inbox (or manual unzip). Watcher unzips + repoints `latest`. macOS notification: "IgniteIQ export ready — run /diff-iiq-export".
-2. Run `/diff-iiq-export` in Claude Code (skill at `~/.claude/skills/diff-iiq-export/`). **Default behavior compares `exports/latest/` against live staging at `https://igniteiqstg.wpenginepowered.com`** — the output is a porting checklist (strings missing on staging, mapped to `template-parts/*.php` + `cli.php` rows). Helper extractor at `~/scripts/igniteiq/iiq-extract.py` handles SPA-style exports (HTML shell + `js/*.js` bundle).
-3. Edit the listed `igniteiq/template-parts/*.php` files (markup) **and** the matching rows in `igniteiq/inc/cli.php` `default_pages()` (seeded copy). Keep them in sync.
+1. Export drops in the shared cloud inbox (`~/Google Drive/My Drive/IgniteIQ/Claude Design Exports/`). The `launchd` watcher unzips + repoints `latest`, then pre-generates `exports/<dated>/DIFF.md` (the porting backlog: strings missing on staging vs. the export, computed via `iiq-extract.py` + `curl` of the 6 cornerstone URLs). An `osascript display dialog` fires with three buttons: **Cancel** / **View diff** (opens `DIFF.md`) / **Open in Claude Code** (copies `/port-iiq-diff` to the clipboard, opens Terminal in the repo).
+2. In the opened Terminal, run `claude`, then paste (⌘V) the pre-loaded `/port-iiq-diff` slash command. The skill (at `~/.claude/skills/port-iiq-diff/`) reads `exports/latest/DIFF.md`, edits `igniteiq/inc/cli.php` `default_pages()` rows + matching `igniteiq/template-parts/*.php` markup byte-accurately to land every missing string, then runs `php -l` on every modified file and prints a summary. The skill does NOT commit or push.
+3. Edit the listed `igniteiq/template-parts/*.php` files (markup) **and** the matching rows in `igniteiq/inc/cli.php` `default_pages()` (seeded copy). Keep them in sync. `/port-iiq-diff` does most of this; spot-check anything it flagged "Unmapped".
 4. `bash deploy.sh` to mirror to Local. Preview at `http://igniteiq.local/`. Reseed in Local's site shell if copy changed: `wp igniteiq seed --force`.
 5. Commit + push to `main`. The Action deploys to WPE staging and reseeds automatically.
 6. Run `/verify-iiq-fidelity` to confirm every export string is now on staging. Don't consider the port done until that report is clean.
+
+If you need a fresh diff outside the dialog flow (e.g. you ran the skill, made manual fixes, and want to see what's still missing), `/diff-iiq-export` (skill at `~/.claude/skills/diff-iiq-export/`) regenerates the same kind of comparison on demand. The watcher's `DIFF.md` is the same data, just pre-baked at unzip time.
 
 ## 7. Don'ts
 
