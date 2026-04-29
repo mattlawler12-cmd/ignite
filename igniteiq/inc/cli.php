@@ -156,6 +156,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'stats' => [
                         ['value' => '< 7 days', 'label' => 'Time to deployed'],
                         ['value' => '25+',      'label' => 'Systems unified'],
+                        ['value' => '100%',     'label' => 'Customer-owned'],
                         ['value' => 'v4.2',     'label' => 'Framework version'],
                     ],
                 ],
@@ -356,6 +357,12 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'secondary_cta' => ['label' => '', 'url' => ''],
                     'dark'          => true,
                     'size_variant'  => 'compact',
+                    'stats' => [
+                        ['label' => 'Your cloud',           'value' => 'Enterprise grade cloud infrastructure'],
+                        ['label' => 'Your data',            'value' => 'Safe. Unified. Clean. Trusted.'],
+                        ['label' => 'Runs in your account', 'value' => 'IgniteIQ Ontology Layer'],
+                        ['label' => 'Framework version',    'value' => 'v4.2'],
+                    ],
                 ],
 
                 // ArchTwoHalves (Architecture.js, index="01" label="How it runs")
@@ -494,15 +501,15 @@ if (!class_exists('IgniteIQ_CLI')) {
             return [
                 // OntologyHero (Ontology.js)
                 [
-                    'acf_fc_layout' => 'hero_editorial',
-                    'eyebrow'        => '● The ontology · v4.2',
-                    'headline_lines' => [
-                        ['line' => 'Ontology is the nouns and verbs of how your business actually runs.'],
+                    'acf_fc_layout' => 'hero_ontology',
+                    'eyebrow'       => '● The ontology · v4.2',
+                    'headline_segments' => [
+                        ['text' => 'Ontology is the',       'muted' => false],
+                        ['text' => ' nouns and verbs ',     'muted' => true],
+                        ['text' => 'of how your business',  'muted' => false],
+                        ['text' => ' actually runs.',       'muted' => true],
                     ],
-                    'body' => "<p>Every home services business runs on a web of interconnected relationships - jobs, customers, technicians, calls, invoices - moving and changing every hour. An ontology is the layer that encodes those relationships into a shared model: the ground truth of how your business is actually operating. It's the difference between a company that runs on assumptions scattered across fifteen systems, and a company that runs on a single, shared definition of itself.</p>",
-                    'primary_cta'   => ['label' => '', 'url' => ''],
-                    'secondary_cta' => ['label' => '', 'url' => ''],
-                    'dark' => false,
+                    'lede' => "Every home services business runs on a web of interconnected relationships - jobs, customers, technicians, calls, invoices - moving and changing every hour. An ontology is the layer that encodes those relationships into a shared model: the ground truth of how your business is actually operating. It's the difference between a company that runs on assumptions scattered across fifteen systems, and a company that runs on a single, shared definition of itself.",
                 ],
 
                 // WhatIsAnOntology (Ontology.js, index="01" label="The concept")
@@ -663,8 +670,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'eyebrow'        => '● Company',
                     'headline_lines' => [
                         ['line' => 'Operators who ran the trucks.'],
-                        ['line' => 'Architects who modernized the industry.'],
-                        ['line' => 'Innovators building what’s next.'],
+                        ['line' => 'Architects who modernized the industry. Innovators building what’s next.'],
                     ],
                     'body'          => '',
                     'primary_cta'   => ['label' => '', 'url' => ''],
@@ -836,7 +842,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'eyebrow'        => '● Customer access',
                     'headline_lines' => [
                         ['line' => 'Welcome back.'],
-                        ['line' => 'Your intelligence is waiting.'],
+                        ['line' => 'Your intelligence is waiting.', 'muted' => true],
                     ],
                     'body' => '<p>Sign in to your IgniteIQ workspace to query the ontology, monitor signals, and run agents across your business.</p>',
                 ],

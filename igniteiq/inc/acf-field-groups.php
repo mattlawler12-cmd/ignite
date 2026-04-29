@@ -245,6 +245,31 @@ if (function_exists('acf_add_local_field_group')) {
                         ],
                     ],
 
+                    // ─── hero_ontology ───
+                    'layout_iiq_hero_ontology' => [
+                        'key'        => 'layout_iiq_hero_ontology',
+                        'name'       => 'hero_ontology',
+                        'label'      => 'Hero — Ontology',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_ho_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text', 'instructions' => 'Small uppercase tag above the headline. Include any leading glyph (e.g. "● The ontology · v4.2").'],
+                            [
+                                'key'          => 'field_iiq_ho_headline_segments',
+                                'label'        => 'Headline segments',
+                                'name'         => 'headline_segments',
+                                'type'         => 'repeater',
+                                'instructions' => 'Inline segments composing the H1. Toggle Muted to render in var(--fg-tertiary). Include leading/trailing spaces in segment text where needed.',
+                                'layout'       => 'table',
+                                'button_label' => 'Add segment',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_ho_segment_text',  'label' => 'Text',  'name' => 'text',  'type' => 'text', 'required' => 1],
+                                    ['key' => 'field_iiq_ho_segment_muted', 'label' => 'Muted', 'name' => 'muted', 'type' => 'true_false', 'ui' => 1, 'default_value' => 0],
+                                ],
+                            ],
+                            ['key' => 'field_iiq_ho_lede', 'label' => 'Lede paragraph', 'name' => 'lede', 'type' => 'textarea', 'rows' => 6, 'new_lines' => '', 'instructions' => 'Paragraph below the H1 divider — 21px / line-height 1.55 / weight 500.'],
+                        ],
+                    ],
+
                     // ─── section_pillars ───
                     'layout_iiq_section_pillars' => [
                         'key'        => 'layout_iiq_section_pillars',

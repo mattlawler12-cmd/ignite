@@ -14,7 +14,7 @@ $scenarios = get_sub_field('scenarios') ?: [];
 $variant   = iiq_section_variant();
 $is_dark   = ($variant === 'dark');
 ?>
-<section data-reveal class="iiq-pad iiq-section-pad"<?= iiq_section_variant_style($variant) ?>>
+<section class="iiq-pad iiq-section-pad"<?= iiq_section_variant_style($variant) ?>>
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 
@@ -67,9 +67,15 @@ $is_dark   = ($variant === 'dark');
                         ? $item['index_number']
                         : str_pad((string)($i + 1), 2, '0', STR_PAD_LEFT);
                     $is_last = ($i === count($items) - 1);
+                    // Per-card reveal w/ staggered delay — mirrors export pattern
+                    // (each card wrapped in its own <Reveal delay={i*N}>) and avoids
+                    // section-level opacity transition causing layout to read narrow
+                    // mid-fade on screenshots.
+                    $reveal_delay = $i * 100;
+                    $reveal_attrs = ' data-reveal data-reveal-delay="' . $reveal_delay . '"';
                 ?>
                 <?php if ($style === 'bars'): ?>
-                    <article style="display:flex;flex-direction:column;height:100%;">
+                    <article<?= $reveal_attrs ?> style="display:flex;flex-direction:column;height:100%;">
                         <svg aria-hidden="true" viewBox="0 0 1000 16" preserveAspectRatio="none" style="display:block;width:100%;height:12px;">
                             <polygon points="0,14 14,2 986,2 1000,14" fill="<?= $is_dark ? 'var(--ink-50)' : 'var(--ink-1000,#0F0F12)' ?>"/>
                         </svg>
@@ -94,7 +100,7 @@ $is_dark   = ($variant === 'dark');
                     </article>
 
                 <?php elseif ($style === 'bordered'): ?>
-                    <article style="padding:40px 32px 8px;<?= $i > 0 ? 'border-left:1px solid ' . ($is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';' : '' ?>">
+                    <article<?= $reveal_attrs ?> style="padding:40px 32px 8px;<?= $i > 0 ? 'border-left:1px solid ' . ($is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';' : '' ?>">
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
                             <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:<?= $idx_color ?>;"></span>
                             <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:<?= $idx_color ?>;font-weight:500;"><?= esc_html($idxnum) ?> &mdash; <?= esc_html($title) ?></span>
@@ -112,7 +118,7 @@ $is_dark   = ($variant === 'dark');
                     </article>
 
                 <?php elseif ($style === 'top-border'): ?>
-                    <article style="border-top:1px solid <?= $is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)' ?>;padding-top:28px;display:flex;flex-direction:column;gap:14px;">
+                    <article<?= $reveal_attrs ?> style="border-top:1px solid <?= $is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)' ?>;padding-top:28px;display:flex;flex-direction:column;gap:14px;">
                         <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;color:<?= $idx_color ?>;font-weight:500;"><?= esc_html($idxnum) ?></span>
                         <?php if ($title): ?>
                             <h3 style="font-family:var(--font-display);font-size:28px;font-weight:600;letter-spacing:-0.025em;line-height:1.15;margin:0;color:<?= $title_color ?>;">
@@ -127,7 +133,7 @@ $is_dark   = ($variant === 'dark');
                     </article>
 
                 <?php elseif ($style === 'grid-divided'): ?>
-                    <article style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:14px;">
+                    <article<?= $reveal_attrs ?> style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:14px;">
                         <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:<?= $idx_color ?>;"><?= esc_html($idxnum) ?></span>
                         <?php if ($title): ?>
                             <h3 style="font-family:var(--font-display);font-size:18px;font-weight:600;letter-spacing:-0.01em;line-height:1.2;margin:0;color:<?= $title_color ?>;">
@@ -142,7 +148,7 @@ $is_dark   = ($variant === 'dark');
                     </article>
 
                 <?php else: // cards (default) ?>
-                    <article style="background:var(--bg-canvas,#fff);border:1px solid var(--border-subtle,#E2DDD2);border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:14px;">
+                    <article<?= $reveal_attrs ?> style="background:var(--bg-canvas,#fff);border:1px solid var(--border-subtle,#E2DDD2);border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:14px;">
                         <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:<?= $idx_color ?>;">
                             <?= esc_html($idxnum) ?>
                         </span>

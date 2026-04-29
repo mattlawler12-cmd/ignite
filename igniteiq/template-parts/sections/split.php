@@ -12,6 +12,13 @@ $image       = get_sub_field('image');
 $reverse     = (bool) get_sub_field('reverse');
 $variant     = iiq_section_variant();
 
+// Optional asymmetric grid ratio sourced from _settings.column_ratio.
+// Defaults to '1fr 1fr' so existing split sections render unchanged.
+$_split_settings = function_exists('get_sub_field') ? get_sub_field('_settings') : null;
+$column_ratio    = is_array($_split_settings) && !empty($_split_settings['column_ratio'])
+    ? (string) $_split_settings['column_ratio']
+    : '1fr 1fr';
+
 $text_order  = $reverse ? 2 : 1;
 $media_order = $reverse ? 1 : 2;
 ?>
@@ -19,7 +26,7 @@ $media_order = $reverse ? 1 : 2;
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 
-        <div class="iiq-grid-split" style="display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;">
+        <div class="iiq-grid-split" style="display:grid;grid-template-columns:<?= esc_attr($column_ratio) ?>;gap:80px;align-items:center;">
             <div style="order:<?= (int) $text_order ?>;">
                 <?php iiq_section_eyebrow($eyebrow); ?>
                 <?php if ($headline): ?>
