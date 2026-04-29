@@ -9,8 +9,31 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('iiq_section_settings')) {
     function iiq_section_settings() {
         if (!function_exists('get_sub_field')) return null;
+
+        // Try ACF's normal sub-field path first.
         $val = get_sub_field('settings');
-        return is_array($val) ? $val : null;
+        if (is_array($val) && !empty($val)) return $val;
+
+        // Fallback: read raw postmeta directly. ACF's shared
+        // $iiq_settings_group re-uses the same field key across many
+        // flexible-content layouts, which intermittently makes get_sub_field
+        // return null for the second-onward use of the group. Data is still
+        // present under the standard page_sections_<row>_settings_<leaf>
+        // postmeta keys; pull it directly.
+        if (!function_exists('get_row_index')) return null;
+        $row_idx = (int) get_row_index() - 1; // ACF is 1-based; postmeta is 0-based
+        $post_id = function_exists('get_the_ID') ? get_the_ID() : 0;
+        if (!$post_id || $row_idx < 0) return null;
+
+        $prefix = "page_sections_{$row_idx}_settings_";
+        $out = [];
+        foreach (['theme_variant', 'section_index', 'section_label', 'column_ratio'] as $leaf) {
+            $meta = get_post_meta($post_id, $prefix . $leaf, true);
+            if ($meta !== '' && $meta !== null) {
+                $out[$leaf] = $meta;
+            }
+        }
+        return $out ?: null;
     }
 }
 
