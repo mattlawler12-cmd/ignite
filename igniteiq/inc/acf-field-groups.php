@@ -21,43 +21,58 @@ if (function_exists('acf_add_local_field_group')) {
     // ──────────────────────────────────────────────────────────────────
     $iiq_hide_on_screen = ['custom_fields', 'discussion', 'comments'];
 
-    // Reusable: settings sub-group attached to most layouts
-    $iiq_settings_group = [
-        'key'        => 'field_iiq_layout_settings',
-        'label'      => 'Section settings',
-        'name'       => 'settings',
-        'type'       => 'group',
-        'layout'     => 'block',
-        'sub_fields' => [
-            [
-                'key'   => 'field_iiq_settings_section_index',
-                'label' => 'Section index',
-                'name'  => 'section_index',
-                'type'  => 'text',
-                'instructions' => 'Two-digit prefix shown above the section, e.g. "01".',
-            ],
-            [
-                'key'   => 'field_iiq_settings_section_label',
-                'label' => 'Section label',
-                'name'  => 'section_label',
-                'type'  => 'text',
-            ],
-            [
-                'key'     => 'field_iiq_settings_theme_variant',
-                'label'   => 'Theme variant',
-                'name'    => 'theme_variant',
-                'type'    => 'select',
-                'choices' => [
-                    'light'  => 'Light',
-                    'dark'   => 'Dark',
-                    'sunken' => 'Sunken',
-                    'canvas' => 'Canvas',
+    // Reusable: settings sub-group attached to most layouts.
+    //
+    // FIDELITY/ACF FIX (Wave 8): each layout now gets its OWN settings group
+    // with a unique field key, instead of all 14 layouts sharing the single
+    // 'field_iiq_layout_settings' key. ACF stores nested-group meta keyed by
+    // field key — when 14 layouts shared the same key, ACF refused to persist
+    // any of them, and `get_sub_field('settings')` returned null everywhere
+    // (so theme_variant + section_index + section_label never made it to
+    // postmeta — verified via `wp post meta list 13` on staging, which showed
+    // zero `*_settings_*` keys for the ontology page).
+    //
+    // Factory mirrors the existing $iiq_cta_group / $iiq_headline_lines
+    // pattern. Each sub-field also gets a unique key suffix so the inner
+    // schema is fully namespaced.
+    $iiq_settings_group_for = function ($key_suffix) {
+        return [
+            'key'        => 'field_iiq_settings_' . $key_suffix,
+            'label'      => 'Section settings',
+            'name'       => 'settings',
+            'type'       => 'group',
+            'layout'     => 'block',
+            'sub_fields' => [
+                [
+                    'key'   => 'field_iiq_settings_' . $key_suffix . '_section_index',
+                    'label' => 'Section index',
+                    'name'  => 'section_index',
+                    'type'  => 'text',
+                    'instructions' => 'Two-digit prefix shown above the section, e.g. "01".',
                 ],
-                'default_value' => 'light',
-                'return_format' => 'value',
+                [
+                    'key'   => 'field_iiq_settings_' . $key_suffix . '_section_label',
+                    'label' => 'Section label',
+                    'name'  => 'section_label',
+                    'type'  => 'text',
+                ],
+                [
+                    'key'     => 'field_iiq_settings_' . $key_suffix . '_theme_variant',
+                    'label'   => 'Theme variant',
+                    'name'    => 'theme_variant',
+                    'type'    => 'select',
+                    'choices' => [
+                        'light'  => 'Light',
+                        'dark'   => 'Dark',
+                        'sunken' => 'Sunken',
+                        'canvas' => 'Canvas',
+                    ],
+                    'default_value' => 'light',
+                    'return_format' => 'value',
+                ],
             ],
-        ],
-    ];
+        ];
+    };
 
     // Reusable CTA group factory
     $iiq_cta_group = function ($key_suffix, $label, $name) {
@@ -277,7 +292,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Pillars',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('pillars'),
                             ['key' => 'field_iiq_sp_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_sp_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             ['key' => 'field_iiq_sp_intro', 'label' => 'Intro', 'name' => 'intro', 'type' => 'textarea', 'rows' => 3],
@@ -339,7 +354,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Split',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('split'),
                             ['key' => 'field_iiq_ss_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_ss_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             ['key' => 'field_iiq_ss_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
@@ -398,7 +413,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section: Gap-Split',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('gap_split'),
                             ['key' => 'field_iiq_sgs_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_sgs_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
                             ['key' => 'field_iiq_sgs_headline_gap', 'label' => 'Headline gap', 'name' => 'headline_gap', 'type' => 'text'],
@@ -424,7 +439,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Stats',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('stats'),
                             ['key' => 'field_iiq_sst_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             [
                                 'key' => 'field_iiq_sst_style',
@@ -449,7 +464,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Stack',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('stack'),
                             ['key' => 'field_iiq_sk_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_sk_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             ['key' => 'field_iiq_sk_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
@@ -488,7 +503,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Prose',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('prose'),
                             ['key' => 'field_iiq_pr_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_pr_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             [
@@ -525,7 +540,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Contrast table',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('contrast'),
                             ['key' => 'field_iiq_ct_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_ct_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             ['key' => 'field_iiq_ct_headline_accent', 'label' => 'Headline accent (muted tail)', 'name' => 'headline_accent', 'type' => 'text', 'instructions' => 'Optional. Renders in fg-tertiary after the main headline.'],
@@ -554,7 +569,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Section · Team',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('team'),
                             ['key' => 'field_iiq_tm_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             [
                                 'key' => 'field_iiq_tm_avatar_style',
@@ -591,7 +606,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Trust · Logos',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('trust_logos'),
                             ['key' => 'field_iiq_tl_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             [
                                 'key'          => 'field_iiq_tl_logos',
@@ -615,7 +630,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Trust · Quote',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('trust_quote'),
                             ['key' => 'field_iiq_tq_quote', 'label' => 'Quote', 'name' => 'quote', 'type' => 'textarea', 'rows' => 4],
                             ['key' => 'field_iiq_tq_role', 'label' => 'Attribution role', 'name' => 'attribution_role', 'type' => 'text'],
                             ['key' => 'field_iiq_tq_status', 'label' => 'Attribution status', 'name' => 'attribution_status', 'type' => 'text'],
@@ -630,7 +645,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'CTA · Banner',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('cta_banner'),
                             ['key' => 'field_iiq_cb_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
                             ['key' => 'field_iiq_cb_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
                             $iiq_cta_group('cb_primary', 'Primary CTA', 'primary_cta'),
@@ -654,7 +669,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Diagram',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('diagram'),
                             [
                                 'key' => 'field_iiq_dg_diagram_key',
                                 'label' => 'Diagram',
@@ -746,7 +761,7 @@ if (function_exists('acf_add_local_field_group')) {
                         'label'      => 'Form',
                         'display'    => 'block',
                         'sub_fields' => [
-                            $iiq_settings_group,
+                            $iiq_settings_group_for('form'),
                             [
                                 'key' => 'field_iiq_fm_form_type',
                                 'label' => 'Form type',
