@@ -1,0 +1,45 @@
+name: Deploy to WP Engine staging
+
+# Auto-deploy the IgniteIQ theme to WP Engine staging on every push to main.
+#
+# REQUIRED before this workflow will succeed:
+#   1. Set WPE_ENV below to your actual WP Engine environment slug
+#      (find it in WP Engine User Portal — it's the URL slug, e.g. "igniteiqstg",
+#      not the display name "IgniteIQ Staging"). Search this file for "REPLACE_ME".
+#   2. Add the public key (~/.ssh/wpe_deploy_key.pub) to WP Engine User Portal → SSH Keys.
+#   3. Add the private key (~/.ssh/wpe_deploy_key) as a GitHub repo secret named
+#      WPE_SSHG_KEY_PRIVATE (Settings → Secrets and variables → Actions).
+#
+# Until WPE_ENV is set, the workflow will fail loudly at the deploy step rather
+# than deploying to the wrong place. Pushes to main still go through — only the
+# deploy step fails.
+#
+# Manual trigger: Actions tab → "Deploy to WP Engine staging" → Run workflow.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy theme
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to WP Engine
+        uses: wpengine/github-action-wpe-site-deploy@v3
+        with:
+          WPE_SSHG_KEY_PRIVATE: ${{ secrets.WPE_SSHG_KEY_PRIVATE }}
+          WPE_ENV: REPLACE_ME
+          SRC_PATH: "igniteiq/"
+          REMOTE_PATH: "wp-content/themes/igniteiq-v2/"
+          FLAGS: "-azvr --inplace --delete --exclude=.* --exclude=node_modules"
+          PHP_LINT: "TRUE"
+          CACHE_CLEAR: "TRUE"
