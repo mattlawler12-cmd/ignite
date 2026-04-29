@@ -96,20 +96,27 @@ This is the spine of the site. Internalize it before editing.
 
 ## 5. Export-drop convention
 
-See `exports/README.md` for full details. Quick version:
+See `exports/README.md` for full details. Two paths:
 
-- Inbox for new Claude Design zips Scott shares: `~/Desktop/screenys/new/` (leave them there).
-- Workspace: unzip into `exports/<YYYYMMDD>-<short-name>/` (e.g. `exports/20260501-pricing-update/`). No extra nesting — the export's `site/` subdir sits directly under the dated dir.
-- Update the `latest` symlink after each drop: `cd exports && ln -snf <YYYYMMDD>-<short-name> latest`.
-- Everything under `exports/` is gitignored except `.gitkeep` and `README.md`. Never commit unzipped contents or zips.
+**Cloud inbox (shared with Scott — preferred):**
+- Drop the zip into `~/Google Drive/My Drive/IgniteIQ/Claude Design Exports/`.
+- A `launchd` agent on Matt's Mac (`~/scripts/igniteiq/watch-exports.sh`, plist at `~/Library/LaunchAgents/com.igniteiq.export-watcher.plist`) watches the folder, validates the zip (≤500MB, no path-traversal, no symlinks), unzips into `exports/<YYYYMMDD>-<derived-name>/`, repoints `exports/latest`, and fires a macOS notification.
+- Requires Full Disk Access granted to `/bin/bash` (System Settings → Privacy & Security → Full Disk Access). Without it, the watcher can't read Google Drive contents from a launchd context. See `scripts/README.md` for setup.
+
+**Manual (offline / fallback):**
+- Unzip into `exports/<YYYYMMDD>-<short-name>/` (e.g. `exports/20260501-pricing-update/`). Either Claude Design layout works — the export's content root may be `site/` or `igniteiq-website/project/`.
+- Update the `latest` symlink: `cd exports && ln -snf <YYYYMMDD>-<short-name> latest`.
+
+Everything under `exports/` is gitignored except `.gitkeep` and `README.md`. Never commit unzipped contents or zips.
 
 ## 6. Port process (the loop)
 
-1. New export drops at `~/Desktop/screenys/new/`. Unzip into `exports/<YYYYMMDD>-<short-name>/` and update the `latest` symlink: `cd exports && ln -snf <YYYYMMDD>-<short-name> latest`.
-2. Run `/diff-iiq-export` (skill at `~/.claude/skills/diff-iiq-export/`). It diffs `exports/latest` against the previous dated dir. Read the markdown delta report — focus on the WP-mapping table at the bottom.
+1. Export drops in cloud inbox (or manual unzip). Watcher unzips + repoints `latest`. macOS notification: "IgniteIQ export ready — run /diff-iiq-export".
+2. Run `/diff-iiq-export` in Claude Code (skill at `~/.claude/skills/diff-iiq-export/`). **Default behavior compares `exports/latest/` against live staging at `https://igniteiqstg.wpenginepowered.com`** — the output is a porting checklist (strings missing on staging, mapped to `template-parts/*.php` + `cli.php` rows). Helper extractor at `~/scripts/igniteiq/iiq-extract.py` handles SPA-style exports (HTML shell + `js/*.js` bundle).
 3. Edit the listed `igniteiq/template-parts/*.php` files (markup) **and** the matching rows in `igniteiq/inc/cli.php` `default_pages()` (seeded copy). Keep them in sync.
 4. `bash deploy.sh` to mirror to Local. Preview at `http://igniteiq.local/`. Reseed in Local's site shell if copy changed: `wp igniteiq seed --force`.
-5. Commit + push to `main`. The Action deploys to WPE staging and reseeds automatically. Verify at `https://igniteiqstg.wpenginepowered.com/`.
+5. Commit + push to `main`. The Action deploys to WPE staging and reseeds automatically.
+6. Run `/verify-iiq-fidelity` to confirm every export string is now on staging. Don't consider the port done until that report is clean.
 
 ## 7. Don'ts
 
