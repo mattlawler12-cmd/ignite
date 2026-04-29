@@ -1,0 +1,377 @@
+/* =========================================================================
+   IgniteIQ — Colors & Type
+   Own Your Intelligence.
+   ----------------------------------------------------------------------
+   Monochromatic, infrastructural. Black, white, and a precise gray scale
+   carry 99% of the work. Ignite Red is a signal color — used sparingly
+   for moments of intelligence, emphasis, and live state.
+   ========================================================================= */
+
+/* ---------- FONTS -----------------------------------------------------
+   Display / Body: Aeonik (brand font, supplied by IgniteIQ)
+                   Weights: 300 Light, 400 Regular, 500 Medium*, 700 Bold.
+                   * 500 Medium currently uses Aeonik Regular (per brand decision).
+   Mono:           Aeonik Fono (brand mono, supplied)
+                   Weights: 300 Light, 500 Medium.
+   --------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('../fonts/Aeonik-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik';
+  src: url('../fonts/Aeonik-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik';
+  src: url('../fonts/Aeonik-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik';
+  src: url('../fonts/Aeonik-Medium.otf') format('opentype');
+  font-weight: 500 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik Fono';
+  src: url('../fonts/AeonikFono-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik Fono';
+  src: url('../fonts/AeonikFono-Medium.otf') format('opentype');
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* =========================================================
+     COLOR — neutrals (the workhorse)
+     A 12-step warm-cool-neutral gray ramp, true black at the
+     bottom anchor. Built in oklch so light-mode and dark-mode
+     swaps are perceptually balanced.
+     ========================================================= */
+  --ink-0:    oklch(100%   0      0);          /* pure white            */
+  --ink-50:   oklch(98.6%  0.001 286);          /* page bg               */
+  --ink-100:  oklch(96.4%  0.002 286);          /* surface raised        */
+  --ink-150:  oklch(93.2%  0.003 286);          /* hairline / divider    */
+  --ink-200:  oklch(88.0%  0.004 286);          /* border                */
+  --ink-300:  oklch(78.0%  0.005 286);          /* muted line            */
+  --ink-400:  oklch(64.0%  0.006 286);          /* placeholder, fg-tertiary */
+  --ink-500:  oklch(50.0%  0.007 286);          /* fg-secondary, icons   */
+  --ink-600:  oklch(38.0%  0.007 286);          /* body alt              */
+  --ink-700:  oklch(27.5%  0.006 286);          /* heading alt           */
+  --ink-800:  oklch(18.0%  0.005 286);          /* near-black surface    */
+  --ink-900:  oklch(12.0%  0.004 286);          /* deep surface          */
+  --ink-950:  oklch(7.5%   0.003 286);          /* canvas dark           */
+  --ink-1000: oklch(0%     0      0);           /* true black (logo)     */
+
+  /* =========================================================
+     COLOR — Ignite Red (accent)
+     Used for: live indicators, AI-active states, focused
+     emphasis, key CTAs, the "Ignite" moment. NEVER as a body
+     color, NEVER as a large fill.
+     ========================================================= */
+  --ignite-50:  oklch(97%   0.018  25);
+  --ignite-100: oklch(93%   0.045  25);
+  --ignite-200: oklch(85%   0.10   25);
+  --ignite-300: oklch(75%   0.16   25);
+  --ignite-400: oklch(65%   0.21   25);
+  --ignite-500: oklch(57.5% 0.232  25);   /* primary brand red */
+  --ignite-600: oklch(50%   0.215  25);
+  --ignite-700: oklch(42%   0.18   25);
+  --ignite-800: oklch(33%   0.13   25);
+  --ignite-900: oklch(24%   0.085  25);
+
+  /* =========================================================
+     COLOR — semantic data-state palette
+     Reserved for status badges and data-viz only.
+     Desaturated by design — the ontology speaks softly.
+     ========================================================= */
+  --state-success: oklch(62%   0.13  155);
+  --state-warning: oklch(76%   0.13   75);
+  --state-info:    oklch(60%   0.10  240);
+  --link-blue:     oklch(70%   0.13  238);   /* inline link blue from product UI */
+  --state-danger:  var(--ignite-500);
+
+  /* =========================================================
+     SEMANTIC TOKENS — light mode default
+     Use these in components, not the raw ramps.
+     ========================================================= */
+  --bg-canvas:      var(--ink-50);
+  --bg-surface:     var(--ink-0);
+  --bg-raised:      var(--ink-0);
+  --bg-sunken:      var(--ink-100);
+  --bg-inverse:     var(--ink-1000);
+
+  --fg-primary:     var(--ink-1000);
+  --fg-secondary:   var(--ink-600);
+  --fg-tertiary:    var(--ink-500);
+  --fg-muted:       var(--ink-400);
+  --fg-on-inverse:  var(--ink-50);
+  --fg-accent:      var(--ignite-500);
+
+  --border-subtle:  var(--ink-150);
+  --border-default: var(--ink-200);
+  --border-strong:  var(--ink-300);
+  --border-inverse: var(--ink-800);
+
+  --focus-ring:     var(--ignite-500);
+  --selection-bg:   oklch(57.5% 0.232 25 / 0.18);
+
+  /* =========================================================
+     RADII — minimal. Sharp corners signal infrastructure.
+     ========================================================= */
+  --radius-none:  0px;
+  --radius-xs:    2px;
+  --radius-sm:    4px;
+  --radius-md:    6px;   /* default for inputs, buttons */
+  --radius-lg:    10px;  /* cards */
+  --radius-xl:    16px;  /* large surfaces */
+  --radius-pill:  999px;
+
+  /* =========================================================
+     SPACING — 4px base
+     ========================================================= */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* =========================================================
+     SHADOWS — restrained. Mostly hairlines + a single soft lift.
+     ========================================================= */
+  --shadow-none: none;
+  --shadow-hairline: 0 0 0 1px var(--border-subtle);
+  --shadow-sm:  0 1px 2px 0 rgb(0 0 0 / 0.04), 0 0 0 1px rgb(0 0 0 / 0.04);
+  --shadow-md:  0 4px 12px -2px rgb(0 0 0 / 0.06), 0 0 0 1px rgb(0 0 0 / 0.05);
+  --shadow-lg:  0 16px 40px -8px rgb(0 0 0 / 0.10), 0 0 0 1px rgb(0 0 0 / 0.05);
+  --shadow-xl:  0 32px 80px -12px rgb(0 0 0 / 0.18), 0 0 0 1px rgb(0 0 0 / 0.06);
+  --shadow-inset-hairline: inset 0 0 0 1px var(--border-default);
+  --shadow-glow-ignite: 0 0 0 4px oklch(57.5% 0.232 25 / 0.18);
+
+  /* =========================================================
+     MOTION — fast, mechanical, no bounce.
+     The brand is precision software, not a consumer toy.
+     ========================================================= */
+  --ease-standard: cubic-bezier(0.2, 0.0, 0.0, 1.0);
+  --ease-out:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in:       cubic-bezier(0.7, 0, 0.84, 0);
+  --duration-instant: 80ms;
+  --duration-fast:    140ms;
+  --duration-base:    220ms;
+  --duration-slow:    360ms;
+
+  /* =========================================================
+     TYPOGRAPHY — the system
+     Display: Inter Tight (geometric, condensed-feel headings)
+     Sans:    Inter         (workhorse body + UI)
+     Mono:    JetBrains Mono (data, code, ontology objects)
+     ========================================================= */
+  --font-display: 'Aeonik', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-sans:    'Aeonik', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono:    'Aeonik Fono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* type scale — modular, slight 1.2 ratio at body, larger jumps for display */
+  --text-2xs:  11px;
+  --text-xs:   12px;
+  --text-sm:   13px;
+  --text-base: 15px;
+  --text-md:   16px;
+  --text-lg:   18px;
+  --text-xl:   22px;
+  --text-2xl:  28px;
+  --text-3xl:  36px;
+  --text-4xl:  48px;
+  --text-5xl:  64px;
+  --text-6xl:  88px;
+  --text-7xl:  120px;
+
+  --leading-tight:  1.05;
+  --leading-snug:   1.2;
+  --leading-normal: 1.45;
+  --leading-loose:  1.65;
+
+  --tracking-tighter: -0.04em;
+  --tracking-tight:   -0.02em;
+  --tracking-normal:  0;
+  --tracking-wide:    0.04em;
+  --tracking-eyebrow: 0.14em;     /* uppercase eyebrow labels */
+
+  --weight-regular:  400;
+  --weight-medium:   500;
+  --weight-semibold: 600;
+  --weight-bold:     700;
+  --weight-black:    800;
+}
+
+/* =========================================================
+   DARK THEME — the dashboard / product default
+   IgniteIQ leans dark for product, light for marketing.
+   ========================================================= */
+:root[data-theme="dark"], .iiq-dark {
+  --bg-canvas:      var(--ink-950);
+  --bg-surface:     var(--ink-900);
+  --bg-raised:      var(--ink-800);
+  --bg-sunken:      var(--ink-1000);
+  --bg-inverse:     var(--ink-0);
+
+  --fg-primary:     var(--ink-50);
+  --fg-secondary:   var(--ink-300);
+  --fg-tertiary:    var(--ink-400);
+  --fg-muted:       var(--ink-500);
+  --fg-on-inverse:  var(--ink-1000);
+  --fg-accent:      var(--ignite-400);
+
+  --border-subtle:  oklch(20% 0.005 286);
+  --border-default: oklch(26% 0.005 286);
+  --border-strong:  oklch(34% 0.006 286);
+  --border-inverse: var(--ink-200);
+
+  --shadow-sm:  0 1px 2px 0 rgb(0 0 0 / 0.4), 0 0 0 1px rgb(255 255 255 / 0.04);
+  --shadow-md:  0 4px 12px -2px rgb(0 0 0 / 0.5), 0 0 0 1px rgb(255 255 255 / 0.05);
+  --shadow-lg:  0 16px 40px -8px rgb(0 0 0 / 0.6), 0 0 0 1px rgb(255 255 255 / 0.06);
+}
+
+/* =========================================================
+   ELEMENT DEFAULTS — apply tokens to native HTML
+   ========================================================= */
+html, body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--selection-bg); }
+
+h1, .h1 {
+  font-family: var(--font-display);
+  font-size: var(--text-5xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tighter);
+  font-weight: var(--weight-semibold);
+  color: var(--fg-primary);
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+h3, .h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+  font-weight: var(--weight-semibold);
+}
+h4, .h4 {
+  font-family: var(--font-sans);
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-tight);
+}
+h5, .h5 {
+  font-family: var(--font-sans);
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  font-weight: var(--weight-semibold);
+}
+h6, .h6, .eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+p, .body {
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--fg-secondary);
+}
+.lead {
+  font-size: var(--text-xl);
+  line-height: var(--leading-snug);
+  color: var(--fg-secondary);
+  letter-spacing: var(--tracking-tight);
+}
+small, .caption {
+  font-size: var(--text-xs);
+  color: var(--fg-tertiary);
+}
+
+code, kbd, samp, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  font-feature-settings: 'zero', 'ss02';
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: var(--border-strong);
+  transition: text-decoration-color var(--duration-fast) var(--ease-standard);
+}
+a:hover { text-decoration-color: var(--fg-accent); }
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border-subtle);
+  margin: var(--space-8) 0;
+}
+
+/* eyebrow label utility, mono-cased  */
+.iiq-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--fg-tertiary);
+}
+
+/* monospace data label (e.g. "JOB_ID 84412") */
+.iiq-token {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--fg-secondary);
+  background: var(--bg-sunken);
+  padding: 2px 6px;
+  border-radius: var(--radius-xs);
+  border: 1px solid var(--border-subtle);
+}

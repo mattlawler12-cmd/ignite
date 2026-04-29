@@ -1,0 +1,17 @@
+# macOS / Windows / editor
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+*.iml
+
+# backups + logs
+*.log
+*.bak
+*.bak.*
+
+# node (forward-looking)
+node_modules/

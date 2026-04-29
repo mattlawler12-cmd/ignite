@@ -1,0 +1,14 @@
+/*
+Theme Name: IgniteIQ v2
+Theme URI: https://igniteiq.com
+Author: IgniteIQ
+Author URI: https://igniteiq.com
+Description: Custom WordPress theme for IgniteIQ — intelligence infrastructure for the modern trades. ACF Pro Flexible Content drives all editable copy; SVG diagrams + animations live in PHP template-parts. No page builder, no React in the browser.
+Version: 2.0.0
+Requires at least: 6.4
+Requires PHP: 8.1
+License: Proprietary
+Text Domain: igniteiq
+*/
+
+/* All real CSS lives in /assets/css/{tokens,responsive,theme}.css and is enqueued in inc/enqueue.php. */

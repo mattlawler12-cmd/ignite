@@ -1,0 +1,129 @@
+/* IgniteIQ v2 — theme-specific CSS layered on tokens.css + responsive.css */
+
+/* Universal box-sizing — width:100% containers should NOT add padding on top */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Desktop defaults for the iiq layout utilities. responsive.css overrides
+   these on tablet/phone. Without these, sections rendered via the section
+   template-parts have ZERO vertical padding on desktop and flow into each
+   other. Values match the JSX SectionFrame helper. */
+.iiq-pad         { padding-left: 32px; padding-right: 32px; }
+.iiq-hero-pad    { padding: 180px 32px 140px; }
+.iiq-section-pad { padding-top: 120px; padding-bottom: 140px; }
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg-canvas);
+  color: var(--fg-primary);
+  margin: 0;
+  font-family: 'Aeonik', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes iiqPulse { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+@keyframes iiqRevealIn { from { opacity: 0; transform: translateY(16px) } to { opacity: 1; transform: translateY(0) } }
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--ink-300); border-radius: 0; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* Reveal animation port (Reveal.jsx).
+   Desktop-only: hidden initially, fades in when intersected. Mobile + reduced
+   motion: always visible (no risk of blank sections if observer misses). */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  html.iiq-js-reveal [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    will-change: opacity, transform;
+  }
+  html.iiq-js-reveal [data-reveal].is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* Mobile drawer open state */
+.iiq-nav-drawer.is-open { transform: translateX(0) !important; }
+.iiq-nav-scrim.is-open { opacity: 1 !important; pointer-events: auto !important; }
+body.iiq-nav-locked { overflow: hidden; }
+
+/* Visually-hidden helper for accessibility */
+.iiq-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0);
+  white-space: nowrap; border: 0;
+}
+
+/* Form input styling — matches JSX Field/SelectField/TextareaField */
+.iiq-input,
+.iiq-select,
+.iiq-textarea {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--border-default);
+  padding: 12px 0;
+  font-family: 'Aeonik', sans-serif;
+  font-size: 16px;
+  color: var(--fg-primary);
+  outline: none;
+  transition: border-bottom-color 200ms var(--ease-standard, ease);
+  border-radius: 0;
+}
+.iiq-input:focus,
+.iiq-select:focus,
+.iiq-textarea:focus { border-bottom-color: var(--ignite-500); }
+.iiq-textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
+
+.iiq-field-label {
+  display: block;
+  font-family: 'Aeonik Fono', ui-monospace, SFMono-Regular, monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-tertiary, #71717a);
+  margin-bottom: 6px;
+}
+.iiq-field-label .iiq-required { color: var(--ignite-500); margin-left: 4px; }
+
+.iiq-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 22px;
+  background: var(--ignite-500);
+  color: #fff;
+  font-family: 'Aeonik Fono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 0;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+.iiq-btn:hover { background: var(--ignite-600, #c0382b); }
+.iiq-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.iiq-btn-ghost {
+  background: transparent;
+  color: var(--fg-primary);
+  border: 1px solid var(--border-default);
+}
+.iiq-btn-ghost:hover { background: rgba(0,0,0,0.04); }
+
+/* Honeypot — hidden from users + bots that respect tabindex */
+.iiq-honeypot {
+  position: absolute !important;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

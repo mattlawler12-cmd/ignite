@@ -1,0 +1,848 @@
+<?php
+/**
+ * ACF Pro Field Group Registration
+ *
+ * Registers three field groups:
+ *   A. Page Sections (Flexible Content)
+ *   B. Page Meta (SEO + schema)
+ *   C. Site Settings (Options page)
+ *
+ * Silently no-ops if ACF Pro is not active.
+ *
+ * @package IgniteIQ
+ */
+
+if (!defined('ABSPATH')) { exit; }
+
+if (function_exists('acf_add_local_field_group')) {
+
+    // ──────────────────────────────────────────────────────────────────
+    // Shared bits
+    // ──────────────────────────────────────────────────────────────────
+    $iiq_hide_on_screen = ['custom_fields', 'discussion', 'comments'];
+
+    // Reusable: settings sub-group attached to most layouts
+    $iiq_settings_group = [
+        'key'        => 'field_iiq_layout_settings',
+        'label'      => 'Section settings',
+        'name'       => '_settings',
+        'type'       => 'group',
+        'layout'     => 'block',
+        'sub_fields' => [
+            [
+                'key'   => 'field_iiq_settings_section_index',
+                'label' => 'Section index',
+                'name'  => 'section_index',
+                'type'  => 'text',
+                'instructions' => 'Two-digit prefix shown above the section, e.g. "01".',
+            ],
+            [
+                'key'   => 'field_iiq_settings_section_label',
+                'label' => 'Section label',
+                'name'  => 'section_label',
+                'type'  => 'text',
+            ],
+            [
+                'key'     => 'field_iiq_settings_theme_variant',
+                'label'   => 'Theme variant',
+                'name'    => 'theme_variant',
+                'type'    => 'select',
+                'choices' => [
+                    'light'  => 'Light',
+                    'dark'   => 'Dark',
+                    'sunken' => 'Sunken',
+                    'canvas' => 'Canvas',
+                ],
+                'default_value' => 'light',
+                'return_format' => 'value',
+            ],
+        ],
+    ];
+
+    // Reusable CTA group factory
+    $iiq_cta_group = function ($key_suffix, $label, $name) {
+        return [
+            'key'        => 'field_iiq_cta_' . $key_suffix,
+            'label'      => $label,
+            'name'       => $name,
+            'type'       => 'group',
+            'layout'     => 'block',
+            'sub_fields' => [
+                [
+                    'key'   => 'field_iiq_cta_label_' . $key_suffix,
+                    'label' => 'Label',
+                    'name'  => 'label',
+                    'type'  => 'text',
+                ],
+                [
+                    'key'   => 'field_iiq_cta_url_' . $key_suffix,
+                    'label' => 'URL',
+                    'name'  => 'url',
+                    'type'  => 'text',
+                ],
+            ],
+        ];
+    };
+
+    // Reusable headline_lines repeater
+    $iiq_headline_lines = function ($key_suffix) {
+        return [
+            'key'          => 'field_iiq_headline_lines_' . $key_suffix,
+            'label'        => 'Headline lines',
+            'name'         => 'headline_lines',
+            'type'         => 'repeater',
+            'layout'       => 'table',
+            'button_label' => 'Add line',
+            'sub_fields'   => [
+                [
+                    'key'   => 'field_iiq_headline_line_' . $key_suffix,
+                    'label' => 'Line',
+                    'name'  => 'line',
+                    'type'  => 'text',
+                ],
+            ],
+        ];
+    };
+
+    // Reusable stats repeater
+    $iiq_stats_repeater = function ($key_suffix, $with_footnote = false) {
+        $sub = [
+            [
+                'key' => 'field_iiq_stat_value_' . $key_suffix,
+                'label' => 'Value', 'name' => 'value', 'type' => 'text',
+            ],
+            [
+                'key' => 'field_iiq_stat_label_' . $key_suffix,
+                'label' => 'Label', 'name' => 'label', 'type' => 'text',
+            ],
+        ];
+        if ($with_footnote) {
+            $sub[] = [
+                'key' => 'field_iiq_stat_footnote_' . $key_suffix,
+                'label' => 'Footnote', 'name' => 'footnote', 'type' => 'text',
+            ];
+        }
+        return [
+            'key'          => 'field_iiq_stats_' . $key_suffix,
+            'label'        => 'Stats',
+            'name'         => 'stats',
+            'type'         => 'repeater',
+            'layout'       => 'table',
+            'button_label' => 'Add stat',
+            'sub_fields'   => $sub,
+        ];
+    };
+
+    $iiq_diagram_choices = [
+        'stack'          => 'Stack diagram',
+        'platform-stack' => 'Platform stack',
+        'arch-ontology'  => 'Architecture · ontology',
+        'operator-stack' => 'Operator stack (problem)',
+        'cloud-arch'     => 'Cloud architecture',
+        'framework'      => 'Framework',
+        'boundary'       => 'Sovereign boundary',
+    ];
+
+    // ──────────────────────────────────────────────────────────────────
+    // GROUP A — PAGE SECTIONS (Flexible Content)
+    // ──────────────────────────────────────────────────────────────────
+    acf_add_local_field_group([
+        'key'    => 'group_iiq_page_sections',
+        'title'  => 'Page Sections',
+        'fields' => [
+            [
+                'key'          => 'field_iiq_page_sections',
+                'label'        => 'Page sections',
+                'name'         => 'page_sections',
+                'type'         => 'flexible_content',
+                'button_label' => 'Add section',
+                'layouts'      => [
+
+                    // ─── hero_statement ───
+                    'layout_iiq_hero_statement' => [
+                        'key'        => 'layout_iiq_hero_statement',
+                        'name'       => 'hero_statement',
+                        'label'      => 'Hero · Statement',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_hs_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            $iiq_headline_lines('hs'),
+                            ['key' => 'field_iiq_hs_subhead', 'label' => 'Subhead', 'name' => 'subhead', 'type' => 'textarea', 'rows' => 3],
+                            $iiq_cta_group('hs_primary', 'Primary CTA', 'primary_cta'),
+                            $iiq_cta_group('hs_secondary', 'Secondary CTA', 'secondary_cta'),
+                            $iiq_stats_repeater('hs'),
+                        ],
+                    ],
+
+                    // ─── hero_editorial ───
+                    'layout_iiq_hero_editorial' => [
+                        'key'        => 'layout_iiq_hero_editorial',
+                        'name'       => 'hero_editorial',
+                        'label'      => 'Hero · Editorial',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_he_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            $iiq_headline_lines('he'),
+                            ['key' => 'field_iiq_he_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            $iiq_cta_group('he_primary', 'Primary CTA', 'primary_cta'),
+                            $iiq_cta_group('he_secondary', 'Secondary CTA', 'secondary_cta'),
+                            ['key' => 'field_iiq_he_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1],
+                        ],
+                    ],
+
+                    // ─── hero_cinematic ───
+                    'layout_iiq_hero_cinematic' => [
+                        'key'        => 'layout_iiq_hero_cinematic',
+                        'name'       => 'hero_cinematic',
+                        'label'      => 'Hero · Cinematic',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_hc_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            $iiq_headline_lines('hc'),
+                            ['key' => 'field_iiq_hc_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            $iiq_cta_group('hc_primary', 'Primary CTA', 'primary_cta'),
+                            $iiq_cta_group('hc_secondary', 'Secondary CTA', 'secondary_cta'),
+                            $iiq_stats_repeater('hc'),
+                        ],
+                    ],
+
+                    // ─── hero_split ───
+                    'layout_iiq_hero_split' => [
+                        'key'        => 'layout_iiq_hero_split',
+                        'name'       => 'hero_split',
+                        'label'      => 'Hero · Split',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_hsp_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            $iiq_headline_lines('hsp'),
+                            ['key' => 'field_iiq_hsp_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            $iiq_cta_group('hsp_primary', 'Primary CTA', 'primary_cta'),
+                            $iiq_cta_group('hsp_secondary', 'Secondary CTA', 'secondary_cta'),
+                            ['key' => 'field_iiq_hsp_image', 'label' => 'Media image', 'name' => 'media_image', 'type' => 'image', 'return_format' => 'array'],
+                            [
+                                'key' => 'field_iiq_hsp_position',
+                                'label' => 'Media position',
+                                'name' => 'media_position',
+                                'type' => 'select',
+                                'choices' => ['left' => 'Left', 'right' => 'Right'],
+                                'default_value' => 'right',
+                                'return_format' => 'value',
+                            ],
+                        ],
+                    ],
+
+                    // ─── hero_minimal ───
+                    'layout_iiq_hero_minimal' => [
+                        'key'        => 'layout_iiq_hero_minimal',
+                        'name'       => 'hero_minimal',
+                        'label'      => 'Hero · Minimal',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            ['key' => 'field_iiq_hm_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            $iiq_headline_lines('hm'),
+                            ['key' => 'field_iiq_hm_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                        ],
+                    ],
+
+                    // ─── section_pillars ───
+                    'layout_iiq_section_pillars' => [
+                        'key'        => 'layout_iiq_section_pillars',
+                        'name'       => 'section_pillars',
+                        'label'      => 'Section · Pillars',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_sp_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_sp_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_sp_intro', 'label' => 'Intro', 'name' => 'intro', 'type' => 'textarea', 'rows' => 3],
+                            [
+                                'key' => 'field_iiq_sp_columns',
+                                'label' => 'Columns',
+                                'name' => 'columns',
+                                'type' => 'select',
+                                'choices' => ['2' => '2', '3' => '3', '4' => '4'],
+                                'default_value' => '3',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key' => 'field_iiq_sp_style',
+                                'label' => 'Render style',
+                                'name' => 'style',
+                                'type' => 'select',
+                                'choices' => [
+                                    'cards'        => 'Cards (rounded white card)',
+                                    'bars'         => 'Tapered SVG bars (top + bottom)',
+                                    'bordered'     => 'Border-separated columns (vertical dividers)',
+                                    'top-border'   => 'Top border only (minimal)',
+                                    'grid-divided' => 'Grid-divided (1px gap, sharp edges)',
+                                ],
+                                'default_value' => 'cards',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key'          => 'field_iiq_sp_items',
+                                'label'        => 'Items',
+                                'name'         => 'items',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add pillar',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_sp_item_index', 'label' => 'Index number', 'name' => 'index_number', 'type' => 'text'],
+                                    ['key' => 'field_iiq_sp_item_title', 'label' => 'Title', 'name' => 'title', 'type' => 'text'],
+                                    ['key' => 'field_iiq_sp_item_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 4],
+                                ],
+                            ],
+                            [
+                                'key'          => 'field_iiq_sp_scenarios',
+                                'label'        => 'Scenarios (optional)',
+                                'name'         => 'scenarios',
+                                'type'         => 'repeater',
+                                'instructions' => 'Optional tagged anecdote cards rendered below the pillars grid.',
+                                'button_label' => 'Add scenario',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_sp_scenario_tag',  'label' => 'Tag',  'name' => 'tag',  'type' => 'text'],
+                                    ['key' => 'field_iiq_sp_scenario_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── section_split ───
+                    'layout_iiq_section_split' => [
+                        'key'        => 'layout_iiq_section_split',
+                        'name'       => 'section_split',
+                        'label'      => 'Section · Split',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_ss_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_ss_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_ss_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            [
+                                'key' => 'field_iiq_ss_media_slot',
+                                'label' => 'Media slot',
+                                'name' => 'media_slot',
+                                'type' => 'select',
+                                'choices' => ['diagram' => 'Diagram', 'image' => 'Image'],
+                                'default_value' => 'diagram',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key' => 'field_iiq_ss_diagram_key',
+                                'label' => 'Diagram',
+                                'name' => 'diagram_key',
+                                'type' => 'select',
+                                'choices' => $iiq_diagram_choices,
+                                'return_format' => 'value',
+                                'conditional_logic' => [[
+                                    ['field' => 'field_iiq_ss_media_slot', 'operator' => '==', 'value' => 'diagram'],
+                                ]],
+                            ],
+                            [
+                                'key' => 'field_iiq_ss_image',
+                                'label' => 'Image',
+                                'name' => 'image',
+                                'type' => 'image',
+                                'return_format' => 'array',
+                                'conditional_logic' => [[
+                                    ['field' => 'field_iiq_ss_media_slot', 'operator' => '==', 'value' => 'image'],
+                                ]],
+                            ],
+                            ['key' => 'field_iiq_ss_reverse', 'label' => 'Reverse', 'name' => 'reverse', 'type' => 'true_false', 'ui' => 1],
+                        ],
+                    ],
+
+                    // ─── section_stats ───
+                    'layout_iiq_section_stats' => [
+                        'key'        => 'layout_iiq_section_stats',
+                        'name'       => 'section_stats',
+                        'label'      => 'Section · Stats',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_sst_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            [
+                                'key' => 'field_iiq_sst_style',
+                                'label' => 'Render style',
+                                'name' => 'style',
+                                'type' => 'select',
+                                'choices' => [
+                                    'cards' => 'Cards (rounded white)',
+                                    'bare'  => 'Bare grid (no border / no card)',
+                                ],
+                                'default_value' => 'cards',
+                                'return_format' => 'value',
+                            ],
+                            $iiq_stats_repeater('sst', true),
+                        ],
+                    ],
+
+                    // ─── section_stack (steps / pipeline) ───
+                    'layout_iiq_section_stack' => [
+                        'key'        => 'layout_iiq_section_stack',
+                        'name'       => 'section_stack',
+                        'label'      => 'Section · Stack',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_sk_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_sk_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_sk_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                            [
+                                'key' => 'field_iiq_sk_layout',
+                                'label' => 'Layout',
+                                'name' => 'layout',
+                                'type' => 'select',
+                                'choices' => [
+                                    'list-2col'          => 'Vertical list (default)',
+                                    'timeline-horizontal' => 'Horizontal timeline (4-col with bullets)',
+                                    'grid-3col'          => 'Vertical 3-column rows (label / title / body)',
+                                ],
+                                'default_value' => 'list-2col',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key'          => 'field_iiq_sk_items',
+                                'label'        => 'Items',
+                                'name'         => 'items',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add step',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_sk_item_step', 'label' => 'Step', 'name' => 'step', 'type' => 'text'],
+                                    ['key' => 'field_iiq_sk_item_title', 'label' => 'Title', 'name' => 'title', 'type' => 'text'],
+                                    ['key' => 'field_iiq_sk_item_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── section_prose ───
+                    'layout_iiq_section_prose' => [
+                        'key'        => 'layout_iiq_section_prose',
+                        'name'       => 'section_prose',
+                        'label'      => 'Section · Prose',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_pr_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_pr_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            [
+                                'key' => 'field_iiq_pr_style',
+                                'label' => 'Layout style',
+                                'name' => 'style',
+                                'type' => 'select',
+                                'choices' => [
+                                    'single' => 'Single column (default, centered)',
+                                    'split'  => 'Split (headline left, paragraphs right; last paragraph as monospace stamp)',
+                                ],
+                                'default_value' => 'single',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key'          => 'field_iiq_pr_paragraphs',
+                                'label'        => 'Paragraphs',
+                                'name'         => 'paragraphs',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add paragraph',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_pr_p', 'label' => 'Paragraph', 'name' => 'paragraph', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── section_contrast ───
+                    // 2-col contrast table with optional intro paragraphs.
+                    // Used by the "Headless by design" section on /how-it-works/.
+                    'layout_iiq_section_contrast' => [
+                        'key'        => 'layout_iiq_section_contrast',
+                        'name'       => 'section_contrast',
+                        'label'      => 'Section · Contrast table',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_ct_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            ['key' => 'field_iiq_ct_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_ct_headline_accent', 'label' => 'Headline accent (muted tail)', 'name' => 'headline_accent', 'type' => 'text', 'instructions' => 'Optional. Renders in fg-tertiary after the main headline.'],
+                            ['key' => 'field_iiq_ct_body_left', 'label' => 'Body — left column', 'name' => 'body_left', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_ct_body_right', 'label' => 'Body — right column', 'name' => 'body_right', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_ct_header_old', 'label' => 'Table header — old column', 'name' => 'table_header_old', 'type' => 'text', 'default_value' => 'The old model'],
+                            ['key' => 'field_iiq_ct_header_new', 'label' => 'Table header — new column', 'name' => 'table_header_new', 'type' => 'text', 'default_value' => 'The new model'],
+                            [
+                                'key'          => 'field_iiq_ct_rows',
+                                'label'        => 'Rows',
+                                'name'         => 'rows',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add row',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_ct_row_old', 'label' => 'Old', 'name' => 'old_text', 'type' => 'text'],
+                                    ['key' => 'field_iiq_ct_row_new', 'label' => 'New', 'name' => 'new_text', 'type' => 'text'],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── section_team ───
+                    'layout_iiq_section_team' => [
+                        'key'        => 'layout_iiq_section_team',
+                        'name'       => 'section_team',
+                        'label'      => 'Section · Team',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_tm_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            [
+                                'key' => 'field_iiq_tm_avatar_style',
+                                'label' => 'Avatar style',
+                                'name' => 'avatar_style',
+                                'type' => 'select',
+                                'choices' => [
+                                    'circle' => 'Circle (current default)',
+                                    'square' => 'Square gradient (64×64, border-radius 6)',
+                                ],
+                                'default_value' => 'circle',
+                                'return_format' => 'value',
+                            ],
+                            [
+                                'key'          => 'field_iiq_tm_members',
+                                'label'        => 'Members',
+                                'name'         => 'members',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add member',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_tm_name', 'label' => 'Name', 'name' => 'name', 'type' => 'text'],
+                                    ['key' => 'field_iiq_tm_role', 'label' => 'Role', 'name' => 'role', 'type' => 'text'],
+                                    ['key' => 'field_iiq_tm_bio', 'label' => 'Bio', 'name' => 'bio', 'type' => 'textarea', 'rows' => 4],
+                                    ['key' => 'field_iiq_tm_photo', 'label' => 'Photo', 'name' => 'photo', 'type' => 'image', 'return_format' => 'array'],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── trust_logos ───
+                    'layout_iiq_trust_logos' => [
+                        'key'        => 'layout_iiq_trust_logos',
+                        'name'       => 'trust_logos',
+                        'label'      => 'Trust · Logos',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_tl_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
+                            [
+                                'key'          => 'field_iiq_tl_logos',
+                                'label'        => 'Logos',
+                                'name'         => 'logos',
+                                'type'         => 'repeater',
+                                'button_label' => 'Add logo',
+                                'sub_fields'   => [
+                                    ['key' => 'field_iiq_tl_image', 'label' => 'Image', 'name' => 'image', 'type' => 'image', 'return_format' => 'array'],
+                                    ['key' => 'field_iiq_tl_alt', 'label' => 'Alt', 'name' => 'alt', 'type' => 'text'],
+                                    ['key' => 'field_iiq_tl_url', 'label' => 'URL', 'name' => 'url', 'type' => 'text'],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── trust_quote ───
+                    'layout_iiq_trust_quote' => [
+                        'key'        => 'layout_iiq_trust_quote',
+                        'name'       => 'trust_quote',
+                        'label'      => 'Trust · Quote',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_tq_quote', 'label' => 'Quote', 'name' => 'quote', 'type' => 'textarea', 'rows' => 4],
+                            ['key' => 'field_iiq_tq_role', 'label' => 'Attribution role', 'name' => 'attribution_role', 'type' => 'text'],
+                            ['key' => 'field_iiq_tq_status', 'label' => 'Attribution status', 'name' => 'attribution_status', 'type' => 'text'],
+                            ['key' => 'field_iiq_tq_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1],
+                        ],
+                    ],
+
+                    // ─── cta_banner ───
+                    'layout_iiq_cta_banner' => [
+                        'key'        => 'layout_iiq_cta_banner',
+                        'name'       => 'cta_banner',
+                        'label'      => 'CTA · Banner',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            ['key' => 'field_iiq_cb_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_cb_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                            $iiq_cta_group('cb_primary', 'Primary CTA', 'primary_cta'),
+                            $iiq_cta_group('cb_secondary', 'Secondary CTA', 'secondary_cta'),
+                            [
+                                'key' => 'field_iiq_cb_variant',
+                                'label' => 'Variant',
+                                'name' => 'variant',
+                                'type' => 'select',
+                                'choices' => ['dark' => 'Dark', 'light' => 'Light'],
+                                'default_value' => 'dark',
+                                'return_format' => 'value',
+                            ],
+                        ],
+                    ],
+
+                    // ─── diagram ───
+                    'layout_iiq_diagram' => [
+                        'key'        => 'layout_iiq_diagram',
+                        'name'       => 'diagram',
+                        'label'      => 'Diagram',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            [
+                                'key' => 'field_iiq_dg_diagram_key',
+                                'label' => 'Diagram',
+                                'name' => 'diagram_key',
+                                'type' => 'select',
+                                'choices' => $iiq_diagram_choices,
+                                'return_format' => 'value',
+                            ],
+                            ['key' => 'field_iiq_dg_caption', 'label' => 'Caption', 'name' => 'caption', 'type' => 'text'],
+                            // Extended fields for stack / platform-stack
+                            [
+                                'key' => 'field_iiq_dg_index',
+                                'label' => 'Index',
+                                'name' => 'index',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_label',
+                                'label' => 'Label',
+                                'name' => 'label',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_header_label',
+                                'label' => 'Header label',
+                                'name' => 'header_label',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_headline_left',
+                                'label' => 'Headline (left)',
+                                'name' => 'headline_left',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_headline_right',
+                                'label' => 'Headline (right)',
+                                'name' => 'headline_right',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_body',
+                                'label' => 'Body',
+                                'name' => 'body',
+                                'type' => 'textarea',
+                                'rows' => 4,
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                            [
+                                'key' => 'field_iiq_dg_closing_line',
+                                'label' => 'Closing line',
+                                'name' => 'closing_line',
+                                'type' => 'text',
+                                'conditional_logic' => [
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'stack']],
+                                    [['field' => 'field_iiq_dg_diagram_key', 'operator' => '==', 'value' => 'platform-stack']],
+                                ],
+                            ],
+                        ],
+                    ],
+
+                    // ─── form ───
+                    'layout_iiq_form' => [
+                        'key'        => 'layout_iiq_form',
+                        'name'       => 'form',
+                        'label'      => 'Form',
+                        'display'    => 'block',
+                        'sub_fields' => [
+                            $iiq_settings_group,
+                            [
+                                'key' => 'field_iiq_fm_form_type',
+                                'label' => 'Form type',
+                                'name' => 'form_type',
+                                'type' => 'select',
+                                'choices' => ['contact' => 'Contact', 'signin' => 'Sign in'],
+                                'default_value' => 'contact',
+                                'return_format' => 'value',
+                            ],
+                        ],
+                    ],
+
+                ],
+            ],
+        ],
+        'location' => [[
+            ['param' => 'post_type', 'operator' => '==', 'value' => 'page'],
+        ]],
+        'menu_order'      => 0,
+        'position'        => 'normal',
+        'style'           => 'default',
+        'label_placement' => 'top',
+        'hide_on_screen'  => $iiq_hide_on_screen,
+        'active'          => true,
+    ]);
+
+    // ──────────────────────────────────────────────────────────────────
+    // GROUP B — PAGE META (SEO)
+    // ──────────────────────────────────────────────────────────────────
+    acf_add_local_field_group([
+        'key'    => 'group_iiq_page_meta',
+        'title'  => 'Page Meta',
+        'fields' => [
+            ['key' => 'field_iiq_meta_title', 'label' => 'Meta title', 'name' => 'meta_title', 'type' => 'text'],
+            ['key' => 'field_iiq_meta_desc', 'label' => 'Meta description', 'name' => 'meta_description', 'type' => 'textarea', 'rows' => 3],
+            ['key' => 'field_iiq_meta_og', 'label' => 'OG image', 'name' => 'og_image', 'type' => 'image', 'return_format' => 'array'],
+            [
+                'key' => 'field_iiq_meta_schema',
+                'label' => 'Schema override (JSON-LD)',
+                'name' => 'schema_override',
+                'type' => 'textarea',
+                'rows' => 8,
+                'instructions' => 'Optional. Raw JSON-LD inserted into <head>.',
+            ],
+        ],
+        'location' => [[
+            ['param' => 'post_type', 'operator' => '==', 'value' => 'page'],
+        ]],
+        'menu_order'      => 10,
+        'position'        => 'normal',
+        'style'           => 'default',
+        'label_placement' => 'top',
+        'hide_on_screen'  => $iiq_hide_on_screen,
+        'active'          => true,
+    ]);
+
+    // ──────────────────────────────────────────────────────────────────
+    // GROUP C — SITE SETTINGS (Options Page)
+    // ──────────────────────────────────────────────────────────────────
+    if (function_exists('acf_add_options_page')) {
+        acf_add_options_page([
+            'page_title' => 'IgniteIQ Site Settings',
+            'menu_title' => 'Site Settings',
+            'menu_slug'  => 'iiq_site_settings',
+            'capability' => 'manage_options',
+            'redirect'   => false,
+        ]);
+    }
+
+    acf_add_local_field_group([
+        'key'    => 'group_iiq_site_settings',
+        'title'  => 'Site Settings',
+        'fields' => [
+            // Header CTA
+            [
+                'key'    => 'field_iiq_settings_header_cta',
+                'label'  => 'Header CTA',
+                'name'   => 'header_cta',
+                'type'   => 'group',
+                'layout' => 'block',
+                'sub_fields' => [
+                    ['key' => 'field_iiq_settings_header_cta_label', 'label' => 'Label', 'name' => 'label', 'type' => 'text'],
+                    ['key' => 'field_iiq_settings_header_cta_url', 'label' => 'URL', 'name' => 'url', 'type' => 'text'],
+                ],
+            ],
+
+            // Footer columns
+            [
+                'key'   => 'field_iiq_settings_footer_columns',
+                'label' => 'Footer columns',
+                'name'  => 'footer_columns',
+                'type'  => 'repeater',
+                'button_label' => 'Add column',
+                'sub_fields' => [
+                    ['key' => 'field_iiq_settings_fc_heading', 'label' => 'Heading', 'name' => 'heading', 'type' => 'text'],
+                    [
+                        'key'          => 'field_iiq_settings_fc_links',
+                        'label'        => 'Links',
+                        'name'         => 'links',
+                        'type'         => 'repeater',
+                        'button_label' => 'Add link',
+                        'sub_fields'   => [
+                            ['key' => 'field_iiq_settings_fc_link_label', 'label' => 'Label', 'name' => 'label', 'type' => 'text'],
+                            ['key' => 'field_iiq_settings_fc_link_url', 'label' => 'URL', 'name' => 'url', 'type' => 'text'],
+                        ],
+                    ],
+                ],
+            ],
+
+            ['key' => 'field_iiq_settings_footer_copyright', 'label' => 'Footer copyright note', 'name' => 'footer_copyright_note', 'type' => 'text'],
+            ['key' => 'field_iiq_settings_contact_email', 'label' => 'Contact email', 'name' => 'contact_email', 'type' => 'text'],
+            ['key' => 'field_iiq_settings_contact_phone', 'label' => 'Contact phone', 'name' => 'contact_phone', 'type' => 'text'],
+
+            // Social links
+            [
+                'key'   => 'field_iiq_settings_social_links',
+                'label' => 'Social links',
+                'name'  => 'social_links',
+                'type'  => 'repeater',
+                'button_label' => 'Add social link',
+                'sub_fields' => [
+                    [
+                        'key' => 'field_iiq_settings_social_platform',
+                        'label' => 'Platform',
+                        'name' => 'platform',
+                        'type' => 'select',
+                        'choices' => [
+                            'linkedin' => 'LinkedIn',
+                            'twitter'  => 'X / Twitter',
+                            'youtube'  => 'YouTube',
+                            'github'   => 'GitHub',
+                            'instagram' => 'Instagram',
+                        ],
+                        'return_format' => 'value',
+                    ],
+                    ['key' => 'field_iiq_settings_social_url', 'label' => 'URL', 'name' => 'url', 'type' => 'text'],
+                ],
+            ],
+
+            // Nav announcement bar
+            [
+                'key'    => 'field_iiq_settings_announcement',
+                'label'  => 'Nav announcement bar',
+                'name'   => 'nav_announcement_bar',
+                'type'   => 'group',
+                'layout' => 'block',
+                'sub_fields' => [
+                    ['key' => 'field_iiq_settings_announcement_text', 'label' => 'Text', 'name' => 'text', 'type' => 'text'],
+                    ['key' => 'field_iiq_settings_announcement_url', 'label' => 'URL', 'name' => 'url', 'type' => 'text'],
+                    ['key' => 'field_iiq_settings_announcement_active', 'label' => 'Active', 'name' => 'active', 'type' => 'true_false', 'ui' => 1],
+                ],
+            ],
+        ],
+        'location' => [[
+            ['param' => 'options_page', 'operator' => '==', 'value' => 'iiq_site_settings'],
+        ]],
+        'menu_order'      => 0,
+        'position'        => 'normal',
+        'style'           => 'default',
+        'label_placement' => 'top',
+        'hide_on_screen'  => $iiq_hide_on_screen,
+        'active'          => true,
+    ]);
+
+}

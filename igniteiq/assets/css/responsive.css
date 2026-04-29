@@ -1,0 +1,323 @@
+/* ─────────────────────────────────────────────────────────────────
+   IgniteIQ — responsive utilities
+   Mobile breakpoints:
+     ≤ 1024px  tablet
+     ≤ 640px   phone
+   ───────────────────────────────────────────────────────────────── */
+
+/* Stop horizontal overflow site-wide */
+html, body { max-width: 100%; overflow-x: hidden; }
+
+/* Generic responsive grid: 2-col → 1-col on tablet */
+@media (max-width: 1024px) {
+  .iiq-grid-2 { grid-template-columns: 1fr !important; gap: 48px !important; }
+  .iiq-grid-3 { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+  .iiq-grid-4 { grid-template-columns: 1fr 1fr !important; gap: 24px !important; }
+  .iiq-grid-split { grid-template-columns: 1fr !important; gap: 56px !important; }
+
+  /* hero / section padding gets tighter */
+  .iiq-pad { padding-left: 24px !important; padding-right: 24px !important; }
+  .iiq-hero-pad { padding: 140px 24px 96px !important; }
+  .iiq-section-pad { padding-top: 96px !important; padding-bottom: 112px !important; }
+}
+
+@media (max-width: 640px) {
+  .iiq-grid-2 { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .iiq-grid-3 { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .iiq-grid-4 { grid-template-columns: 1fr 1fr !important; gap: 20px !important; }
+  .iiq-grid-split { grid-template-columns: 1fr !important; gap: 40px !important; }
+
+  .iiq-pad { padding-left: 20px !important; padding-right: 20px !important; }
+  .iiq-hero-pad { padding: 120px 20px 72px !important; }
+  .iiq-section-pad { padding-top: 80px !important; padding-bottom: 88px !important; }
+
+  /* shrink display type */
+  .iiq-display-xl { font-size: clamp(40px, 11vw, 56px) !important; }
+  .iiq-display-lg { font-size: clamp(34px, 9.5vw, 48px) !important; }
+  .iiq-display-md { font-size: clamp(28px, 8vw, 38px) !important; }
+
+  /* horizontal scroll wrapper for big SVG diagrams (used in Phase 2 too) */
+  .iiq-scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .iiq-scroll-x > * { min-width: 720px; }
+}
+
+/* ── Mobile nav (drawer) ─────────────────────────────────────────── */
+.iiq-nav-burger { display: none; }
+
+/* Drawer + scrim hidden by default at desktop widths */
+.iiq-nav-drawer,
+.iiq-nav-scrim { display: none !important; }
+
+@media (max-width: 860px) {
+  .iiq-nav-drawer,
+  .iiq-nav-scrim { display: flex !important; }
+
+  .iiq-nav-desktop { display: none !important; }
+  .iiq-nav-burger { display: inline-flex !important; }
+
+  .iiq-nav-drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(86vw, 380px);
+    background: var(--bg-canvas);
+    border-left: 1px solid var(--border-default);
+    box-shadow: -20px 0 60px oklch(10% 0.005 286 / 0.16);
+    transform: translateX(100%);
+    transition: transform 280ms var(--ease-standard);
+    z-index: 200;
+    display: flex; flex-direction: column;
+    padding: 28px 28px 32px;
+  }
+  .iiq-nav-drawer.open { transform: translateX(0); }
+  .iiq-nav-scrim {
+    position: fixed; inset: 0;
+    background: oklch(10% 0.005 286 / 0.4);
+    opacity: 0; pointer-events: none;
+    transition: opacity 240ms var(--ease-standard);
+    z-index: 199;
+  }
+  .iiq-nav-scrim.open { opacity: 1; pointer-events: auto; }
+}
+
+/* ── Auto-collapse inline-styled grids ───────────────────────────────
+   The site uses inline `style={{ gridTemplateColumns: '...' }}` for
+   layout. Rather than tag every container with a className, we match
+   the inline style strings directly and override at narrow widths.
+   ──────────────────────────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  /* 2-col layouts: 1fr 1fr, 1.1fr 0.9fr, 1.2fr 0.8fr, 1fr 1.4fr, 1fr 1.1fr, 1fr 1.2fr, 0.9fr 1.4fr, 1.1fr 0.9fr */
+  [style*="gridTemplateColumns: '1fr 1fr'"],
+  [style*="gridTemplateColumns: \"1fr 1fr\""],
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="gridTemplateColumns: '1.1fr 0.9fr'"],
+  [style*="gridTemplateColumns: '1.2fr 0.8fr'"],
+  [style*="gridTemplateColumns: '0.9fr 1.4fr'"],
+  [style*="gridTemplateColumns: '1fr 1.4fr'"],
+  [style*="gridTemplateColumns: '1.4fr 1fr'"],
+  [style*="gridTemplateColumns: '1fr 1.1fr'"],
+  [style*="gridTemplateColumns: '1fr 1.2fr'"],
+  [style*="gridTemplateColumns: '1.2fr 1fr'"],
+  [style*="gridTemplateColumns: '1.1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 48px !important;
+  }
+
+  /* 3-col layouts: repeat(3, 1fr) */
+  [style*="repeat(3, 1fr)"],
+  [style*="repeat(3,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* 4-col layouts: repeat(4, 1fr) */
+  [style*="repeat(4, 1fr)"],
+  [style*="repeat(4,1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+
+  /* 3-col with avatar: 88px 1fr 2fr (founders / team rows) */
+  [style*="gridTemplateColumns: '88px 1fr 2fr'"] {
+    grid-template-columns: 64px 1fr !important;
+    gap: 24px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  [style*="repeat(3, 1fr)"],
+  [style*="repeat(3,1fr)"],
+  [style*="repeat(4, 1fr)"],
+  [style*="repeat(4,1fr)"] {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+
+  /* tighten ALL section padding on phones — hits the big `padding: '160px 32px 180px'` style strings */
+  section[style*="padding: '"], section[style*="padding:'"],
+  section[style*="padding: \""], section[style*="padding:\""] {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* tighten huge top/bottom hero padding */
+  section[style*="180px 32px"],
+  section[style*="160px 32px"],
+  section[style*="140px 32px"],
+  section[style*="120px 32px"] {
+    padding-top: 96px !important;
+    padding-bottom: 80px !important;
+  }
+}
+
+/* Big inline gaps (gap: 80, gap: 96, gap: 64) — squeeze on phones */
+@media (max-width: 640px) {
+  [style*="gap: 96px"], [style*="gap: 96"],
+  [style*="gap: 80px"], [style*="gap: 80"],
+  [style*="gap: 64px"], [style*="gap: 64"] {
+    gap: 40px !important;
+  }
+}
+
+
+/* ─────────────────────────────────────────────────────────────────
+   IgniteIQ v2 — broader mobile overrides
+   Catches inline grid/padding patterns the source (JSX-derived)
+   templates use that the section above didn't enumerate exactly.
+   ───────────────────────────────────────────────────────────────── */
+
+/* Belt-and-suspenders horizontal overflow guard */
+html, body { max-width: 100vw; overflow-x: hidden; }
+img, video, svg, canvas { max-width: 100%; height: auto; }
+img[width], svg[width] { height: auto; }
+
+/* Tablet-and-down — collapse 2-col asymmetric splits and footer mega-grid */
+@media (max-width: 1024px) {
+  /* Asymmetric 2-col (1.05/0.95, 1.2/0.8 etc — already partly covered, add the missing variants) */
+  [style*="gridTemplateColumns: '1.05fr 0.95fr'"],
+  [style*="grid-template-columns: 1.05fr 0.95fr"],
+  [style*="gridTemplateColumns: '0.95fr 1.05fr'"],
+  [style*="grid-template-columns: 0.95fr 1.05fr"],
+  [style*="grid-template-columns:0.9fr 1.4fr"],
+  [style*="grid-template-columns: 88px 1fr 2fr"],
+  [style*="grid-template-columns:88px 1fr 2fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 40px !important;
+  }
+
+  /* Day timeline triplets like "160px 1fr 1.6fr" */
+  [style*="160px 1fr 1.6fr"],
+  [style*="120px 1fr 1.6fr"] {
+    grid-template-columns: 56px 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Footer mega-grid `1.2fr repeat(4,1fr)` */
+  [style*="1.2fr repeat(4,1fr)"],
+  [style*="1.2fr repeat(4, 1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 40px !important;
+  }
+}
+
+/* Phone — collapse remaining 2-col into 1-col, tighten layouts */
+@media (max-width: 640px) {
+  [style*="1.2fr repeat(4,1fr)"],
+  [style*="1.2fr repeat(4, 1fr)"] {
+    grid-template-columns: 1fr !important;
+    gap: 32px !important;
+  }
+  [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"],
+  [style*="gridTemplateColumns: '1fr 1fr'"] {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
+  }
+  /* Form left/right name pairs */
+  form [style*="1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* Section index/label markers (`top:-120px` absolute) — hide on tablet/phone
+   They're decorative and overflow the section frame at narrow widths. */
+@media (max-width: 1024px) {
+  [style*="top:-120px"],
+  [style*="top: -120px"] {
+    display: none !important;
+  }
+}
+
+/* Phone — additional horizontal padding caps and hero padding floor.
+   Catches the patterns missed by the (180|160|140|120)px substring
+   selector — e.g. `padding: 110px 32px 120px`. */
+@media (max-width: 640px) {
+  section[style*="padding: 110px 32px"],
+  section[style*="padding:110px 32px"],
+  section[style*="padding: 96px 32px"],
+  section[style*="padding:96px 32px"],
+  section[style*="padding: 64px 48px"],
+  section[style*="padding:64px 48px"] {
+    padding-top: 80px !important;
+    padding-bottom: 64px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* General clamp-min downshift for very large display headlines */
+  h1[style*="clamp(56px"], h1[style*="clamp(48px"] { font-size: clamp(36px, 9vw, 56px) !important; }
+  h2[style*="clamp(40px"], h2[style*="clamp(48px"] { font-size: clamp(28px, 7.5vw, 40px) !important; }
+
+  /* Statement hero giant: `clamp(56px, 8vw, 132px)` — cap mobile */
+  h1[style*="clamp(56px, 8vw, 132px)"],
+  h1[style*="clamp(56px,8vw,132px)"] { font-size: clamp(40px, 11vw, 64px) !important; line-height: 1.05 !important; }
+
+  /* Reduce big inline gaps further */
+  [style*="gap: 64px"], [style*="gap:64px"],
+  [style*="gap: 80px"], [style*="gap:80px"],
+  [style*="gap: 96px"], [style*="gap:96px"] {
+    gap: 32px !important;
+  }
+
+  /* Make every direct CTA wrap on small screens */
+  a.iiq-btn, .iiq-btn { white-space: normal; word-break: keep-all; }
+
+  /* Squeeze button rows that put 2 CTAs side by side */
+  [style*="display:flex"][style*="gap:"]:has(a.iiq-btn + a.iiq-btn),
+  [style*="display: flex"][style*="gap:"]:has(a.iiq-btn + a.iiq-btn) {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Min tap-target for inline anchor CTAs */
+  a.iiq-btn { min-height: 44px; padding: 14px 22px; }
+
+  /* Form input sizes — readable on phone */
+  .iiq-input, .iiq-select, .iiq-textarea { font-size: 16px; }
+
+  /* Tables / wide blocks → horizontal scroll wrapper */
+  table { display: block; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+}
+
+/* Body lock when nav drawer is open already handled by .iiq-nav-locked in theme.css */
+
+/* ─────────────────────────────────────────────────────────────────
+   Mobile fix: collapse "1fr auto" grids (hero body+CTA, etc.)
+   ───────────────────────────────────────────────────────────────── */
+@media (max-width: 860px) {
+  [style*="grid-template-columns: 1fr auto"],
+  [style*="grid-template-columns:1fr auto"],
+  [style*="gridTemplateColumns: '1fr auto'"] {
+    grid-template-columns: 1fr !important;
+    align-items: flex-start !important;
+    gap: 28px !important;
+  }
+  [style*="grid-template-columns: 120px 1fr"],
+  [style*="grid-template-columns:120px 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* H1/H2 long-word wrap on phone — prevent overflow when a single
+   word exceeds the content area at large display font sizes. */
+@media (max-width: 640px) {
+  h1, h2 {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+  }
+  /* Hero h1s — cap mobile size more aggressively */
+  section h1[style*="clamp(64px"] { font-size: clamp(36px, 9vw, 56px) !important; line-height: 1.04 !important; }
+  section h1[style*="clamp(56px"] { font-size: clamp(34px, 8.5vw, 52px) !important; line-height: 1.04 !important; }
+  section h1[style*="clamp(40px"] { font-size: clamp(30px, 8vw, 44px) !important; line-height: 1.06 !important; }
+  /* CTA buttons in hero rows: stretch full-width on phone */
+  section [style*="display: flex"] > a.iiq-btn,
+  section [style*="display:flex"] > a.iiq-btn,
+  section [style*="display: flex"] > a[class*="iiq-btn"],
+  section [style*="display:flex"] > a[class*="iiq-btn"] {
+    flex: 1 1 auto;
+    text-align: center;
+    justify-content: center;
+  }
+}
