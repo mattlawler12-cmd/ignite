@@ -34,7 +34,19 @@ $total_lines = count($headline_lines);
           }
       }
     ?>
-    <h1 style="font-family: var(--font-display); font-size: clamp(44px, 5.2vw, 88px); line-height: 1.06; font-weight: 600; letter-spacing: -0.04em; margin: 40px 0 0; color: var(--fg-primary); max-width: 1240px; text-wrap: balance;">
+    <?php
+      // FIDELITY: when an explicit `muted` flag is present (e.g. ContactHero,
+      // Contact.js:29-44 — "Let's talk." primary + tertiary inline span on
+      // the second sentence), render lines INLINE with separating spaces
+      // and use the larger Contact-spec clamp(56,7.6vw,132px). When no
+      // explicit muted is set (signin, etc.), keep block-stacked layout
+      // with the existing 44/5.2vw/88px clamp.
+      $h1_font_size      = $has_explicit_muted ? 'clamp(56px, 7.6vw, 132px)' : 'clamp(44px, 5.2vw, 88px)';
+      $h1_line_height    = $has_explicit_muted ? '0.94' : '1.06';
+      $h1_letter_spacing = $has_explicit_muted ? '-0.05em' : '-0.04em';
+      $h1_max_width      = $has_explicit_muted ? '1280px' : '1240px';
+    ?>
+    <h1 style="font-family: var(--font-display); font-size: <?= $h1_font_size ?>; line-height: <?= $h1_line_height ?>; font-weight: 600; letter-spacing: <?= $h1_letter_spacing ?>; margin: 40px 0 0; color: var(--fg-primary); max-width: <?= $h1_max_width ?>; text-wrap: balance;">
       <?php foreach ($headline_lines as $i => $row):
         $line = is_array($row) ? ($row['line'] ?? '') : $row;
         if ($has_explicit_muted) {
@@ -44,8 +56,10 @@ $total_lines = count($headline_lines);
             $is_muted = (!$is_last && $total_lines > 1);
         }
         $color = $is_muted ? 'var(--fg-tertiary)' : 'var(--fg-primary)';
+        $span_display = $has_explicit_muted ? '' : 'display: block;';
+        $span_separator = ($has_explicit_muted && $i > 0) ? ' ' : '';
       ?>
-        <span style="display: block; color: <?= $color ?>;"><?= esc_html($line) ?></span>
+        <?= $span_separator ?><span style="<?= $span_display ?> color: <?= $color ?>;"><?= esc_html($line) ?></span>
       <?php endforeach; ?>
     </h1>
     <?php if ($body): ?>

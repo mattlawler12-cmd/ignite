@@ -306,6 +306,7 @@ if (function_exists('acf_add_local_field_group')) {
                             ['key' => 'field_iiq_sp_headline_lead',  'label' => 'Headline lead',  'name' => 'headline_lead',  'type' => 'text'],
                             ['key' => 'field_iiq_sp_headline_gap',   'label' => 'Headline gap',   'name' => 'headline_gap',   'type' => 'text'],
                             ['key' => 'field_iiq_sp_headline_break', 'label' => 'Headline break', 'name' => 'headline_break', 'type' => 'true_false'],
+                            ['key' => 'field_iiq_sp_compact_top',    'label' => 'Compact top (no top padding)', 'name' => 'compact_top', 'type' => 'true_false', 'instructions' => 'Set true when this section visually continues from the previous one (e.g. CoreEntities split across stats + pillars).'],
                             [
                                 'key' => 'field_iiq_sp_headline_align',
                                 'label' => 'Headline alignment',

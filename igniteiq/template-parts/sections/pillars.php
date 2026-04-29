@@ -15,10 +15,24 @@ if ($columns < 2 || $columns > 4) $columns = 3;
 $style     = get_sub_field('style') ?: 'cards';
 $items     = get_sub_field('items') ?: [];
 $scenarios = get_sub_field('scenarios') ?: [];
+$compact_top = (bool) get_sub_field('compact_top');
 $variant   = iiq_section_variant();
 $is_dark   = ($variant === 'dark');
+// FIDELITY: compact_top=true zeroes the section's top padding so the
+// section visually continues from the previous one (used when a single
+// export component was split into two ACF flex rows — e.g. Ontology
+// CoreEntities, where section_stats + section_pillars together
+// represent one block).
+$variant_attr = iiq_section_variant_style($variant);
+if ($compact_top) {
+    if ($variant_attr === '') {
+        $variant_attr = ' style="padding-top:0;"';
+    } else {
+        $variant_attr = preg_replace('/style="/', 'style="padding-top:0;', $variant_attr, 1);
+    }
+}
 ?>
-<section class="iiq-pad iiq-section-pad"<?= iiq_section_variant_style($variant) ?>>
+<section class="iiq-pad iiq-section-pad"<?= $variant_attr ?>>
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 

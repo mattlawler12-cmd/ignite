@@ -815,12 +815,26 @@ function ArchStackDiagram({
       color: 'var(--fg-primary)',
       textWrap: 'balance'
     }
-  }, closingLine || /*#__PURE__*/React.createElement(React.Fragment, null, "Every decision \u2014", ' ', /*#__PURE__*/React.createElement("em", {
-    style: {
-      fontStyle: 'italic',
-      color: 'var(--fg-tertiary)'
+  }, (function () {
+    // FIDELITY: when a string `closingLine` is passed (e.g. Ontology page
+    // \u2014 "Your business makes a thousand decisions a day. We make every
+    // one faster, smarter, and right."), split on the first `". "` and
+    // render the second sentence in italic --fg-tertiary, mirroring
+    // Ontology.js:584-589 which wraps the second clause in <em>.
+    if (!closingLine) {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, "Every decision \u2014", ' ', /*#__PURE__*/React.createElement("em", {
+        style: { fontStyle: 'italic', color: 'var(--fg-tertiary)' }
+      }, "faster, smarter, and right."));
     }
-  }, "faster, smarter, and right."))))));
+    if (typeof closingLine !== 'string') return closingLine;
+    var idx = closingLine.indexOf('. ');
+    if (idx === -1) return closingLine;
+    var first = closingLine.slice(0, idx + 1);
+    var second = closingLine.slice(idx + 2);
+    return /*#__PURE__*/React.createElement(React.Fragment, null, first, ' ', /*#__PURE__*/React.createElement("em", {
+      style: { fontStyle: 'italic', color: 'var(--fg-tertiary)' }
+    }, second));
+  })()))));
 }
 window.ArchStackDiagram = ArchStackDiagram;
 })();

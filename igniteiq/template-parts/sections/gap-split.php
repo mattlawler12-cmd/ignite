@@ -51,16 +51,37 @@ $border_subtle = $is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-subtle)';
                     </h2>
                 <?php endif; ?>
 
-                <?php if ($body_left || $body_right): ?>
+                <?php if ($body_left || $body_right):
+                    // FIDELITY: body_left/body_right are ACF wysiwyg fields
+                    // and ACF returns the content already wrapped in <p>...</p>
+                    // (via wpautop). Wrapping that in another outer <p> creates
+                    // invalid <p><p>text</p></p> nesting; browsers auto-close
+                    // the outer <p> before the inner <p>, splitting one grid
+                    // item into multiple — which collapses the 1fr/1fr grid
+                    // into a stacked column. Strip the wysiwyg's outer <p>
+                    // first so the outer <p> we render here stays the only
+                    // one, and grid math is preserved.
+                    $strip_wrap = static function ($html) {
+                        $t = trim((string) $html);
+                        if ($t === '') return '';
+                        if (preg_match('/^<p\b[^>]*>(.*)<\/p>\s*$/is', $t, $m)) {
+                            // Only strip if there's a single top-level <p>
+                            // (no embedded paragraph siblings that would lose
+                            // structure if flattened).
+                            if (substr_count($m[1], '<p') === 0) return $m[1];
+                        }
+                        return $t;
+                    };
+                ?>
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:48px;">
                         <?php if ($body_left): ?>
                             <p style="font-size:16px;line-height:1.55;color:<?= esc_attr($fg_secondary) ?>;margin:0;">
-                                <?= wp_kses_post($body_left) ?>
+                                <?= wp_kses_post($strip_wrap($body_left)) ?>
                             </p>
                         <?php endif; ?>
                         <?php if ($body_right): ?>
                             <p style="font-size:16px;line-height:1.55;color:<?= esc_attr($fg_secondary) ?>;margin:0;">
-                                <?= wp_kses_post($body_right) ?>
+                                <?= wp_kses_post($strip_wrap($body_right)) ?>
                             </p>
                         <?php endif; ?>
                     </div>
