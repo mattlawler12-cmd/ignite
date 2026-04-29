@@ -3,6 +3,7 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
+$eyebrow       = get_sub_field('eyebrow') ?: '';
 $headline      = get_sub_field('headline') ?: '';
 $body          = get_sub_field('body') ?: '';
 $primary_cta   = get_sub_field('primary_cta');
@@ -39,6 +40,12 @@ if ($variant_attr === '') {
 <section data-reveal class="iiq-pad iiq-section-pad"<?= $cta_pad_attr ?>>
     <div style="position:relative;max-width:960px;margin:0 auto;text-align:center;">
         <?php iiq_section_marker(); ?>
+
+        <?php if ($eyebrow): ?>
+            <div style="display:flex;justify-content:center;font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:<?= $is_dark ? 'var(--ignite-400)' : 'var(--ignite-500)' ?>;margin:0 0 8px;">
+                <?= esc_html($eyebrow) ?>
+            </div>
+        <?php endif; ?>
 
         <?php if ($headline): ?>
             <h2 class="iiq-display-xl" style="margin:0 0 24px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:-0.025em;line-height:1.02;">

@@ -696,8 +696,9 @@ if (function_exists('acf_add_local_field_group')) {
                         'display'    => 'block',
                         'sub_fields' => [
                             $iiq_settings_group_for('cta_banner'),
+                            ['key' => 'field_iiq_cb_eyebrow',  'label' => 'Eyebrow',  'name' => 'eyebrow',  'type' => 'text'],
                             ['key' => 'field_iiq_cb_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
-                            ['key' => 'field_iiq_cb_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                            ['key' => 'field_iiq_cb_body',     'label' => 'Body',     'name' => 'body',     'type' => 'textarea', 'rows' => 3],
                             $iiq_cta_group('cb_primary', 'Primary CTA', 'primary_cta'),
                             $iiq_cta_group('cb_secondary', 'Secondary CTA', 'secondary_cta'),
                             [

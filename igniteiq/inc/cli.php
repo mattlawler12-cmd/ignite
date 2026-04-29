@@ -351,6 +351,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Get started today',
                         'theme_variant' => 'dark',
                     ],
+                    'eyebrow'       => 'Get started today',
                     'headline'      => 'Own Your Intelligence.',
                     'body'          => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
                     'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
@@ -463,6 +464,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'eyebrow'  => 'From contract to live',
                     'headline' => 'Deployed Fast. Decades of Value.',
+                    'headline_lead' => 'Deployed Fast.',
+                    'headline_gap'  => 'Decades of Value.',
                     'body'     => 'Versioned. Auditable. Every deployment ships through the same defined process — and every framework update flows back to every operator on the platform.',
                     'layout'   => 'grid-3col',
                     'items' => [
@@ -506,6 +509,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Ready to deploy',
                         'theme_variant' => 'dark',
                     ],
+                    'eyebrow'       => 'Ready to deploy',
                     'headline'      => 'Get started today.',
                     'body'          => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
                     'primary_cta'   => ['label' => 'Start the conversation', 'url' => '/contact/'],
@@ -630,12 +634,15 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // 3-column "One customer, not four / One job / One technician"
                 // grid inside the same component. Splitting into two flexible-
                 // content rows preserves the copy verbatim using the closest
-                // schema layouts (section_stats + section_pillars).
+                // schema layouts (section_stats + section_pillars). Section
+                // index/label is left BLANK on this row so the visible marker
+                // ("04 The 12 core entities") only renders once, on the
+                // section_stats row above.
                 [
                     'acf_fc_layout' => 'section_pillars',
                     'settings' => [
-                        'section_index' => '04',
-                        'section_label' => 'The 12 core entities',
+                        'section_index' => '',
+                        'section_label' => '',
                         'theme_variant' => 'light',
                     ],
                     'eyebrow'  => '',
@@ -687,6 +694,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Get started today',
                         'theme_variant' => 'dark',
                     ],
+                    'eyebrow'       => 'Get started today',
                     'headline'      => 'Own Your Intelligence.',
                     'body'          => 'Your cloud. Your data. Your Intelligence. Deployed in days, not months - and yours from the moment we ship.',
                     'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
@@ -838,6 +846,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'Ready to deploy',
                         'theme_variant' => 'dark',
                     ],
+                    'eyebrow'       => 'Ready to deploy',
                     'headline'      => 'Get started today.',
                     'body'          => 'From contract to a live, queryable intelligence engine in seven days. We share security documentation, deployment plans, and a price up front.',
                     'primary_cta'   => ['label' => 'Start the conversation', 'url' => '/contact/'],
