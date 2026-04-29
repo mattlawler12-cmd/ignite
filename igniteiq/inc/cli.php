@@ -373,9 +373,15 @@ if (!class_exists('IgniteIQ_CLI')) {
                 [
                     'acf_fc_layout' => 'hero_editorial',
                     'eyebrow'        => 'Architecture · v4.2',
+                    // FIDELITY: 4-segment two-tone H1 inline (Architecture.js:96-115).
+                    // "Built on" + tertiary " your cloud. " + "Run on" + tertiary " your data."
+                    // Caller controls whitespace via leading/trailing spaces inside each line.
+                    'headline_inline' => true,
                     'headline_lines' => [
-                        ['line' => 'Built on your cloud.'],
-                        ['line' => 'Run on your data.'],
+                        ['line' => 'Built on',         'muted' => false],
+                        ['line' => ' your cloud. ',   'muted' => true],
+                        ['line' => 'Run on',          'muted' => false],
+                        ['line' => ' your data.',     'muted' => true],
                     ],
                     'body'          => "<p>The IgniteIQ architecture is built around one premise: your warehouse, your data, and the intelligence layer all run inside your cloud account. Modular, replaceable, and continuously compounding it's intelligence.</p>",
                     'primary_cta'   => ['label' => '', 'url' => ''],

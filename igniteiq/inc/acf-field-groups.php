@@ -211,6 +211,7 @@ if (function_exists('acf_add_local_field_group')) {
                             $iiq_cta_group('he_secondary', 'Secondary CTA', 'secondary_cta'),
                             ['key' => 'field_iiq_he_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1],
                             ['key' => 'field_iiq_he_size_variant', 'label' => 'Size variant', 'name' => 'size_variant', 'type' => 'select', 'choices' => ['' => 'Default', 'compact' => 'Compact (ArchHero)', 'inline-2tone' => 'Inline 2-tone (CompanyHero)'], 'default_value' => '', 'allow_null' => 1, 'return_format' => 'value'],
+                            ['key' => 'field_iiq_he_headline_inline', 'label' => 'Headline inline', 'name' => 'headline_inline', 'type' => 'true_false', 'instructions' => 'Render headline_lines inline (no separating space). Caller controls whitespace via leading/trailing spaces inside each line.'],
                         ],
                     ],
 
