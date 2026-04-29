@@ -212,6 +212,7 @@ if (function_exists('acf_add_local_field_group')) {
                             ['key' => 'field_iiq_he_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1],
                             ['key' => 'field_iiq_he_size_variant', 'label' => 'Size variant', 'name' => 'size_variant', 'type' => 'select', 'choices' => ['' => 'Default', 'compact' => 'Compact (ArchHero)', 'inline-2tone' => 'Inline 2-tone (CompanyHero)'], 'default_value' => '', 'allow_null' => 1, 'return_format' => 'value'],
                             ['key' => 'field_iiq_he_headline_inline', 'label' => 'Headline inline', 'name' => 'headline_inline', 'type' => 'true_false', 'instructions' => 'Render headline_lines inline (no separating space). Caller controls whitespace via leading/trailing spaces inside each line.'],
+                            $iiq_stats_repeater('he'),
                         ],
                     ],
 
@@ -308,6 +309,7 @@ if (function_exists('acf_add_local_field_group')) {
                             ['key' => 'field_iiq_sp_headline_gap',   'label' => 'Headline gap',   'name' => 'headline_gap',   'type' => 'text'],
                             ['key' => 'field_iiq_sp_headline_break', 'label' => 'Headline break', 'name' => 'headline_break', 'type' => 'true_false'],
                             ['key' => 'field_iiq_sp_compact_top',    'label' => 'Compact top (no top padding)', 'name' => 'compact_top', 'type' => 'true_false', 'instructions' => 'Set true when this section visually continues from the previous one (e.g. CoreEntities split across stats + pillars).'],
+                            ['key' => 'field_iiq_sp_hide_index',     'label' => 'Hide per-card index numbers', 'name' => 'hide_index', 'type' => 'true_false', 'instructions' => 'When true, omit the 01/02 mono number above each card title (e.g. ArchSecurity grid where cards are just title + body).'],
                             [
                                 'key' => 'field_iiq_sp_headline_align',
                                 'label' => 'Headline alignment',

@@ -16,6 +16,7 @@ $style     = get_sub_field('style') ?: 'cards';
 $items     = get_sub_field('items') ?: [];
 $scenarios = get_sub_field('scenarios') ?: [];
 $compact_top = (bool) get_sub_field('compact_top');
+$hide_index  = (bool) get_sub_field('hide_index');
 $variant   = iiq_section_variant();
 $is_dark   = ($variant === 'dark');
 // FIDELITY: compact_top=true zeroes the section's top padding so the
@@ -200,8 +201,10 @@ if ($compact_top) {
                     </article>
 
                 <?php elseif ($style === 'grid-divided'): ?>
-                    <article<?= $reveal_attrs ?> style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:14px;height:100%;">
-                        <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:<?= $idx_color ?>;"><?= esc_html($idxnum) ?></span>
+                    <article<?= $reveal_attrs ?> style="background:<?= $is_dark ? 'var(--ink-1000)' : '#fff' ?>;padding:32px 28px;display:flex;flex-direction:column;gap:10px;height:100%;">
+                        <?php if (!$hide_index): ?>
+                            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.14em;color:<?= $idx_color ?>;"><?= esc_html($idxnum) ?></span>
+                        <?php endif; ?>
                         <?php if ($title): ?>
                             <h3 style="font-family:var(--font-display);font-size:18px;font-weight:600;letter-spacing:-0.01em;line-height:1.2;margin:0;color:<?= $title_color ?>;">
                                 <?= esc_html($title) ?>
