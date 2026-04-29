@@ -67,6 +67,21 @@ if (!class_exists('IgniteIQ_CLI')) {
                     continue;
                 }
 
+                // Force-mode: wipe all page_sections meta first so ACF writes
+                // a fresh row set rather than diff-merging against stale meta
+                // (which silently no-ops when sub-field keys/names changed).
+                if ($force) {
+                    delete_field('page_sections', $page_id);
+                    // Belt-and-suspenders: nuke any leftover page_sections_* meta
+                    // rows that ACF's own delete may not catch when field schema
+                    // renamed sub-fields (e.g. _settings → settings).
+                    global $wpdb;
+                    $wpdb->query($wpdb->prepare(
+                        "DELETE FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key LIKE 'page_sections_%%'",
+                        $page_id
+                    ));
+                }
+
                 $ok = update_field('page_sections', $rows, $page_id);
                 if ($ok) {
                     WP_CLI::success("Seeded '{$slug}' (id {$page_id}) with " . count($rows) . ' sections.');
