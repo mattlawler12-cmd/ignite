@@ -21,13 +21,6 @@ if (defined('WP_CLI') && WP_CLI) {
     require_once IIQ_DIR . '/inc/cli.php';
 }
 
-// Temporary admin migration tool — used to populate staging via WP Admin
-// when SSH/WP-CLI isn't available. Remove this require + the file
-// (`inc/admin-seed-tool.php`) after staging is happy.
-if (is_admin() && file_exists(IIQ_DIR . '/inc/admin-seed-tool.php')) {
-    require_once IIQ_DIR . '/inc/admin-seed-tool.php';
-}
-
 /**
  * Admin notice if ACF Pro is not active.
  */
