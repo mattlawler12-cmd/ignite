@@ -295,6 +295,18 @@ if (function_exists('acf_add_local_field_group')) {
                             $iiq_settings_group_for('pillars'),
                             ['key' => 'field_iiq_sp_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
                             ['key' => 'field_iiq_sp_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_sp_headline_lead',  'label' => 'Headline lead',  'name' => 'headline_lead',  'type' => 'text'],
+                            ['key' => 'field_iiq_sp_headline_gap',   'label' => 'Headline gap',   'name' => 'headline_gap',   'type' => 'text'],
+                            ['key' => 'field_iiq_sp_headline_break', 'label' => 'Headline break', 'name' => 'headline_break', 'type' => 'true_false'],
+                            [
+                                'key' => 'field_iiq_sp_headline_align',
+                                'label' => 'Headline alignment',
+                                'name' => 'headline_align',
+                                'type' => 'select',
+                                'choices' => ['center' => 'Centered', 'left' => 'Left-aligned (wide)'],
+                                'default_value' => 'center',
+                                'return_format' => 'value',
+                            ],
                             ['key' => 'field_iiq_sp_intro', 'label' => 'Intro', 'name' => 'intro', 'type' => 'textarea', 'rows' => 3],
                             [
                                 'key' => 'field_iiq_sp_columns',
@@ -329,6 +341,7 @@ if (function_exists('acf_add_local_field_group')) {
                                 'sub_fields'   => [
                                     ['key' => 'field_iiq_sp_item_index', 'label' => 'Index number', 'name' => 'index_number', 'type' => 'text'],
                                     ['key' => 'field_iiq_sp_item_title', 'label' => 'Title', 'name' => 'title', 'type' => 'text'],
+                                    ['key' => 'field_iiq_sp_item_eyebrow_label', 'label' => 'Eyebrow label', 'name' => 'eyebrow_label', 'type' => 'text', 'instructions' => 'Optional short caption appended to the per-card eyebrow after an em-dash, e.g. "Data" → renders as "01 — Data".'],
                                     ['key' => 'field_iiq_sp_item_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 4],
                                 ],
                             ],
@@ -440,7 +453,19 @@ if (function_exists('acf_add_local_field_group')) {
                         'display'    => 'block',
                         'sub_fields' => [
                             $iiq_settings_group_for('stats'),
-                            ['key' => 'field_iiq_sst_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_sst_headline',      'label' => 'Headline',      'name' => 'headline',      'type' => 'text'],
+                            ['key' => 'field_iiq_sst_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_sst_headline_gap',  'label' => 'Headline gap',  'name' => 'headline_gap',  'type' => 'text'],
+                            ['key' => 'field_iiq_sst_intro',         'label' => 'Intro',         'name' => 'intro',         'type' => 'textarea', 'rows' => 3],
+                            [
+                                'key' => 'field_iiq_sst_headline_align',
+                                'label' => 'Headline alignment',
+                                'name' => 'headline_align',
+                                'type' => 'select',
+                                'choices' => ['center' => 'Centered', 'left' => 'Left-aligned (wide)'],
+                                'default_value' => 'center',
+                                'return_format' => 'value',
+                            ],
                             [
                                 'key' => 'field_iiq_sst_style',
                                 'label' => 'Render style',
@@ -465,9 +490,11 @@ if (function_exists('acf_add_local_field_group')) {
                         'display'    => 'block',
                         'sub_fields' => [
                             $iiq_settings_group_for('stack'),
-                            ['key' => 'field_iiq_sk_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
-                            ['key' => 'field_iiq_sk_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
-                            ['key' => 'field_iiq_sk_body', 'label' => 'Body', 'name' => 'body', 'type' => 'textarea', 'rows' => 3],
+                            ['key' => 'field_iiq_sk_eyebrow',       'label' => 'Eyebrow',       'name' => 'eyebrow',       'type' => 'text'],
+                            ['key' => 'field_iiq_sk_headline',      'label' => 'Headline',      'name' => 'headline',      'type' => 'text'],
+                            ['key' => 'field_iiq_sk_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_sk_headline_gap',  'label' => 'Headline gap',  'name' => 'headline_gap',  'type' => 'text'],
+                            ['key' => 'field_iiq_sk_body',          'label' => 'Body',          'name' => 'body',          'type' => 'textarea', 'rows' => 3],
                             [
                                 'key' => 'field_iiq_sk_layout',
                                 'label' => 'Layout',
@@ -504,8 +531,10 @@ if (function_exists('acf_add_local_field_group')) {
                         'display'    => 'block',
                         'sub_fields' => [
                             $iiq_settings_group_for('prose'),
-                            ['key' => 'field_iiq_pr_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
-                            ['key' => 'field_iiq_pr_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_pr_eyebrow',       'label' => 'Eyebrow',       'name' => 'eyebrow',       'type' => 'text'],
+                            ['key' => 'field_iiq_pr_headline',      'label' => 'Headline',      'name' => 'headline',      'type' => 'text'],
+                            ['key' => 'field_iiq_pr_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_pr_headline_gap',  'label' => 'Headline gap',  'name' => 'headline_gap',  'type' => 'text'],
                             [
                                 'key' => 'field_iiq_pr_style',
                                 'label' => 'Layout style',
