@@ -120,3 +120,24 @@ launchctl bootout "gui/$(id -u)/com.igniteiq.export-watcher"
 
 `com.igniteiq.export-watcher.plist` is a copy of what's installed at
 `~/Library/LaunchAgents/`. Keep them in sync if you edit either.
+
+## Visual diff harness — `scripts/iiq-shoot.js`
+
+A Playwright-based screenshot harness that captures 12 full-page screenshots
+(6 export + 6 staging) for visual fidelity comparison. Used by the
+`/visual-iiq-diff` skill, but you can also run it directly:
+
+```bash
+cd /tmp && node ~/Desktop/igniteiq-theme-v2/scripts/iiq-shoot.js
+```
+
+Outputs: `exports/.compare/{export,staging}/{home,how-it-works,ontology,company,contact,signin}.png`
+
+The script:
+1. Launches Chromium (Playwright downloads it on first run, ~150 MB)
+2. For each of 6 cornerstone pages, navigates to both `file://exports/latest/<file>.html` (export) and `https://igniteiqstg.wpenginepowered.com/<path>/` (staging)
+3. Scrolls top→bottom→top to trigger any reveal-on-scroll animations
+4. Captures full-page PNG at 1440px wide
+
+Requires Playwright in your project: `npm install playwright` from any dir
+that has a node_modules/ context, OR run via `npx -y playwright`.

@@ -161,18 +161,12 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                 ],
 
-                // HeroEditorial (Hero.js, App.js: hero='editorial', headline='team')
-                [
-                    'acf_fc_layout'  => 'hero_editorial',
-                    'eyebrow'        => '',
-                    'headline_lines' => [
-                        ['line' => 'Built by the operators who ran the trucks.'],
-                    ],
-                    'body' => "<p>The team that helped build ServiceTitan, alongside operators who've run the trucks and the dispatch board, building the intelligence layer the trades have been waiting for. Owned by you. Deployed in days.</p>",
-                    'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
-                    'secondary_cta' => ['label' => 'How it works',      'url' => '/how-it-works/'],
-                    'dark' => false,
-                ],
+                // FIDELITY NOTE: the export's home page (App.js) computes a
+                // `HeroComp` (HeroEditorial/Cinematic/Split per tweaks.hero) but
+                // its JSX return does NOT render that variable — only HeroStatement
+                // appears before WhyItMattersSection. So the home page has ONE
+                // hero, not two. The "Built by the operators who ran the trucks."
+                // headline lives only in the dev tweaks panel as an alternative.
 
                 // WhyItMattersSection (SectionsA.js, index="01" label="Why this matters")
                 [
@@ -358,8 +352,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['line' => 'Run on your data.'],
                     ],
                     'body'          => "<p>The IgniteIQ architecture is built around one premise: your warehouse, your data, and the intelligence layer all run inside your cloud account. Modular, replaceable, and continuously compounding it's intelligence.</p>",
-                    'primary_cta'   => ['label' => 'Get started today', 'url' => '/contact/'],
-                    'secondary_cta' => ['label' => 'See the ontology',  'url' => '/ontology/'],
+                    'primary_cta'   => ['label' => '', 'url' => ''],
+                    'secondary_cta' => ['label' => '', 'url' => ''],
                     'dark'          => true,
                 ],
 
@@ -507,8 +501,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                         ['line' => 'Ontology is the nouns and verbs of how your business actually runs.'],
                     ],
                     'body' => "<p>Every home services business runs on a web of interconnected relationships - jobs, customers, technicians, calls, invoices - moving and changing every hour. An ontology is the layer that encodes those relationships into a shared model: the ground truth of how your business is actually operating. It's the difference between a company that runs on assumptions scattered across fifteen systems, and a company that runs on a single, shared definition of itself.</p>",
-                    'primary_cta'   => ['label' => 'See how it deploys', 'url' => '/how-it-works/'],
-                    'secondary_cta' => ['label' => 'Get started today',  'url' => '/contact/'],
+                    'primary_cta'   => ['label' => '', 'url' => ''],
+                    'secondary_cta' => ['label' => '', 'url' => ''],
                     'dark' => false,
                 ],
 
