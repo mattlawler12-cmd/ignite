@@ -6,6 +6,17 @@ Operating notes for LLM agents working in this repo. Read this first.
 
 WordPress theme for **igniteiq.com**, ported from Claude Design HTML/JS/CSS exports. This repo is the canonical source of truth — the theme code lives in `igniteiq/`, with the repo root holding deploy tooling and runbooks. There are two deploy paths: **Local by Flywheel** for visual dev, and **WP Engine staging** via a GitHub Action on push to `main`. Production is not automated.
 
+## Fidelity invariant
+
+The WP build on staging must exactly match the latest export's content and visuals. A push to `main` is a claim of fidelity.
+
+- **Content:** every headline, body string, button label, footer link, and array of cards/items in `exports/latest/` must appear verbatim on the rendered page.
+- **Visuals:** colors (hex), spacing tokens, typography, component order, image src URLs, and CSS class composition must match.
+- **Audit trail:** the byte-accurate output of `/diff-iiq-export` is the checklist. Don't push until every item from its "Fidelity checklist" section is reflected in `template-parts/*.php` markup AND the matching row in `inc/cli.php` `default_pages()`.
+- **Verification:** after the deploy goes green, run `/verify-iiq-fidelity` (scrapes the 6 staging URLs, greps for every string from `exports/latest/`, reports anything missing). Don't consider the port done until that report is clean.
+
+If a delta in the export is intentionally not being ported (rare — discuss with Matt first), document it in a `// FIDELITY EXCEPTION:` comment in the relevant `template-parts/*.php` file.
+
 ## 2. Theme directory layout
 
 ```
