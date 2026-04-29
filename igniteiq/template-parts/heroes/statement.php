@@ -2,7 +2,9 @@
 if (!defined('ABSPATH')) exit;
 $eyebrow        = get_sub_field('eyebrow') ?: '';
 $headline_lines = get_sub_field('headline_lines') ?: [];
-$body           = get_sub_field('body') ?: '';
+// FIDELITY: ACF schema for hero_statement uses `subhead` (acf-field-groups.php:170).
+// Fall back to `body` for back-compat with any other consumer.
+$body           = get_sub_field('subhead') ?: (get_sub_field('body') ?: '');
 $primary_cta    = get_sub_field('primary_cta') ?: ['label' => '', 'url' => ''];
 $secondary_cta  = get_sub_field('secondary_cta') ?: ['label' => '', 'url' => ''];
 $stats          = get_sub_field('stats') ?: [];

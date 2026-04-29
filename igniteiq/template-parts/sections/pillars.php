@@ -3,11 +3,12 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$eyebrow       = get_sub_field('eyebrow') ?: '';
-$headline      = get_sub_field('headline') ?: '';
-$headline_lead = get_sub_field('headline_lead') ?: '';
-$headline_gap  = get_sub_field('headline_gap') ?: '';
-$intro         = get_sub_field('intro') ?: '';
+$eyebrow        = get_sub_field('eyebrow') ?: '';
+$headline       = get_sub_field('headline') ?: '';
+$headline_lead  = get_sub_field('headline_lead') ?: '';
+$headline_gap   = get_sub_field('headline_gap') ?: '';
+$headline_break = (bool) get_sub_field('headline_break');
+$intro          = get_sub_field('intro') ?: '';
 $columns   = (int) (get_sub_field('columns') ?: 3);
 if ($columns < 2 || $columns > 4) $columns = 3;
 $style     = get_sub_field('style') ?: 'cards';
@@ -24,7 +25,7 @@ $is_dark   = ($variant === 'dark');
             <?php iiq_section_eyebrow($eyebrow); ?>
             <?php if ($headline_lead && $headline_gap): ?>
                 <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
-                    <?= wp_kses_post($headline_lead) ?><br><span style="color:var(--fg-tertiary);"><?= wp_kses_post($headline_gap) ?></span>
+                    <?= wp_kses_post($headline_lead) ?><?php if ($headline_break): ?><br><span style="color:var(--fg-tertiary);"><?= wp_kses_post($headline_gap) ?></span><?php else: ?><span style="color:var(--fg-tertiary);">&nbsp;<?= wp_kses_post($headline_gap) ?></span><?php endif; ?>
                 </h2>
             <?php elseif ($headline): ?>
                 <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">

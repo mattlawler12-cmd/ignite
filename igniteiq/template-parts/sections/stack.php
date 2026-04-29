@@ -3,9 +3,11 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$eyebrow  = get_sub_field('eyebrow') ?: '';
-$headline = get_sub_field('headline') ?: '';
-$body     = get_sub_field('body') ?: '';
+$eyebrow       = get_sub_field('eyebrow') ?: '';
+$headline      = get_sub_field('headline') ?: '';
+$headline_lead = get_sub_field('headline_lead') ?: '';
+$headline_gap  = get_sub_field('headline_gap') ?: '';
+$body          = get_sub_field('body') ?: '';
 $items    = get_sub_field('items') ?: [];
 $layout   = get_sub_field('layout') ?: 'list-2col';
 $variant  = iiq_section_variant();
@@ -18,20 +20,27 @@ $count    = is_array($items) ? count($items) : 0;
 
         <div style="max-width:880px;margin:0 0 64px;">
             <?php iiq_section_eyebrow($eyebrow); ?>
-            <?php if ($headline): ?>
+            <?php if ($headline_lead && $headline_gap): ?>
+                <?php
+                // FIDELITY: explicit lead/gap two-tone, inline by default.
+                // `grid-3col` layouts (e.g. Architecture.js ArchHowItDeploys
+                // "Deployed Fast. Decades of Value.") set the gap span to
+                // `display:block` for a visual line break; other layouts keep
+                // it inline (e.g. home timeline-horizontal "What used to take
+                // a year. Shipped in a week." — SectionsA.js 203-206).
+                $gap_display = ($layout === 'grid-3col') ? 'display:block;' : '';
+                ?>
+                <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.04em;line-height:1.0;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
+                    <?= wp_kses_post($headline_lead) ?><span style="color:var(--fg-tertiary);<?= $gap_display ?>"> <?= wp_kses_post($headline_gap) ?></span>
+                </h2>
+            <?php elseif ($headline): ?>
                 <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.04em;line-height:1.0;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
                     <?php
-                    // FIDELITY: Architecture.js ArchHowItDeploys (grid-3col layout)
-                    // splits "Deployed Fast. Decades of Value." across two visual lines,
-                    // with the second sentence rendered in --fg-tertiary inside a
-                    // block-level span. We mirror that here when the layout is
-                    // grid-3col AND the headline contains a sentence boundary.
-                    // Other section_stack usages (e.g. home `timeline-horizontal`
-                    // "What used to take a year. Shipped in a week.") keep the
-                    // single-line inline treatment per their export.
+                    // Back-compat auto-split for grid-3col layouts where lead/gap
+                    // were not provided in the seed.
                     $hpos = ($layout === 'grid-3col') ? strpos($headline, '. ') : false;
                     if ($hpos !== false) {
-                        $first  = substr($headline, 0, $hpos + 1); // include the period
+                        $first  = substr($headline, 0, $hpos + 1);
                         $second = ltrim(substr($headline, $hpos + 1));
                         echo wp_kses_post($first) . ' ';
                         echo '<span style="color:var(--fg-tertiary);display:block;">' . wp_kses_post($second) . '</span>';
