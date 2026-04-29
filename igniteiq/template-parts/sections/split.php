@@ -3,9 +3,11 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$eyebrow     = get_sub_field('eyebrow') ?: '';
-$headline    = get_sub_field('headline') ?: '';
-$body        = get_sub_field('body') ?: '';
+$eyebrow       = get_sub_field('eyebrow') ?: '';
+$headline      = get_sub_field('headline') ?: '';
+$headline_lead = get_sub_field('headline_lead') ?: '';
+$headline_gap  = get_sub_field('headline_gap') ?: '';
+$body          = get_sub_field('body') ?: '';
 $media_slot  = get_sub_field('media_slot') ?: 'diagram';
 $diagram_key = get_sub_field('diagram_key') ?: '';
 $image       = get_sub_field('image');
@@ -29,8 +31,12 @@ $media_order = $reverse ? 1 : 2;
         <div class="iiq-grid-split" style="display:grid;grid-template-columns:<?= esc_attr($column_ratio) ?>;gap:80px;align-items:center;">
             <div style="order:<?= (int) $text_order ?>;">
                 <?php iiq_section_eyebrow($eyebrow); ?>
-                <?php if ($headline): ?>
-                    <h2 class="iiq-display-lg" style="margin:18px 0 24px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:-0.02em;line-height:1.05;">
+                <?php if ($headline_lead && $headline_gap): ?>
+                    <h2 class="iiq-display-lg" style="margin:18px 0 24px;font-family:var(--font-display);font-size:clamp(40px,5.4vw,76px);font-weight:600;letter-spacing:-0.04em;line-height:0.98;">
+                        <?= wp_kses_post($headline_lead) ?><span style="color:var(--fg-tertiary);"> <?= wp_kses_post($headline_gap) ?></span>
+                    </h2>
+                <?php elseif ($headline): ?>
+                    <h2 class="iiq-display-lg" style="margin:18px 0 24px;font-family:var(--font-display);font-weight:600;letter-spacing:-0.02em;line-height:1.05;">
                         <?= wp_kses_post($headline) ?>
                     </h2>
                 <?php endif; ?>

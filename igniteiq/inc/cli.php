@@ -708,9 +708,14 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'acf_fc_layout' => 'hero_editorial',
                     // Template (heroes/editorial.php:38) renders its own bullet.
                     'eyebrow'        => 'Company',
+                    // FIDELITY: Company.js hero (lines 24-40) renders a single
+                    // H1 at clamp(44,5.2vw,88px) with the second sentence in
+                    // a tertiary inline span. The `inline-2tone` size_variant
+                    // + per-line `muted` flags reproduce that exactly.
+                    'size_variant'   => 'inline-2tone',
                     'headline_lines' => [
-                        ['line' => 'Operators who ran the trucks.'],
-                        ['line' => 'Architects who modernized the industry. Innovators building what’s next.'],
+                        ['line' => 'Operators who ran the trucks.', 'muted' => false],
+                        ['line' => 'Architects who modernized the industry. Innovators building what’s next.', 'muted' => true],
                     ],
                     'body'          => '',
                     'primary_cta'   => ['label' => '', 'url' => ''],
@@ -728,6 +733,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'eyebrow'  => '',
                     'headline' => 'We’re not an AI company.',
+                    'headline_lead' => 'We’re not an AI',
+                    'headline_gap'  => 'company.',
                     'body'     => '<p>We’re not here to sell you a new flashy tool. We build the infrastructure that makes your systems, tools, and AI actually work. We don’t rent access. We build it. You keep it.</p>',
                     'media_slot'  => 'diagram',
                     'diagram_key' => '',
@@ -763,6 +770,9 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'eyebrow'  => '',
                     'headline' => 'Three things we believe about the next decade of home services.',
+                    'headline_lead'  => 'Three things we believe about',
+                    'headline_gap'   => 'the next decade of home services.',
+                    'headline_align' => 'left',
                     'intro'    => '',
                     'columns'  => '3',
                     'style'    => 'top-border',
@@ -782,8 +792,10 @@ if (!class_exists('IgniteIQ_CLI')) {
                         'section_label' => 'The team',
                         'theme_variant' => 'light',
                     ],
-                    'headline'     => 'The only team in the category with this combination.',
-                    'avatar_style' => 'square',
+                    'headline'      => 'The only team in the category with this combination.',
+                    'headline_lead' => 'The only team in the category',
+                    'headline_gap'  => 'with this combination.',
+                    'avatar_style'  => 'square',
                     'members' => [
                         [
                             'name'  => 'Scott Rayden',

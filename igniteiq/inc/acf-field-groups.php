@@ -115,6 +115,14 @@ if (function_exists('acf_add_local_field_group')) {
                     'name'  => 'line',
                     'type'  => 'text',
                 ],
+                [
+                    'key'   => 'field_iiq_headline_line_muted_' . $key_suffix,
+                    'label' => 'Muted',
+                    'name'  => 'muted',
+                    'type'  => 'true_false',
+                    'ui'    => 1,
+                    'default_value' => 0,
+                ],
             ],
         ];
     };
@@ -202,7 +210,7 @@ if (function_exists('acf_add_local_field_group')) {
                             $iiq_cta_group('he_primary', 'Primary CTA', 'primary_cta'),
                             $iiq_cta_group('he_secondary', 'Secondary CTA', 'secondary_cta'),
                             ['key' => 'field_iiq_he_dark', 'label' => 'Dark', 'name' => 'dark', 'type' => 'true_false', 'ui' => 1],
-                            ['key' => 'field_iiq_he_size_variant', 'label' => 'Size variant', 'name' => 'size_variant', 'type' => 'select', 'choices' => ['' => 'Default', 'compact' => 'Compact (ArchHero)'], 'default_value' => '', 'allow_null' => 1, 'return_format' => 'value'],
+                            ['key' => 'field_iiq_he_size_variant', 'label' => 'Size variant', 'name' => 'size_variant', 'type' => 'select', 'choices' => ['' => 'Default', 'compact' => 'Compact (ArchHero)', 'inline-2tone' => 'Inline 2-tone (CompanyHero)'], 'default_value' => '', 'allow_null' => 1, 'return_format' => 'value'],
                         ],
                     ],
 
@@ -378,8 +386,10 @@ if (function_exists('acf_add_local_field_group')) {
                         'sub_fields' => [
                             $iiq_settings_group_for('split'),
                             ['key' => 'field_iiq_ss_eyebrow', 'label' => 'Eyebrow', 'name' => 'eyebrow', 'type' => 'text'],
-                            ['key' => 'field_iiq_ss_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
-                            ['key' => 'field_iiq_ss_body', 'label' => 'Body', 'name' => 'body', 'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
+                            ['key' => 'field_iiq_ss_headline',      'label' => 'Headline',      'name' => 'headline',      'type' => 'text'],
+                            ['key' => 'field_iiq_ss_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_ss_headline_gap',  'label' => 'Headline gap',  'name' => 'headline_gap',  'type' => 'text'],
+                            ['key' => 'field_iiq_ss_body',          'label' => 'Body',          'name' => 'body',          'type' => 'wysiwyg', 'media_upload' => 0, 'tabs' => 'visual'],
                             [
                                 'key' => 'field_iiq_ss_media_slot',
                                 'label' => 'Media slot',
@@ -608,7 +618,9 @@ if (function_exists('acf_add_local_field_group')) {
                         'display'    => 'block',
                         'sub_fields' => [
                             $iiq_settings_group_for('team'),
-                            ['key' => 'field_iiq_tm_headline', 'label' => 'Headline', 'name' => 'headline', 'type' => 'text'],
+                            ['key' => 'field_iiq_tm_headline',      'label' => 'Headline',      'name' => 'headline',      'type' => 'text'],
+                            ['key' => 'field_iiq_tm_headline_lead', 'label' => 'Headline lead', 'name' => 'headline_lead', 'type' => 'text'],
+                            ['key' => 'field_iiq_tm_headline_gap',  'label' => 'Headline gap',  'name' => 'headline_gap',  'type' => 'text'],
                             [
                                 'key' => 'field_iiq_tm_avatar_style',
                                 'label' => 'Avatar style',

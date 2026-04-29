@@ -3,8 +3,10 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$headline     = get_sub_field('headline') ?: '';
-$members      = get_sub_field('members') ?: [];
+$headline      = get_sub_field('headline') ?: '';
+$headline_lead = get_sub_field('headline_lead') ?: '';
+$headline_gap  = get_sub_field('headline_gap') ?: '';
+$members       = get_sub_field('members') ?: [];
 $avatar_style = get_sub_field('avatar_style') ?: 'circle';
 $variant      = iiq_section_variant();
 $is_square    = ($avatar_style === 'square');
@@ -30,7 +32,11 @@ $avatar_radius = $is_square ? '6px' : '50%';
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 
-        <?php if ($headline): ?>
+        <?php if ($headline_lead && $headline_gap): ?>
+            <h2 class="iiq-display-lg" style="margin:0 0 56px;max-width:1100px;font-family:var(--font-display);font-size:clamp(44px,5.6vw,88px);font-weight:600;letter-spacing:-0.04em;line-height:0.98;">
+                <?= wp_kses_post($headline_lead) ?><span style="color:var(--fg-tertiary);"> <?= wp_kses_post($headline_gap) ?></span>
+            </h2>
+        <?php elseif ($headline): ?>
             <h2 class="iiq-display-lg" style="margin:0 0 56px;max-width:880px;font-family:var(--font-display);font-weight:600;letter-spacing:-0.025em;line-height:1.05;">
                 <?= wp_kses_post($headline) ?>
             </h2>

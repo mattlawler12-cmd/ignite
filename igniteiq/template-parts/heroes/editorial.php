@@ -7,6 +7,7 @@ $primary_cta    = get_sub_field('primary_cta') ?: ['label' => '', 'url' => ''];
 $secondary_cta  = get_sub_field('secondary_cta') ?: ['label' => '', 'url' => ''];
 $dark           = get_sub_field('dark') ? true : false;
 $size_variant   = get_sub_field('size_variant') ?: '';
+$stats          = get_sub_field('stats') ?: [];
 
 // Fallback default headline lines (from JSX defaults)
 if (empty($headline_lines)) {
@@ -23,10 +24,14 @@ foreach ($headline_lines as $row) {
 }
 $is_long = strlen($headline_concat) > 80;
 $is_compact = ($size_variant === 'compact');
-$h1_font_size      = $is_long ? 'clamp(36px, 4.6vw, 72px)' : ($is_compact ? 'clamp(56px, 8.4vw, 144px)' : 'clamp(64px, 11vw, 184px)');
-$h1_line_height    = $is_long ? '1.04' : ($is_compact ? '0.94' : '0.92');
-$h1_font_weight    = $is_long ? '600' : '700';
-$h1_letter_spacing = (!$is_long && $is_compact) ? '-0.05em' : '-0.04em';
+// FIDELITY: Company.js hero (Company.js:24-40) renders inline 2-tone at
+// clamp(44,5.2vw,88px), lineHeight 1.06, 600 weight — different from the
+// existing 'compact' (huge stacked headline) and the auto 'is_long' shrink.
+$is_inline_2tone = ($size_variant === 'inline-2tone');
+$h1_font_size      = $is_inline_2tone ? 'clamp(44px, 5.2vw, 88px)' : ($is_long ? 'clamp(36px, 4.6vw, 72px)' : ($is_compact ? 'clamp(56px, 8.4vw, 144px)' : 'clamp(64px, 11vw, 184px)'));
+$h1_line_height    = $is_inline_2tone ? '1.06' : ($is_long ? '1.04' : ($is_compact ? '0.94' : '0.92'));
+$h1_font_weight    = $is_inline_2tone ? '600' : ($is_long ? '600' : '700');
+$h1_letter_spacing = $is_inline_2tone ? '-0.04em' : ((!$is_long && $is_compact) ? '-0.05em' : '-0.04em');
 
 $total_lines = count($headline_lines);
 ?>
@@ -39,15 +44,29 @@ $total_lines = count($headline_lines);
       </span>
     <?php endif; ?>
     <h1 style="font-family: var(--font-display); font-size: <?= $h1_font_size ?>; line-height: <?= $h1_line_height ?>; font-weight: <?= $h1_font_weight ?>; letter-spacing: <?= $h1_letter_spacing ?>; margin: 32px 0 0; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>; max-width: 1400px;">
-      <?php foreach ($headline_lines as $i => $row):
+      <?php
+      // Detect explicit per-line `muted` flags. If any line declares one,
+      // use them; otherwise fall back to legacy auto (last line primary,
+      // earlier lines muted).
+      $has_explicit_muted = false;
+      foreach ($headline_lines as $row) {
+        if (is_array($row) && array_key_exists('muted', $row)) { $has_explicit_muted = true; break; }
+      }
+      foreach ($headline_lines as $i => $row):
         $line  = is_array($row) ? ($row['line'] ?? '') : $row;
         $is_last = ($i === $total_lines - 1);
-        $is_muted = (!$is_last && $total_lines > 1);
+        $is_muted = $has_explicit_muted
+          ? !empty($row['muted'])
+          : (!$is_last && $total_lines > 1);
         $color = $is_muted
           ? ($dark ? 'oklch(60% 0.005 286)' : 'var(--fg-tertiary)')
           : ($dark ? 'var(--ink-50)' : 'var(--fg-primary)');
+        // inline-2tone: lines flow inline with a separating space; all
+        // other variants keep the block-stacked rendering.
+        $span_display = $is_inline_2tone ? '' : 'display: block;';
+        $span_separator = ($is_inline_2tone && $i > 0) ? ' ' : '';
       ?>
-        <span style="display: block; color: <?= $color ?>; opacity: 1;"><?= esc_html($line) ?></span>
+        <?= $span_separator ?><span style="<?= $span_display ?> color: <?= $color ?>; opacity: 1;"><?= esc_html($line) ?></span>
       <?php endforeach; ?>
     </h1>
     <div style="margin-top: 64px; display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: flex-end;">
@@ -77,5 +96,19 @@ $total_lines = count($headline_lines);
         <div></div>
       <?php endif; ?>
     </div>
+
+    <?php if (!empty($stats) && is_array($stats)): ?>
+      <div style="margin-top: 80px; padding-top: 32px; border-top: <?= $dark ? '1px solid oklch(22% 0.005 286)' : '1px solid var(--border-default)' ?>; display: grid; grid-template-columns: repeat(<?= count($stats) ?>, 1fr); gap: 24px;">
+        <?php foreach ($stats as $stat):
+          $label = is_array($stat) ? ($stat['label'] ?? '') : '';
+          $value = is_array($stat) ? ($stat['value'] ?? '') : '';
+        ?>
+          <div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: <?= $dark ? 'oklch(50% 0.005 286)' : 'var(--fg-tertiary)' ?>;"><?= esc_html($label) ?></div>
+            <div style="margin-top: 8px; font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -0.015em; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>;"><?= esc_html($value) ?></div>
+          </div>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
