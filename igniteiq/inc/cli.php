@@ -828,12 +828,18 @@ if (!class_exists('IgniteIQ_CLI')) {
                             'bio'   => 'Former Executive Architect at ServiceTitan. Led API development across every department of the platform. Knows home services data at the schema level better than almost anyone in the industry — and knows where the seams are.',
                             'photo' => false,
                         ],
+                        // FIDELITY EXCEPTION (2026-04-29): Darren Merritt
+                        // removed from the public team grid at customer
+                        // request. Original entry preserved here; uncomment
+                        // to restore.
+                        /*
                         [
                             'name'  => 'Darren Merritt',
                             'role'  => 'VP of Engineering',
                             'bio'   => 'Former VP of Engineering at ServiceTitan. Most recently CPO at PipeDreams, a PE-backed home services roll-up. Brings the operator perspective on what breaks at scale and how to engineer for it.',
                             'photo' => false,
                         ],
+                        */
                         [
                             'name'  => 'Josh Scott',
                             'role'  => 'Go To Market',
