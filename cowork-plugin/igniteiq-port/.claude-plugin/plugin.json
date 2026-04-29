@@ -1,11 +1,9 @@
 {
   "name": "igniteiq-port",
   "version": "0.1.0",
-  "displayName": "IgniteIQ Port",
   "description": "Port Claude Design exports into the IgniteIQ WordPress theme. Fetches handoff URLs (or processes uploaded zips), diffs against live staging, edits cli.php and template-parts byte-accurately, runs php -l, and stops short of pushing — user reviews and pushes manually. Deploy is automated via the GitHub Action on push to main.",
   "author": {
-    "name": "IgniteIQ",
-    "url": "https://igniteiq.com"
+    "name": "IgniteIQ"
   },
   "homepage": "https://github.com/mattlawler12-cmd/ignite",
   "license": "PROPRIETARY"

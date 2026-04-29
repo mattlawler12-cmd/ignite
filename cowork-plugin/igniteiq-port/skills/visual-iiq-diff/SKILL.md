@@ -1,6 +1,6 @@
 ---
 name: visual-iiq-diff
-description: Capture screenshots of all 6 IgniteIQ pages on both the latest Claude Design export (file://) and live WP staging (https://igniteiqstg.wpenginepowered.com), then produce a per-page visual gap report. Use after a port to verify visual fidelity beyond just string-level. Triggers: "visual diff iiq", "screenshot diff", "compare staging visually", "/visual-iiq-diff". READ-ONLY — captures + reports, never edits.
+description: Capture screenshots of all 6 IgniteIQ pages on both the latest Claude Design export (file://) and live WP staging (https://igniteiqstg.wpenginepowered.com), then produce a per-page visual gap report. Use after a port to verify visual fidelity beyond just string-level. Triggers — "visual diff iiq", "screenshot diff", "compare staging visually", "/visual-iiq-diff". READ-ONLY — captures + reports, never edits.
 ---
 
 # visual-iiq-diff

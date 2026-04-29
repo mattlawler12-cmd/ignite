@@ -1,6 +1,6 @@
 ---
 name: diff-iiq-export
-description: Diff the latest Claude Design export against the live IgniteIQ WP staging site (https://igniteiqstg.wpenginepowered.com) and produce a porting checklist with WP theme mapping. Use when the user says "diff iiq export", "what do I need to change to match the export", "compare export to staging", "diff Claude Design export", or invokes /diff-iiq-export. Default behavior compares export-to-staging; explicit two paths still supported for export-to-export. READ-ONLY: scrapes URLs, reads exports, never edits PHP.
+description: Diff the latest Claude Design export against the live IgniteIQ WP staging site (https://igniteiqstg.wpenginepowered.com) and produce a porting checklist with WP theme mapping. Use when the user says "diff iiq export", "what do I need to change to match the export", "compare export to staging", "diff Claude Design export", or invokes /diff-iiq-export. Default behavior compares export-to-staging; explicit two paths still supported for export-to-export. READ-ONLY — scrapes URLs, reads exports, never edits PHP.
 ---
 
 # diff-iiq-export
