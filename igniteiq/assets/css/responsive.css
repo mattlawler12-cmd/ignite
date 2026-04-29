@@ -354,39 +354,191 @@ img[width], svg[width] { height: auto; }
 
 /* ─────────────────────────────────────────────────────────────────
    Contrast comparison table (OLD MODEL vs HEADLESS MODEL).
-   When the 1fr/1fr row collapses to single column on phones, the
-   visual relationship between paired rows is lost — readers see an
-   alternating list of old/new bullets with no labels. Add an inline
-   label above each cell on mobile (sourced from the data-iiq-label
-   attribute populated from the table headers) and stack vertically.
+   Wave 9.1: redesign for mobile. Wave 9.0 used per-row labels and a
+   tinted-row background; readers found the alternating pattern
+   confusing. New approach (user-picked): hide the OLD column entirely,
+   render only the HEADLESS column as a vertical list, and prepend each
+   value with a small muted "Was: <old text>" intro sourced from the
+   data-iiq-was attribute populated in contrast.php. A single mobile-
+   only intro line "Vs. the old SaaS model →" sits above the list to
+   preserve the contrast frame.
    ───────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .iiq-contrast-header { display: none !important; }
+  /* Old column hidden entirely on mobile */
+  .iiq-contrast-cell.iiq-contrast-old { display: none !important; }
+
+  /* Old header row hidden; just keep the new header */
+  .iiq-contrast-header { grid-template-columns: 1fr !important; display: block !important; }
+  .iiq-contrast-header > div:first-child { display: none !important; }
+  .iiq-contrast-header > div:last-child {
+    border-right: 0 !important;
+    padding: 18px 22px !important;
+    border-bottom: 1px solid var(--border-default);
+  }
+
+  /* Single-column row layout */
   .iiq-contrast-row {
     grid-template-columns: 1fr !important;
     gap: 0 !important;
-    padding: 4px 0 !important;
+    padding: 0 !important;
   }
-  .iiq-contrast-cell {
+  .iiq-contrast-cell.iiq-contrast-new {
     border-right: 0 !important;
-    padding: 14px 20px !important;
+    padding: 18px 22px !important;
     position: relative;
   }
-  .iiq-contrast-cell::before {
-    content: attr(data-iiq-label);
+
+  /* "Was: <old>" intro line above each new value */
+  .iiq-contrast-cell.iiq-contrast-new::before {
+    content: 'Was: ' attr(data-iiq-was);
     display: block;
     font-family: 'Aeonik Fono', monospace;
-    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    color: var(--fg-tertiary);
+    margin-bottom: 6px;
+    line-height: 1.35;
+    font-weight: 400;
+    text-transform: none;
+  }
+
+  /* Mobile-only intro banner above the entire contrast list */
+  .iiq-contrast-table::before {
+    content: 'Vs. the old SaaS model →';
+    display: block;
+    padding: 14px 22px;
+    font-family: 'Aeonik Fono', monospace;
     font-size: 10px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    margin-bottom: 6px;
     color: var(--fg-tertiary);
+    border-bottom: 1px solid var(--border-default);
   }
-  .iiq-contrast-cell.iiq-contrast-new::before {
-    color: var(--ignite-500);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Wave 9.1 — additional mobile fixes (audit follow-up)
+   ───────────────────────────────────────────────────────────────── */
+
+/* Timeline grid `180px 1fr 1.6fr` (template-parts/sections/stack.php:99 — DAY 0 / DAY 1–2 …)
+   was missing from the multi-column collapse list; the 1.6fr column was forcing
+   the how-it-works page to render at 1740px wide on mobile. */
+@media (max-width: 1024px) {
+  [style*="180px 1fr 1.6fr"],
+  [style*="180px 1fr 1.6fr"][style*="grid-template-columns"] {
+    grid-template-columns: 56px 1fr !important;
+    gap: 16px !important;
   }
-  .iiq-contrast-cell.iiq-contrast-old {
-    background: oklch(96% 0.003 286 / 0.5);
+}
+@media (max-width: 640px) {
+  [style*="180px 1fr 1.6fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    padding: 24px 0 !important;
   }
+}
+
+/* Hero clamp shrinks at <=640px — prevents oversized headlines that force
+   awkward wraps or push the viewport. Each rule scopes the EXACT clamp string
+   used inline so desktop is untouched. */
+@media (max-width: 640px) {
+  /* hero_editorial default cinematic */
+  h1[style*="clamp(64px, 11vw, 184px)"],
+  h1[style*="clamp(64px,11vw,184px)"] {
+    font-size: clamp(38px, 10vw, 56px) !important;
+    line-height: 1.04 !important;
+  }
+  /* hero_editorial compact (ArchHero) */
+  h1[style*="clamp(56px, 8.4vw, 144px)"],
+  h1[style*="clamp(56px,8.4vw,144px)"] {
+    font-size: clamp(34px, 9vw, 50px) !important;
+    line-height: 1.04 !important;
+  }
+  /* hero_editorial inline-2tone (Company hero) */
+  h1[style*="clamp(44px, 5.2vw, 88px)"],
+  h1[style*="clamp(44px,5.2vw,88px)"] {
+    font-size: clamp(30px, 8vw, 42px) !important;
+    line-height: 1.06 !important;
+  }
+  /* hero_ontology */
+  h1[style*="clamp(56px, 7.6vw, 132px)"],
+  h1[style*="clamp(56px,7.6vw,132px)"] {
+    font-size: clamp(34px, 9vw, 50px) !important;
+    line-height: 1.04 !important;
+  }
+  /* H2 how-it-deploys (Deployed Fast / Decades of Value) */
+  h2[style*="clamp(48px, 6.4vw, 96px)"],
+  h2[style*="clamp(48px,6.4vw,96px)"] {
+    font-size: clamp(32px, 8.5vw, 44px) !important;
+    line-height: 1.04 !important;
+  }
+  /* H2 stats clamp(44px,5.6vw,88px) */
+  h2[style*="clamp(44px, 5.6vw, 88px)"],
+  h2[style*="clamp(44px,5.6vw,88px)"] {
+    font-size: clamp(30px, 8vw, 44px) !important;
+    line-height: 1.04 !important;
+  }
+  /* Section headlines clamp(40px,5.6vw,76px) — home pull-quote, contrast, problem etc.
+     Override is tighter than the existing rule on line 248 to fix the home hero quote
+     overflow ("win" / "best" clipping at viewport edge). */
+  section h2[style*="clamp(40px, 5.6vw, 76px)"],
+  section h2[style*="clamp(40px,5.6vw,76px)"] {
+    font-size: clamp(28px, 7.5vw, 40px) !important;
+    line-height: 1.06 !important;
+  }
+  /* Section headlines clamp(40px,5.2vw,76px) — what-changes "Better decisions" */
+  section h2[style*="clamp(40px, 5.2vw, 76px)"],
+  section h2[style*="clamp(40px,5.2vw,76px)"] {
+    font-size: clamp(28px, 7.5vw, 40px) !important;
+    line-height: 1.06 !important;
+  }
+}
+
+/* Hero KPI strip (hero_editorial.php:139 stats grid) — keep the eyebrow+value
+   pairs in 3-column on phones so each stat stays compact rather than collapsing
+   to a single column with massive empty whitespace. */
+@media (max-width: 640px) {
+  [style*="margin-top: 80px; padding-top: 32px"][style*="display: grid"][style*="repeat(3"],
+  [style*="margin-top: 80px; padding-top: 32px"][style*="display: grid"][style*="repeat(2"],
+  [style*="margin-top:80px;padding-top:32px"][style*="display:grid"][style*="repeat(3"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+  }
+  /* Ensure the stat eyebrow + value don't overflow their narrow column */
+  [style*="margin-top: 80px; padding-top: 32px"] > div { min-width: 0 !important; }
+}
+
+/* "2 wks" / number+unit wrap fix on operator-stack stat numerics — the
+   inline min-width:80px forced the unit "wks" to drop below "2" at 375px.
+   Scope to operator-stack only so other 80px-min spans aren't affected. */
+@media (max-width: 640px) {
+  [data-iiq-operator-stack] [style*="min-width:80px"],
+  [data-iiq-operator-stack] [style*="min-width: 80px"] {
+    white-space: nowrap !important;
+    min-width: 60px !important;
+  }
+}
+
+/* Signin full-viewport split — `.iiq-grid-split` already collapses to 1fr on
+   mobile, but the dark <aside> takes only its content height (~340px), leaving
+   the right half of the viewport feeling empty. Give the aside a 50vh floor on
+   mobile so it has hero-grade visual weight. */
+@media (max-width: 1024px) {
+  .iiq-signin-page .iiq-grid-split > aside {
+    min-height: 50vh !important;
+    padding: 56px 32px !important;
+  }
+  .iiq-signin-page .iiq-grid-split > main {
+    padding: 48px 32px !important;
+  }
+}
+@media (max-width: 640px) {
+  .iiq-signin-page .iiq-grid-split > aside { padding: 48px 24px !important; }
+  .iiq-signin-page .iiq-grid-split > main  { padding: 40px 24px !important; }
+}
+
+/* Contact form — ensure the textarea doesn't visually collapse to a single
+   underline that reads as an orphaned input. Force a min-height on phones. */
+@media (max-width: 640px) {
+  .iiq-textarea { min-height: 96px !important; }
 }
