@@ -29,6 +29,20 @@ Five user-scoped skills, all routed via `/<name>`:
 - `/visual-iiq-diff` — screenshot-based per-page visual gap report
   (export `file://` vs. `https://igniteiqstg.wpenginepowered.com`)
 
+Plus one bundled MCP server:
+
+- **Playwright MCP** (Microsoft, `@playwright/mcp`) — bundled via `.mcp.json`,
+  starts via `npx` on first plugin load. Exposes `navigate`, `screenshot`,
+  `get_html`, `click`, `wait_for_selector`, etc. as Claude tools. Runs on the
+  Mac (not in the Cowork sandbox), so it can hit
+  `https://igniteiqstg.wpenginepowered.com` directly. This is what unblocks
+  visual fidelity checks from inside a Cowork chat — without it, the sandbox
+  blocks all non-Anthropic outbound and visual diffs require a Mac-local
+  round-trip. First load downloads the MCP package via `npx -y` (no manual
+  install). The `/visual-iiq-diff` skill still works the old way (Playwright
+  via `node scripts/iiq-shoot.js`); the MCP is an additional surface for
+  ad-hoc per-page checks Claude can drive directly.
+
 ## Install
 
 1. Build the artifact from the repo root:

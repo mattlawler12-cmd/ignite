@@ -44,17 +44,17 @@
   });
 
   function renderConfirmation() {
+    // Mirror the static [data-iiq-contact-success] block in
+    // template-parts/forms/contact.php — byte-accurate to Contact.js.
+    // Plain prose (no inline links) per the export's JSX.
     const wrap = document.createElement('div');
     wrap.setAttribute('role', 'status');
     wrap.setAttribute('aria-live', 'polite');
-    wrap.style.cssText = 'padding:32px 0;font-family:Aeonik,sans-serif;font-size:18px;color:var(--fg-primary);';
+    wrap.style.cssText = 'padding:40px 0;';
     wrap.innerHTML =
-      '<p style="margin:0 0 12px;font-weight:500;font-size:24px;">Thanks. We’ll be in touch.</p>' +
-      '<p style="margin:0;color:var(--fg-secondary);font-size:14px;line-height:1.55;">' +
-      'Someone on our team will reach out within one business day. In the meantime, feel free to ' +
-      '<a href="/how-it-works/" style="color:var(--ignite-500);text-decoration:underline;">see how it works</a>, or ' +
-      '<a href="/ontology/" style="color:var(--ignite-500);text-decoration:underline;">read about the ontology</a>.' +
-      '</p>';
+      '<div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);">● Received</div>' +
+      '<h2 style="font-family:var(--font-display);font-size:36px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;margin:20px 0 0;color:var(--fg-primary);">Thanks. We’ll be in touch.</h2>' +
+      '<p style="margin-top:16px;font-size:16px;line-height:1.55;color:var(--fg-secondary);max-width:540px;">Someone on our team will reach out within one business day. In the meantime, feel free to see how it works, or read about the ontology.</p>';
     form.replaceWith(wrap);
   }
 

@@ -60,6 +60,13 @@ $nonce = wp_create_nonce('iiq_contact');
     </aside>
 
     <div style="padding:40px 44px 44px;border:1px solid var(--border-default);background:var(--bg-base);">
+
+      <div data-iiq-contact-success hidden style="padding:40px 0;">
+        <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--ignite-500);">● Received</div>
+        <h2 style="font-family:var(--font-display);font-size:36px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;margin:20px 0 0;color:var(--fg-primary);">Thanks. We&rsquo;ll be in touch.</h2>
+        <p style="margin-top:16px;font-size:16px;line-height:1.55;color:var(--fg-secondary);max-width:540px;">Someone on our team will reach out within one business day. In the meantime, feel free to see how it works, or read about the ontology.</p>
+      </div>
+
       <form data-iiq-contact-form method="post" action="<?= esc_url(admin_url('admin-ajax.php')) ?>" novalidate style="display:flex;flex-direction:column;gap:24px;">
         <input type="hidden" name="action" value="iiq_contact">
         <input type="hidden" name="nonce" value="<?= esc_attr($nonce) ?>">

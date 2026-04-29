@@ -21,6 +21,18 @@ $column_ratio    = is_array($_split_settings) && !empty($_split_settings['column
     ? (string) $_split_settings['column_ratio']
     : '1fr 1fr';
 
+// FIDELITY: when there's no diagram/image to render in the second column,
+// move the body paragraph there (matches Company.js WhatWeAre, lines 60-100,
+// which uses gridTemplateColumns '1fr 1.6fr' with H2 left + body right).
+$has_media = ($media_slot === 'diagram' && $diagram_key)
+          || ($media_slot === 'image'   && is_array($image) && !empty($image['ID']));
+$body_in_second_col = ($body && !$has_media);
+// When body lands in column 2, prefer the export's 1fr/1.6fr ratio unless
+// settings.column_ratio explicitly overrides.
+if ($body_in_second_col && $column_ratio === '1fr 1fr') {
+    $column_ratio = '1fr 1.6fr';
+}
+
 $text_order  = $reverse ? 2 : 1;
 $media_order = $reverse ? 1 : 2;
 ?>
@@ -28,7 +40,7 @@ $media_order = $reverse ? 1 : 2;
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 
-        <div class="iiq-grid-split" style="display:grid;grid-template-columns:<?= esc_attr($column_ratio) ?>;gap:80px;align-items:center;">
+        <div class="iiq-grid-split" style="display:grid;grid-template-columns:<?= esc_attr($column_ratio) ?>;gap:80px;align-items:<?= $body_in_second_col ? 'flex-start' : 'center' ?>;">
             <div style="order:<?= (int) $text_order ?>;">
                 <?php iiq_section_eyebrow($eyebrow); ?>
                 <?php if ($headline_lead && $headline_gap): ?>
@@ -40,7 +52,7 @@ $media_order = $reverse ? 1 : 2;
                         <?= wp_kses_post($headline) ?>
                     </h2>
                 <?php endif; ?>
-                <?php if ($body): ?>
+                <?php if ($body && !$body_in_second_col): ?>
                     <div style="font-size:17px;line-height:1.6;color:var(--fg-secondary,#5A5A60);">
                         <?= wp_kses_post($body) ?>
                     </div>
@@ -61,6 +73,8 @@ $media_order = $reverse ? 1 : 2;
                         false,
                         ['style' => 'width:100%;height:auto;border-radius:14px;display:block;']
                     );
+                } elseif ($body_in_second_col) {
+                    echo '<div style="font-size:19px;line-height:1.6;color:var(--fg-primary);font-weight:500;margin:18px 0 0;">' . wp_kses_post($body) . '</div>';
                 }
                 ?>
             </div>

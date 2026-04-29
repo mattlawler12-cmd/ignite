@@ -18,13 +18,14 @@ $default_columns = [
         'heading' => 'Company',
         'links' => [
             ['label' => 'About',   'url' => home_url('/company/')],
-            ['label' => 'Contact', 'url' => home_url('/contact/')],
+            ['label' => 'Team',    'url' => home_url('/company/#team')],
+            ['label' => 'Contact', 'url' => home_url('/company/#contact')],
         ],
     ],
     [
         'heading' => 'Resources',
         'links' => [
-            ['label' => 'Security', 'url' => '#'],
+            ['label' => 'Security', 'url' => home_url('/how-it-works/#security')],
             ['label' => 'Privacy',  'url' => '#'],
             ['label' => 'Terms',    'url' => '#'],
         ],
@@ -32,8 +33,10 @@ $default_columns = [
     [
         'heading' => 'Customers',
         'links' => [
-            ['label' => 'Tapps Electric', 'url' => '#'],
-            ['label' => 'AirWorks',       'url' => '#'],
+            ['label' => 'Tapps Electric',         'url' => '#'],
+            ['label' => 'AirWorks',               'url' => '#'],
+            ['label' => "ComfortBro's H&A",       'url' => '#'],
+            ['label' => 'Powerhouse CG · partner', 'url' => '#'],
         ],
     ],
 ];
@@ -53,7 +56,7 @@ $copyright = function_exists('iiq_setting')
         <img src="<?= esc_url(IIQ_URI . '/assets/img/logo-white.png') ?>" alt="IgniteIQ" style="object-fit:contain;width:28px;height:28px;">
         <span style="font-family:'Aeonik',sans-serif;font-weight:600;letter-spacing:-0.02em;font-size:24px;color:#fff;">IgniteIQ</span>
       </a>
-      <p style="margin:24px 0 0;font-size:14px;color:var(--ink-300,#737373);max-width:280px;line-height:1.6;">Intelligence infrastructure for the modern trades.</p>
+      <p style="margin:24px 0 0;font-size:14px;color:var(--ink-300,#737373);max-width:280px;line-height:1.6;">Intelligence infrastructure for home services. Own your cloud. Own your data. Own your intelligence.</p>
     </div>
 
     <?php foreach ($columns as $col): ?>
@@ -74,6 +77,6 @@ $copyright = function_exists('iiq_setting')
 
   <div style="max-width:1320px;margin:64px auto 0;padding-top:32px;border-top:1px solid var(--ink-900,#1a1a1a);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;">
     <span style="font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-400,#525252);"><?= esc_html($copyright) ?></span>
-    <span style="font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-400,#525252);">v<?= esc_html(IIQ_VERSION) ?></span>
+    <span style="font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-400,#525252);">Framework v4.2</span>
   </div>
 </footer>

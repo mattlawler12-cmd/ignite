@@ -1,7 +1,7 @@
 {
   "name": "igniteiq-port",
-  "version": "0.1.4",
-  "description": "Port Claude Design exports into the IgniteIQ WordPress theme. Fetches handoff URLs, diffs against live staging, edits cli.php and template-parts byte-accurately, then stops for review before commit. Deploy to staging is automated via GitHub Action on push to main.",
+  "version": "0.1.5",
+  "description": "Port Claude Design exports into the IgniteIQ WordPress theme. Fetches handoff URLs, diffs against live staging, edits cli.php and template-parts byte-accurately, then stops for review before commit. Bundles the Microsoft Playwright MCP so visual fidelity checks (navigate, screenshot, get_html against staging) work directly from a Cowork session — Claude no longer needs the Mac-local /visual-iiq-diff round-trip. Deploy to staging is automated via GitHub Action on push to main.",
   "author": {
     "name": "IgniteIQ"
   }

@@ -35,8 +35,16 @@ $h1_letter_spacing = $is_inline_2tone ? '-0.04em' : ((!$is_long && $is_compact) 
 
 $total_lines = count($headline_lines);
 ?>
-<section style="position: relative; min-height: calc(100vh - 64px); background: <?= $dark ? 'var(--ink-1000)' : 'var(--bg-canvas)' ?>; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>; overflow: hidden; border-bottom: <?= $dark ? '1px solid oklch(20% 0.005 286)' : '1px solid var(--border-subtle)' ?>; display: flex; align-items: center;">
-  <div style="max-width: 1440px; margin: 0 auto; padding: 96px 32px; width: 100%; position: relative;">
+<?php
+// FIDELITY: inline-2tone (Company.js hero) uses padding 168/140 with NO
+// min-height (Company.js:5-9 sets only padding). Other variants keep the
+// existing 100vh treatment used by ArchHero/CompanyHero-cinematic.
+$section_min_height = $is_inline_2tone ? 'auto' : 'calc(100vh - 64px)';
+$section_align = $is_inline_2tone ? 'flex-start' : 'center';
+$inner_padding = $is_inline_2tone ? '168px 32px 140px' : '96px 32px';
+?>
+<section style="position: relative; min-height: <?= $section_min_height ?>; background: <?= $dark ? 'var(--ink-1000)' : 'var(--bg-canvas)' ?>; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>; overflow: hidden; border-bottom: <?= $dark ? '1px solid oklch(20% 0.005 286)' : '1px solid var(--border-subtle)' ?>; display: flex; align-items: <?= $section_align ?>;">
+  <div style="max-width: 1440px; margin: 0 auto; padding: <?= $inner_padding ?>; width: 100%; position: relative;">
     <?php if ($eyebrow): ?>
       <span class="iiq-eyebrow" style="font-family: 'Aeonik Fono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ignite-500); display: inline-flex; align-items: center; gap: 8px;">
         <span style="width:6px;height:6px;border-radius:50%;background:var(--ignite-500);animation: iiqPulse 2s ease-in-out infinite;"></span>

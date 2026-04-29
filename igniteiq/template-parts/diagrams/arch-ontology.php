@@ -15,4 +15,15 @@ if (!defined('ABSPATH')) exit;
  * surrounding section + headline are provided by that split host.
  */
 ?>
-<div data-iiq-design="arch-ontology"></div>
+<div data-iiq-design="arch-ontology" aria-label="IgniteIQ ontology scene"></div>
+<noscript>
+    <div class="iiq-ssr-fallback">
+        <span>● Built on your cloud</span>
+        <p>Every line of business — every job, customer, technician, truck — resolved into one model that lives in your warehouse and is queried by the framework.</p>
+        <span>YOUR DATA WAREHOUSE</span>
+        <span>JOB OBJECT</span>
+        <span>Technician</span>
+        <span>R. Alvarez</span>
+        <span>Callback risk</span>
+    </div>
+</noscript>
