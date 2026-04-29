@@ -87,6 +87,8 @@ python3 "$EX" "$CONTENT_DIR" | LC_ALL=C sort -u > /tmp/iiq.export.txt
 } | python3 "$EX" | LC_ALL=C sort -u > /tmp/iiq.staging.txt
 ```
 
+**Sandbox fallback.** The `curl` loop above is the local fast path. If `curl` returns 0 bytes for every path (Cowork sandbox blocks non-Anthropic outbound), fall back to the `WebFetch` tool: call it with each `https://igniteiqstg.wpenginepowered.com<path>` and the prompt `"Return the verbatim HTML body of this page; do not summarize."`, then concatenate the bodies and pipe through `python3 "$EX"` exactly as before. Treat WebFetch's returned text as if it were curl's stdout. If `WebFetch` is also unavailable, emit: "Cannot reach staging from this environment. Run this skill locally on Matt's Mac, or set up the staging URL in the sandbox allowlist." and stop.
+
 Note: the extractor is heuristic. For SPA exports it filters out CSS values, identifiers, SVG path data, React.createElement code, and template-literal residue. False positives still occur — visual review of short ambiguous strings before treating as porting tasks.
 
 ### Compute deltas

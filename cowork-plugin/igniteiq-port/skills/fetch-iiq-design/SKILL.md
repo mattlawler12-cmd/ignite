@@ -141,6 +141,21 @@ echo
 echo "Next: /port-iiq-diff"
 ```
 
+## Staging fetch fallback (Cowork sandbox)
+
+The bash block above uses `curl -sL` to scrape the 6 staging pages — fast and offline-capable on Matt's Mac. In a Cowork session the sandbox VM blocks all non-Anthropic outbound, so curl silently returns 0 bytes and every export string ends up flagged as "missing on staging".
+
+After running the bash block, inspect `$TARGET/DIFF.md`:
+
+1. If the summary line shows `Missing on staging: <large>  ·  Extra on staging: 0` (every string missing, zero extras), the curl fetch likely failed. Continue to step 2.
+2. Fall back to the `WebFetch` tool for each of the 6 cornerstone paths (`/`, `/how-it-works/`, `/ontology/`, `/company/`, `/contact/`, `/signin/`):
+   - Call WebFetch with `url = "https://igniteiqstg.wpenginepowered.com<path>"` and prompt `"Return the verbatim HTML body of this page; do not summarize."`
+   - Concatenate the returned bodies into one stream and pipe through `python3 "$EX"` exactly as the curl loop did, writing `$TARGET/.staging-strings.txt`.
+   - Re-run the `comm -23` / `comm -13` set diff against `$TARGET/.export-strings.txt` and rewrite `$TARGET/DIFF.md` with the corrected counts.
+3. If WebFetch is also unavailable or returns errors for every path, write a partial `$TARGET/DIFF.md` with a header note: "staging unreachable from this environment — diff is against the export only" and list every export string as a porting candidate. Do not fail the skill: the unzip + `exports/latest` repoint must always succeed, and the user can still proceed to `/port-iiq-diff`.
+
+Stay curl-first. Only enter this fallback when the staging-strings file is empty (or near-empty) — never replace the local fast path.
+
 ## Output format
 
 Six concise lines (or fewer on early failure). Example:
@@ -164,7 +179,7 @@ Next: /port-iiq-diff
 - **Tar extract fails** (corrupt archive): reports the failure and removes the empty target dir.
 - **Missing `index.html`** in extracted tree: extraction succeeded but the export shape is unfamiliar — print a warning and skip DIFF.md generation. Symlink is still repointed; user can run `/diff-iiq-export` manually after inspecting.
 - **`iiq-extract.py` missing** at `~/scripts/igniteiq/iiq-extract.py`: report and skip DIFF.md generation. Don't fail the whole skill — extraction itself is the important part.
-- **Staging unreachable** while generating DIFF.md: `curl` returns empty, the staging-strings file is empty, every export string shows as "missing". This is loud but not silent — the user will notice on the next step.
+- **Staging unreachable** while generating DIFF.md: `curl` returns empty (e.g. Cowork sandbox blocks non-Anthropic outbound). Fall back to `WebFetch` per "Staging fetch fallback (Cowork sandbox)" above. If WebFetch is also unavailable, write a partial DIFF.md noting "staging unreachable — diff against export only" and continue; the unzip + repoint must always succeed.
 
 ## Security note
 

@@ -9,6 +9,8 @@ Capture full-page screenshots of all 6 cornerstone IgniteIQ pages on both the lo
 
 **This skill is READ-ONLY.** Captures screenshots + reads them. Never edits PHP, exports, staging, or the harness script.
 
+**This skill must run locally on Matt's Mac.** The Cowork VM doesn't have Chromium; Playwright cannot launch a browser inside the sandbox.
+
 ## Prerequisites
 
 - The harness `~/Desktop/igniteiq-theme-v2/scripts/iiq-shoot.js` uses Playwright. Playwright must be installed in the cwd's `node_modules/` (or globally). If the require fails: `npm install playwright` from any dir with a `node_modules/` context, or `npx -y playwright install chromium` first. On first run Playwright downloads Chromium (~150 MB).
