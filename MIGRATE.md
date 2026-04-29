@@ -2,19 +2,30 @@
 
 This is a one-time runbook to switch from the existing v1 theme to v2.
 
-## 0. Prerequisites
+## 0. Default flow (after one-time activation)
+
+For ongoing content updates, you don't need this runbook. The GitHub Action at `.github/workflows/deploy-staging.yml` handles staging on every push to `main`:
+
+1. Edit `template-parts/*.php` and the matching rows in `inc/cli.php` `default_pages()`.
+2. Commit + push to `main`.
+3. The Action rsyncs `igniteiq/` to `igniteiqstg@igniteiqstg.ssh.wpengine.net:sites/igniteiqstg/wp-content/themes/igniteiq-v2/`, then runs `wp igniteiq seed --force`, then curls all 6 cornerstone URLs to verify 200.
+4. Verify at https://igniteiqstg.wpenginepowered.com/.
+
+The runbook below is for **first-time activation** of a fresh WP install (or recovery if the Action is unavailable). On a healthy install, you should never need it.
+
+## 1. Prerequisites
 
 - Local by Flywheel site `igniteiq` running at `http://igniteiq.local/`
 - ACF Pro plugin installed and activated
 - `bash deploy.sh` has been run from this directory (syncs `igniteiq/` → Local's themes folder as `igniteiq-v2/`)
 
-## 1. Activate v2
+## 2. Activate v2
 
 1. Open WP Admin → Appearance → Themes
 2. Activate **IgniteIQ v2**
 3. The existing `igniteiq` (v1) stays installed — you can revert at any time
 
-## 2. WP-CLI migration (recommended)
+## 3. WP-CLI migration (recommended)
 
 Open Local → right-click the `igniteiq` site → "Open site shell". Then:
 
@@ -52,7 +63,7 @@ wp igniteiq seed
 # wp igniteiq seed --force
 ```
 
-## 3. Admin UI seed tool (for staging without SSH/WP-CLI)
+## 4. Admin UI seed tool (for staging without SSH/WP-CLI)
 
 When SSH/WP-CLI isn't available (e.g. WP Engine staging), use the bundled admin tool:
 
@@ -66,11 +77,11 @@ This will:
 
 Tick **Force overwrite** to replace existing `page_sections` with the JSX defaults — use this when applying updated seed content from the theme.
 
-The admin tool does **not** rename an existing v1 "Architecture" page or rebuild the Primary menu — for that, use the WP-CLI path in section 2. On a clean staging install with no v1 content, the admin tool is sufficient on its own.
+The admin tool does **not** rename an existing v1 "Architecture" page or rebuild the Primary menu — for that, use the WP-CLI path in section 3. On a clean staging install with no v1 content, the admin tool is sufficient on its own.
 
-After staging is happy, delete `inc/admin-seed-tool.php` and remove the matching `require_once` block in `functions.php` (see the comment in that file).
+> **Note:** `inc/admin-seed-tool.php` is being removed now that the GitHub Action handles seeding automatically on every push. This section remains as documentation for the legacy admin tool in case it's restored as an emergency fallback. Do not extend or depend on it.
 
-## 4. UI equivalent (manual click-path)
+## 5. UI equivalent (manual click-path)
 
 If neither WP-CLI nor the admin seed tool fits:
 
@@ -88,7 +99,7 @@ If neither WP-CLI nor the admin seed tool fits:
 5. **Settings → Permalinks → Save Changes** (no edits needed — just press Save to flush rewrites)
 6. Edit each page in WP Admin and fill in the ACF Page Sections fields. Or run `wp igniteiq seed` from Local's site shell to populate defaults.
 
-## 5. Verification
+## 6. Verification
 
 ```bash
 # In Local site shell:
@@ -106,8 +117,9 @@ Visual checks:
 - Contact form: fill required fields, submit, see success state. Check Local's Mailpit/Mailhog tab for the outbound email.
 - Honeypot: in DevTools, find the hidden `<input name="website">`, fill it, submit — request silently accepted with no email sent.
 - Console: no errors on any page
+- On WP Engine staging, the deploy Action's final step runs the same curl-loop against `https://igniteiqstg.wpenginepowered.com/`. Check the Actions log for the per-URL status.
 
-## 6. Editing copy
+## 7. Editing copy
 
 In WP Admin → edit any of the 6 pages. The page editor is **disabled** for these pages (the_content() is bypassed). Instead, scroll to the **Page Sections** ACF flexible-content field and edit the layouts there.
 
@@ -119,6 +131,6 @@ Layouts available (15 total):
 
 Site-wide content (footer columns, contact email, social links) lives in **Site Settings** in the admin sidebar.
 
-## 7. Reverting
+## 8. Reverting
 
 If anything breaks: WP Admin → Appearance → Themes → activate `igniteiq` (v1). The v1 theme is still installed.

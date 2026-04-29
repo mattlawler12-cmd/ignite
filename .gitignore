@@ -15,3 +15,8 @@ ehthumbs.db
 
 # node (forward-looking)
 node_modules/
+
+# Claude Design exports — local only (see exports/README.md)
+exports/*
+!exports/.gitkeep
+!exports/README.md
