@@ -12,10 +12,10 @@ if (!defined('ABSPATH')) exit;
  */
 ?>
 <!-- TODO: wire to real auth target when available. Currently a placeholder. -->
-<section data-reveal class="iiq-pad" style="min-height:calc(100vh - 80px);background:var(--bg-canvas);">
-  <div style="min-height:calc(100vh - 80px);display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
+<section data-reveal class="iiq-pad" style="min-height:calc(100vh - 70px);background:var(--bg-canvas);">
+  <div style="min-height:calc(100vh - 70px);display:grid;grid-template-columns:1fr 1fr;background:var(--bg-canvas);" class="iiq-grid-split">
 
-    <aside style="background:var(--ink-1000);color:var(--ink-50, #fff);padding:64px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;">
+    <aside style="background:var(--ink-1000);color:var(--ink-50, #fff);padding:64px 56px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;min-height:100%;">
       <div aria-hidden="true" style="position:absolute;top:-10%;right:-20%;width:70%;height:70%;background:radial-gradient(ellipse, rgba(239,68,68,0.18), transparent 60%);pointer-events:none;"></div>
 
       <a href="<?= esc_url(home_url('/')) ?>" style="display:inline-flex;align-items:center;gap:16px;text-decoration:none;color:var(--ink-50, #fff);position:relative;">
@@ -34,7 +34,7 @@ if (!defined('ABSPATH')) exit;
       <div style="position:relative;font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.5);">v4.2 &middot; running in your cloud</div>
     </aside>
 
-    <main style="padding:48px 56px;display:flex;flex-direction:column;background:var(--bg-canvas);">
+    <main style="padding:48px 56px;display:flex;flex-direction:column;background:var(--bg-canvas);min-height:100%;">
       <div style="display:flex;justify-content:flex-end;font-family:'Aeonik Fono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);">
         <span>New here?</span>
         <a href="<?= esc_url(home_url('/contact/')) ?>" style="margin-left:8px;color:var(--ignite-500);text-decoration:none;">Contact us</a>

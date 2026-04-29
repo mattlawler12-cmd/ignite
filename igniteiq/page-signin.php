@@ -5,7 +5,8 @@ get_header();
 ?>
 <style>
   /* Sign-in split-screen — collapses to single column on small viewports */
-  .iiq-signin-grid { display:grid; grid-template-columns:1fr 1fr; min-height:100vh; padding-top:72px; background:var(--bg-canvas,#fff); }
+  .iiq-signin-grid { display:grid; grid-template-columns:1fr 1fr; min-height:calc(100vh - 70px); background:var(--bg-canvas,#fff); }
+  .iiq-signin-grid > aside, .iiq-signin-grid > main { min-height:100%; }
   .iiq-signin-aside { position:relative; background:var(--ink-1000,#0F0F12); color:var(--ink-50,#FAFAFA); padding:64px 56px; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; }
   .iiq-signin-main  { padding:48px 56px; display:flex; flex-direction:column; position:relative; }
   .iiq-signin-form-wrap { width:100%; max-width:420px; flex:1; display:flex; align-items:center; }
@@ -79,5 +80,6 @@ get_header();
     </div>
   </main>
 </div>
-<?php
-get_footer();
+<?php wp_footer(); ?>
+</body>
+</html>

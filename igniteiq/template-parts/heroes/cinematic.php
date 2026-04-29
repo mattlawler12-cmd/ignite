@@ -70,18 +70,22 @@ $corners = [
     <div style="max-width: 740px; font-size: 19px; line-height: 1.55; color: oklch(78% 0.005 286); letter-spacing: -0.005em; margin: 40px 0 0;">
       <?= wp_kses_post($body) ?>
     </div>
-    <div style="margin-top: 48px; display: flex; gap: 12px;">
-      <?php if (!empty($primary_cta['url'])): ?>
-        <a href="<?= esc_url($primary_cta['url']) ?>" class="iiq-btn" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: var(--ignite-500); color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; border-radius: 6px; box-shadow: 0 0 0 1px oklch(57.5% 0.232 25 / 0.4), 0 8px 32px -4px oklch(57.5% 0.232 25 / 0.4);">
-          <?= esc_html($primary_cta['label']) ?> <span>&rarr;</span>
-        </a>
-      <?php endif; ?>
-      <?php if (!empty($secondary_cta['url'])): ?>
-        <a href="<?= esc_url($secondary_cta['url']) ?>" class="iiq-btn-ghost" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: oklch(15% 0.005 286 / 0.6); color: var(--ink-50); text-decoration: none; border: 1px solid oklch(28% 0.005 286); border-radius: 6px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
-          <?= esc_html($secondary_cta['label']) ?>
-        </a>
-      <?php endif; ?>
-    </div>
+    <?php $has_primary = !empty($primary_cta['label']); ?>
+    <?php $has_secondary = !empty($secondary_cta['label']); ?>
+    <?php if ($has_primary || $has_secondary): ?>
+      <div style="margin-top: 48px; display: flex; gap: 12px;">
+        <?php if ($has_primary): ?>
+          <a href="<?= esc_url($primary_cta['url'] ?? '#') ?>" class="iiq-btn" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: var(--ignite-500); color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; border-radius: 6px; box-shadow: 0 0 0 1px oklch(57.5% 0.232 25 / 0.4), 0 8px 32px -4px oklch(57.5% 0.232 25 / 0.4);">
+            <?= esc_html($primary_cta['label']) ?> <span>&rarr;</span>
+          </a>
+        <?php endif; ?>
+        <?php if ($has_secondary): ?>
+          <a href="<?= esc_url($secondary_cta['url'] ?? '#') ?>" class="iiq-btn-ghost" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: oklch(15% 0.005 286 / 0.6); color: var(--ink-50); text-decoration: none; border: 1px solid oklch(28% 0.005 286); border-radius: 6px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+            <?= esc_html($secondary_cta['label']) ?>
+          </a>
+        <?php endif; ?>
+      </div>
+    <?php endif; ?>
     <?php if (!empty($stats)): ?>
       <div style="margin-top: 96px; padding-top: 28px; border-top: 1px solid oklch(22% 0.005 286); display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;">
         <?php foreach ($stats as $stat):

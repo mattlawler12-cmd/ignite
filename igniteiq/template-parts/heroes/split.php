@@ -42,18 +42,22 @@ if (empty($body)) {
           <?= wp_kses_post($body) ?>
         </div>
       <?php endif; ?>
-      <div style="margin-top: 40px; display: flex; gap: 12px;">
-        <?php if (!empty($primary_cta['url'])): ?>
-          <a href="<?= esc_url($primary_cta['url']) ?>" class="iiq-btn" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: var(--ignite-500); color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; border-radius: 6px;">
-            <?= esc_html($primary_cta['label']) ?> <span>&rarr;</span>
-          </a>
-        <?php endif; ?>
-        <?php if (!empty($secondary_cta['url'])): ?>
-          <a href="<?= esc_url($secondary_cta['url']) ?>" class="iiq-btn-ghost" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: transparent; color: var(--fg-primary); text-decoration: none; border: 1px solid var(--border-default); border-radius: 6px;">
-            <?= esc_html($secondary_cta['label']) ?>
-          </a>
-        <?php endif; ?>
-      </div>
+      <?php $has_primary = !empty($primary_cta['label']); ?>
+      <?php $has_secondary = !empty($secondary_cta['label']); ?>
+      <?php if ($has_primary || $has_secondary): ?>
+        <div style="margin-top: 40px; display: flex; gap: 12px;">
+          <?php if ($has_primary): ?>
+            <a href="<?= esc_url($primary_cta['url'] ?? '#') ?>" class="iiq-btn" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: var(--ignite-500); color: #fff; text-decoration: none; display: inline-flex; align-items: center; gap: 10px; border-radius: 6px;">
+              <?= esc_html($primary_cta['label']) ?> <span>&rarr;</span>
+            </a>
+          <?php endif; ?>
+          <?php if ($has_secondary): ?>
+            <a href="<?= esc_url($secondary_cta['url'] ?? '#') ?>" class="iiq-btn-ghost" style="font-size: 14px; font-weight: 500; padding: 14px 24px; background: transparent; color: var(--fg-primary); text-decoration: none; border: 1px solid var(--border-default); border-radius: 6px;">
+              <?= esc_html($secondary_cta['label']) ?>
+            </a>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
     </div>
     <div style="position: relative; transform: translateX(8%); border-radius: 12px; overflow: hidden; border: 1px solid oklch(22% 0.005 286); box-shadow: 0 60px 120px -40px oklch(7.5% 0.003 286 / 0.45), 0 0 0 1px oklch(22% 0.005 286); background: var(--ink-950);">
       <?php if ($image && !empty($image['ID'])): ?>

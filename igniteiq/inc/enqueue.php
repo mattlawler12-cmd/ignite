@@ -30,6 +30,105 @@ add_action('wp_enqueue_scripts', function () {
             'nonce' => wp_create_nonce('iiq_contact'),
         ]);
     }
+
+    // ─────────────────────────────────────────────────────────────────
+    // IIQ Design — lifted React diagram components (StackDiagram,
+    // PlatformStack, ArchOntologyScene, OperatorStackList, BoundaryDiagram).
+    // Mounted via iiq-design-bridge.js into [data-iiq-design] placeholders
+    // emitted by template-parts/diagrams/*.php.
+    //
+    // Order is critical:
+    //   1) React + ReactDOM (CDN UMD builds)
+    //   2) Reveal.js exposes window.Reveal/Eyebrow/SectionFrame globals
+    //   3) Each diagram component (depends on Reveal globals)
+    //   4) Bridge mounts components into placeholders (depends on all above)
+    // ─────────────────────────────────────────────────────────────────
+    $needs_iiq_design = is_front_page()
+        || is_page('how-it-works')
+        || is_page('ontology')
+        || is_page('company');
+
+    if ($needs_iiq_design) {
+        $design_js = $js . 'iiq-design/';
+
+        wp_register_script(
+            'iiq-react',
+            'https://unpkg.com/react@18.3.1/umd/react.production.min.js',
+            [],
+            '18.3.1',
+            true
+        );
+        wp_register_script(
+            'iiq-react-dom',
+            'https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js',
+            ['iiq-react'],
+            '18.3.1',
+            true
+        );
+
+        wp_register_script(
+            'iiq-design-reveal',
+            IIQ_URI . '/assets/js/iiq-design/Reveal.js',
+            ['iiq-react-dom'],
+            filemtime($design_js . 'Reveal.js'),
+            true
+        );
+
+        wp_register_script(
+            'iiq-design-stack',
+            IIQ_URI . '/assets/js/iiq-design/StackDiagram.js',
+            ['iiq-design-reveal'],
+            filemtime($design_js . 'StackDiagram.js'),
+            true
+        );
+        wp_register_script(
+            'iiq-design-platform-stack',
+            IIQ_URI . '/assets/js/iiq-design/PlatformStack.js',
+            ['iiq-design-reveal'],
+            filemtime($design_js . 'PlatformStack.js'),
+            true
+        );
+        wp_register_script(
+            'iiq-design-arch-ontology',
+            IIQ_URI . '/assets/js/iiq-design/ArchOntologyScene.js',
+            ['iiq-design-reveal'],
+            filemtime($design_js . 'ArchOntologyScene.js'),
+            true
+        );
+        wp_register_script(
+            'iiq-design-operator-stack',
+            IIQ_URI . '/assets/js/iiq-design/OperatorStackList.js',
+            ['iiq-design-reveal'],
+            filemtime($design_js . 'OperatorStackList.js'),
+            true
+        );
+        wp_register_script(
+            'iiq-design-boundary',
+            IIQ_URI . '/assets/js/iiq-design/BoundaryDiagram.js',
+            ['iiq-design-reveal'],
+            filemtime($design_js . 'BoundaryDiagram.js'),
+            true
+        );
+
+        wp_register_script(
+            'iiq-design-bridge',
+            IIQ_URI . '/assets/js/iiq-design-bridge.js',
+            [
+                'iiq-react',
+                'iiq-react-dom',
+                'iiq-design-reveal',
+                'iiq-design-stack',
+                'iiq-design-platform-stack',
+                'iiq-design-arch-ontology',
+                'iiq-design-operator-stack',
+                'iiq-design-boundary',
+            ],
+            filemtime($js . 'iiq-design-bridge.js'),
+            true
+        );
+
+        wp_enqueue_script('iiq-design-bridge');
+    }
 });
 
 /**
