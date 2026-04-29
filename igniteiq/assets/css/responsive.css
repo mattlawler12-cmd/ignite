@@ -424,13 +424,17 @@ img[width], svg[width] { height: auto; }
    was missing from the multi-column collapse list; the 1.6fr column was forcing
    the how-it-works page to render at 1740px wide on mobile. */
 @media (max-width: 1024px) {
-  [style*="180px 1fr 1.6fr"],
-  [style*="180px 1fr 1.6fr"][style*="grid-template-columns"] {
+  /* Tablet: collapse to 56px label + 1fr title (body wraps to next row at 1fr).
+     NOTE: Keep this single-selector — adding a second compound selector raises
+     specificity above the <=640 single-column override and the body-row would
+     stay glued to the 56px column on phones. */
+  [style*="180px 1fr 1.6fr"] {
     grid-template-columns: 56px 1fr !important;
     gap: 16px !important;
   }
 }
 @media (max-width: 640px) {
+  /* Phone: stack all three children (label, title, body) in one column. */
   [style*="180px 1fr 1.6fr"] {
     grid-template-columns: 1fr !important;
     gap: 10px !important;
