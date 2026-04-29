@@ -82,6 +82,26 @@ body.iiq-nav-locked { overflow: hidden; }
 .iiq-textarea:focus { border-bottom-color: var(--ignite-500); }
 .iiq-textarea { resize: vertical; min-height: 100px; line-height: 1.5; }
 
+/* Specificity boost — defeats Gutenberg block defaults / WP core form styles
+   that re-apply full borders + radius to input/select/textarea after theme.css
+   loads on staging. Belt-and-suspenders: doubled-class selector raises
+   specificity AND !important locks the four load-bearing props. Applies to
+   every .iiq-input/.iiq-select/.iiq-textarea (contact form, signin form,
+   anywhere the underline-only field treatment is intended). */
+.iiq-input.iiq-input,
+.iiq-select.iiq-select,
+.iiq-textarea.iiq-textarea {
+  border: 0 !important;
+  border-bottom: 1px solid var(--border-default) !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+.iiq-input.iiq-input:focus,
+.iiq-select.iiq-select:focus,
+.iiq-textarea.iiq-textarea:focus {
+  border-bottom-color: var(--ignite-500) !important;
+}
+
 .iiq-field-label {
   display: block;
   font-family: 'Aeonik Fono', ui-monospace, SFMono-Regular, monospace;

@@ -47,7 +47,7 @@ if (!defined('ABSPATH')) exit;
       </div>
 
       <div style="flex:1;display:flex;align-items:center;justify-content:center;">
-        <div class="iiq-signin-form-wrap" style="width:100%;max-width:620px;">
+        <div class="iiq-signin-form-wrap" style="width:100%;max-width:540px;">
           <h2 style="font-family:'Aeonik',sans-serif;font-size:36px;font-weight:600;letter-spacing:-0.03em;line-height:1.1;margin:0;color:var(--fg-primary);">Sign in</h2>
           <p style="margin-top:12px;font-size:15px;line-height:1.55;color:var(--fg-secondary);">Use your work email to access your workspace.</p>
 

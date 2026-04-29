@@ -20,7 +20,25 @@ $count    = is_array($items) ? count($items) : 0;
             <?php iiq_section_eyebrow($eyebrow); ?>
             <?php if ($headline): ?>
                 <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.04em;line-height:1.0;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
-                    <?= wp_kses_post($headline) ?>
+                    <?php
+                    // FIDELITY: Architecture.js ArchHowItDeploys (grid-3col layout)
+                    // splits "Deployed Fast. Decades of Value." across two visual lines,
+                    // with the second sentence rendered in --fg-tertiary inside a
+                    // block-level span. We mirror that here when the layout is
+                    // grid-3col AND the headline contains a sentence boundary.
+                    // Other section_stack usages (e.g. home `timeline-horizontal`
+                    // "What used to take a year. Shipped in a week.") keep the
+                    // single-line inline treatment per their export.
+                    $hpos = ($layout === 'grid-3col') ? strpos($headline, '. ') : false;
+                    if ($hpos !== false) {
+                        $first  = substr($headline, 0, $hpos + 1); // include the period
+                        $second = ltrim(substr($headline, $hpos + 1));
+                        echo wp_kses_post($first) . ' ';
+                        echo '<span style="color:var(--fg-tertiary);display:block;">' . wp_kses_post($second) . '</span>';
+                    } else {
+                        echo wp_kses_post($headline);
+                    }
+                    ?>
                 </h2>
             <?php endif; ?>
             <?php if ($body): ?>

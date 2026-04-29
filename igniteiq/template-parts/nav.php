@@ -13,6 +13,18 @@ if (!defined('ABSPATH')) exit;
 
 $inverse = (bool) get_query_var('iiq_nav_inverse', false);
 
+// Sign-in page renders a full-viewport split with a dark <aside> at the
+// top-left. The default black logo/wordmark would be invisible against it,
+// so force inverse colors here. (header.php sets iiq_nav_inverse from the
+// hero_cinematic ACF row, which signin doesn't use — we don't touch it.)
+if (!$inverse) {
+    $iiq_is_signin = (function_exists('is_page_template') && is_page_template('page-signin.php'))
+        || (function_exists('is_page') && is_page('signin'));
+    if ($iiq_is_signin) {
+        $inverse = true;
+    }
+}
+
 $logo_src   = $inverse ? IIQ_URI . '/assets/img/logo-white.png' : IIQ_URI . '/assets/img/logo-black.png';
 $fg         = $inverse ? 'var(--ink-50)' : 'var(--fg-primary)';
 $fg_muted   = $inverse ? 'oklch(70% 0.005 286)' : 'var(--fg-secondary)';
