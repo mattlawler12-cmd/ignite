@@ -8,6 +8,7 @@ $headline       = get_sub_field('headline') ?: '';
 $headline_lead  = get_sub_field('headline_lead') ?: '';
 $headline_gap   = get_sub_field('headline_gap') ?: '';
 $headline_break = (bool) get_sub_field('headline_break');
+$headline_align = get_sub_field('headline_align') ?: 'center';
 $intro          = get_sub_field('intro') ?: '';
 $columns   = (int) (get_sub_field('columns') ?: 3);
 if ($columns < 2 || $columns > 4) $columns = 3;
@@ -21,19 +22,44 @@ $is_dark   = ($variant === 'dark');
     <div style="position:relative;max-width:1320px;margin:0 auto;">
         <?php iiq_section_marker(); ?>
 
-        <div style="max-width:880px;margin:0 auto 64px;text-align:center;">
+        <?php
+        // FIDELITY: headline_align controls the introductory block.
+        // 'center' (default) → max-width 880, centered (matches WhatChanges,
+        //   Invest, "Great decisions"-style centered intros).
+        // 'left'   → max-width 1100, left-aligned (matches Ontology
+        //   WhyHomeServices: "Generic ontologies don't know what a callback
+        //   costs you." — Ontology.js lines 197-220).
+        $intro_block_style = ($headline_align === 'left')
+            ? 'max-width:1100px;margin:0 0 80px;text-align:left;'
+            : 'max-width:880px;margin:0 auto 64px;text-align:center;';
+        ?>
+        <div style="<?= esc_attr($intro_block_style) ?>">
             <?php iiq_section_eyebrow($eyebrow); ?>
+            <?php
+            // H2 typography varies by alignment. Left-aligned (Ontology
+            // WhyHomeServices, Great decisions) uses clamp(44, 5.6vw, 88px),
+            // letter-spacing -0.04em, line-height 0.98, max-width 1100.
+            // Centered (WhatChanges, Invest) keeps the iiq-display-lg defaults.
+            $h2_style = ($headline_align === 'left')
+                ? 'margin:64px 0 0;font-family:var(--font-display);font-size:clamp(44px,5.6vw,88px);font-weight:600;letter-spacing:-0.04em;line-height:0.98;max-width:1100px;'
+                : 'margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;';
+            $h2_style .= $is_dark ? 'color:var(--ink-50);' : '';
+            $h2_class = ($headline_align === 'left') ? '' : 'iiq-display-lg';
+            // For dark sections the gap span uses a desaturated medium-gray
+            // (oklch 55%) instead of the light-mode --fg-tertiary token.
+            $gap_color = $is_dark ? 'oklch(55% 0.005 286)' : 'var(--fg-tertiary)';
+            ?>
             <?php if ($headline_lead && $headline_gap): ?>
-                <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
-                    <?= wp_kses_post($headline_lead) ?><?php if ($headline_break): ?><br><span style="color:var(--fg-tertiary);"><?= wp_kses_post($headline_gap) ?></span><?php else: ?><span style="color:var(--fg-tertiary);">&nbsp;<?= wp_kses_post($headline_gap) ?></span><?php endif; ?>
+                <h2 class="<?= esc_attr($h2_class) ?>" style="<?= esc_attr($h2_style) ?>">
+                    <?= wp_kses_post($headline_lead) ?><?php if ($headline_break): ?><br><span style="color:<?= esc_attr($gap_color) ?>;"><?= wp_kses_post($headline_gap) ?></span><?php else: ?><span style="color:<?= esc_attr($gap_color) ?>;">&nbsp;<?= wp_kses_post($headline_gap) ?></span><?php endif; ?>
                 </h2>
             <?php elseif ($headline): ?>
-                <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
+                <h2 class="<?= esc_attr($h2_class) ?>" style="<?= esc_attr($h2_style) ?>">
                     <?= wp_kses_post($headline) ?>
                 </h2>
             <?php endif; ?>
             <?php if ($intro): ?>
-                <div style="margin-top:22px;font-size:18px;line-height:1.55;color:<?= $is_dark ? 'oklch(78% 0.005 286)' : 'var(--fg-secondary,#5A5A60)' ?>;">
+                <div style="margin-top:32px;font-size:<?= $headline_align === 'left' ? '19' : '18' ?>px;line-height:1.55;<?= $headline_align === 'left' ? 'max-width:880px;' : '' ?>color:<?= $is_dark ? 'oklch(78% 0.005 286)' : 'var(--fg-secondary,#5A5A60)' ?>;">
                     <?= wp_kses_post($intro) ?>
                 </div>
             <?php endif; ?>
@@ -52,7 +78,14 @@ $is_dark   = ($variant === 'dark');
                     $container_style .= 'gap:64px;align-items:stretch;margin-top:120px;';
                     break;
                 case 'bordered':
-                    $container_style .= 'gap:0;border-top:1px solid ' . ($is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';border-bottom:1px solid ' . ($is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';';
+                    // Dark variant: just borderTop (matches Ontology
+                    // WhyHomeServices, Ontology.js:226). Light variant: top
+                    // and bottom rules (matches "Great decisions" pattern).
+                    if ($is_dark) {
+                        $container_style .= 'gap:0;margin-top:80px;border-top:1px solid oklch(22% 0.005 286);';
+                    } else {
+                        $container_style .= 'gap:0;border-top:1px solid var(--border-default,#C9C5BD);border-bottom:1px solid var(--border-default,#C9C5BD);';
+                    }
                     break;
                 case 'top-border':
                     $container_style .= 'gap:48px;';
@@ -106,19 +139,32 @@ $is_dark   = ($variant === 'dark');
                         </svg>
                     </article>
 
-                <?php elseif ($style === 'bordered'): ?>
-                    <article<?= $reveal_attrs ?> style="padding:40px 32px 8px;<?= $i > 0 ? 'border-left:1px solid ' . ($is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';' : '' ?>">
+                <?php elseif ($style === 'bordered'):
+                    // FIDELITY: per-card eyebrow renders just `● 01` when no
+                    // explicit `eyebrow_label` is set on the item — matches
+                    // Ontology WhyHomeServices cards (Ontology.js 246).
+                    // When `eyebrow_label` IS set (e.g. Ontology Great
+                    // decisions cards: "01 — Data"), the dash + label is
+                    // appended (Ontology.js 144-151).
+                    $eyebrow_label = isset($item['eyebrow_label']) ? $item['eyebrow_label'] : '';
+                    // First-card border: in left-aligned/dark sections the
+                    // export uses NO outer side padding on the first/last cards
+                    // and a borderLeft between cards.
+                    $first_pad_left  = ($i === 0) ? '0' : '32px';
+                    $last_pad_right  = ($i === count($items) - 1) ? '0' : '32px';
+                ?>
+                    <article<?= $reveal_attrs ?> style="padding:40px <?= $last_pad_right ?> 8px <?= $first_pad_left ?>;<?= $i > 0 ? 'border-left:1px solid ' . ($is_dark ? 'oklch(22% 0.005 286)' : 'var(--border-default,#C9C5BD)') . ';' : '' ?>">
                         <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
                             <span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:<?= $idx_color ?>;"></span>
-                            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:<?= $idx_color ?>;font-weight:500;"><?= esc_html($idxnum) ?> &mdash; <?= esc_html($title) ?></span>
+                            <span style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:<?= $idx_color ?>;font-weight:500;"><?= esc_html($idxnum) ?><?php if ($eyebrow_label): ?> &mdash; <?= esc_html($eyebrow_label) ?><?php endif; ?></span>
                         </div>
                         <?php if ($title): ?>
-                            <h3 style="font-family:var(--font-display);font-size:36px;font-weight:600;letter-spacing:-0.025em;line-height:1.05;margin:0 0 16px;color:<?= $title_color ?>;">
+                            <h3 style="font-family:var(--font-display);font-size:<?= $is_dark ? '24' : '36' ?>px;font-weight:600;letter-spacing:-0.025em;line-height:<?= $is_dark ? '1.15' : '1.05' ?>;margin:<?= $is_dark ? '20px 0 24px' : '0 0 16px' ?>;color:<?= $title_color ?>;">
                                 <?= esc_html($title) ?>
                             </h3>
                         <?php endif; ?>
                         <?php if ($body): ?>
-                            <p style="font-size:16px;line-height:1.6;color:<?= $body_color ?>;margin:0 0 32px;">
+                            <p style="font-size:<?= $is_dark ? '15' : '16' ?>px;line-height:<?= $is_dark ? '1.6' : '1.6' ?>;color:<?= $body_color ?>;margin:<?= $is_dark ? '18px 0 0' : '0 0 32px' ?>;">
                                 <?= wp_kses_post($body) ?>
                             </p>
                         <?php endif; ?>
