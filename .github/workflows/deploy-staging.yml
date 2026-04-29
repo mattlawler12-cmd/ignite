@@ -55,6 +55,14 @@ jobs:
             igniteiqstg@igniteiqstg.ssh.wpengine.net \
             'cd sites/igniteiqstg && wp igniteiq seed --force'
 
+      - name: Flush WP Engine page cache
+        run: |
+          # WPE serves cached HTML by default; without this, post-deploy verify
+          # and any visitor sees stale content for several minutes after a seed.
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ed25519 \
+            igniteiqstg@igniteiqstg.ssh.wpengine.net \
+            'cd sites/igniteiqstg && wp page-cache flush'
+
       - name: Verify staging URLs
         run: |
           set +e
