@@ -47,9 +47,12 @@ $variant      = iiq_section_variant();
         <?php endif; ?>
 
         <?php if (!empty($rows) && is_array($rows)): ?>
-            <div style="margin-top:96px;max-width:880px;margin-left:auto;margin-right:auto;border:1px solid var(--border-default);background:var(--bg-canvas);">
+            <div class="iiq-contrast-table"
+                 data-old-label="<?= esc_attr($header_old) ?>"
+                 data-new-label="<?= esc_attr($header_new) ?>"
+                 style="margin-top:96px;max-width:880px;margin-left:auto;margin-right:auto;border:1px solid var(--border-default);background:var(--bg-canvas);">
                 <!-- Header row -->
-                <div style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-default);">
+                <div class="iiq-contrast-header" style="display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border-default);">
                     <div style="padding:20px 28px;font-family:'Aeonik Fono',monospace;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:var(--fg-tertiary);border-right:1px solid var(--border-default);font-size:20px;line-height:1.2;">
                         <?= esc_html($header_old) ?>
                     </div>
@@ -62,11 +65,11 @@ $variant      = iiq_section_variant();
                     $old_text = is_array($row) ? ($row['old_text'] ?? '') : '';
                     $new_text = is_array($row) ? ($row['new_text'] ?? '') : '';
                 ?>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;<?= $i === $last ? '' : 'border-bottom:1px solid var(--border-subtle);' ?>align-items:center;">
-                        <div style="padding:16px 28px;font-size:16px;line-height:1.4;color:var(--fg-tertiary);border-right:1px solid var(--border-default);">
+                    <div class="iiq-contrast-row" style="display:grid;grid-template-columns:1fr 1fr;<?= $i === $last ? '' : 'border-bottom:1px solid var(--border-subtle);' ?>align-items:center;">
+                        <div class="iiq-contrast-cell iiq-contrast-old" data-iiq-label="<?= esc_attr($header_old) ?>" style="padding:16px 28px;font-size:16px;line-height:1.4;color:var(--fg-tertiary);border-right:1px solid var(--border-default);">
                             <?= esc_html($old_text) ?>
                         </div>
-                        <div style="padding:16px 28px;font-size:16px;line-height:1.4;color:var(--fg-primary);font-weight:500;">
+                        <div class="iiq-contrast-cell iiq-contrast-new" data-iiq-label="<?= esc_attr($header_new) ?>" style="padding:16px 28px;font-size:16px;line-height:1.4;color:var(--fg-primary);font-weight:500;">
                             <?= esc_html($new_text) ?>
                         </div>
                     </div>

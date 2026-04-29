@@ -770,6 +770,7 @@ function IsoTree({
 }
 function InspectorCallout() {
   return /*#__PURE__*/React.createElement("div", {
+    className: 'iiq-arch-inspector',
     style: {
       position: 'absolute',
       // sit under the JOB pill's area but to the LEFT of where any object draws

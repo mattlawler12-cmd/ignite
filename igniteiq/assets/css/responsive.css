@@ -84,19 +84,34 @@ html, body { max-width: 100%; overflow-x: hidden; }
    the inline style strings directly and override at narrow widths.
    ──────────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  /* 2-col layouts: 1fr 1fr, 1.1fr 0.9fr, 1.2fr 0.8fr, 1fr 1.4fr, 1fr 1.1fr, 1fr 1.2fr, 0.9fr 1.4fr, 1.1fr 0.9fr */
+  /* 2-col layouts: 1fr 1fr, 1.1fr 0.9fr, 1.2fr 0.8fr, 1fr 1.4fr, 1fr 1.1fr, 1fr 1.2fr, 0.9fr 1.4fr, 1.1fr 0.9fr.
+     NOTE: ACF/PHP-rendered templates emit CSS-form `grid-template-columns:1.1fr 0.9fr` (no space after `:`,
+     no surrounding quotes) — the JSX-form selectors below miss those, so we list both forms. */
   [style*="gridTemplateColumns: '1fr 1fr'"],
   [style*="gridTemplateColumns: \"1fr 1fr\""],
   [style*="grid-template-columns: 1fr 1fr"],
+  [style*="grid-template-columns:1fr 1fr"],
   [style*="gridTemplateColumns: '1.1fr 0.9fr'"],
+  [style*="grid-template-columns:1.1fr 0.9fr"],
+  [style*="grid-template-columns: 1.1fr 0.9fr"],
   [style*="gridTemplateColumns: '1.2fr 0.8fr'"],
+  [style*="grid-template-columns:1.2fr 0.8fr"],
+  [style*="grid-template-columns: 1.2fr 0.8fr"],
   [style*="gridTemplateColumns: '0.9fr 1.4fr'"],
+  [style*="grid-template-columns:0.9fr 1.4fr"],
   [style*="gridTemplateColumns: '1fr 1.4fr'"],
+  [style*="grid-template-columns:1fr 1.4fr"],
+  [style*="grid-template-columns: 1fr 1.4fr"],
   [style*="gridTemplateColumns: '1.4fr 1fr'"],
+  [style*="grid-template-columns:1.4fr 1fr"],
   [style*="gridTemplateColumns: '1fr 1.1fr'"],
+  [style*="grid-template-columns:1fr 1.1fr"],
   [style*="gridTemplateColumns: '1fr 1.2fr'"],
+  [style*="grid-template-columns:1fr 1.2fr"],
   [style*="gridTemplateColumns: '1.2fr 1fr'"],
-  [style*="gridTemplateColumns: '1.1fr 1fr'"] {
+  [style*="grid-template-columns:1.2fr 1fr"],
+  [style*="gridTemplateColumns: '1.1fr 1fr'"],
+  [style*="grid-template-columns:1.1fr 1fr"] {
     grid-template-columns: 1fr !important;
     gap: 48px !important;
   }
@@ -299,13 +314,16 @@ img[width], svg[width] { height: auto; }
 }
 
 /* H1/H2 long-word wrap on phone — prevent overflow when a single
-   word exceeds the content area at large display font sizes. */
+   word exceeds the content area at large display font sizes.
+   `hyphens: manual` (not `auto`) so words break ONLY on overflow via
+   overflow-wrap, never mid-word for normal-length words like "services"
+   or "business". `auto` was producing "ser-vices"/"busi-ness" in the hero. */
 @media (max-width: 640px) {
   h1, h2 {
     overflow-wrap: break-word;
     word-wrap: break-word;
-    hyphens: auto;
-    -webkit-hyphens: auto;
+    hyphens: manual;
+    -webkit-hyphens: manual;
   }
   /* Hero h1s — cap mobile size more aggressively */
   section h1[style*="clamp(64px"] { font-size: clamp(36px, 9vw, 56px) !important; line-height: 1.04 !important; }
@@ -319,5 +337,56 @@ img[width], svg[width] { height: auto; }
     flex: 1 1 auto;
     text-align: center;
     justify-content: center;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   ArchOntologyScene InspectorCallout — the floating "JOB OBJECT"
+   card overlays the warehouse diagram. At narrow widths the SVG
+   container shrinks to ~aspect 1200/600, leaving the absolutely-
+   positioned 210px card overflowing the diagram bottom-edge and
+   covering the iso-truck/iso-house art. Hide on phones; the card
+   is decorative — the data fields aren't load-bearing copy.
+   ───────────────────────────────────────────────────────────────── */
+@media (max-width: 760px) {
+  .iiq-arch-inspector { display: none !important; }
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   Contrast comparison table (OLD MODEL vs HEADLESS MODEL).
+   When the 1fr/1fr row collapses to single column on phones, the
+   visual relationship between paired rows is lost — readers see an
+   alternating list of old/new bullets with no labels. Add an inline
+   label above each cell on mobile (sourced from the data-iiq-label
+   attribute populated from the table headers) and stack vertically.
+   ───────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .iiq-contrast-header { display: none !important; }
+  .iiq-contrast-row {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    padding: 4px 0 !important;
+  }
+  .iiq-contrast-cell {
+    border-right: 0 !important;
+    padding: 14px 20px !important;
+    position: relative;
+  }
+  .iiq-contrast-cell::before {
+    content: attr(data-iiq-label);
+    display: block;
+    font-family: 'Aeonik Fono', monospace;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    color: var(--fg-tertiary);
+  }
+  .iiq-contrast-cell.iiq-contrast-new::before {
+    color: var(--ignite-500);
+  }
+  .iiq-contrast-cell.iiq-contrast-old {
+    background: oklch(96% 0.003 286 / 0.5);
   }
 }
