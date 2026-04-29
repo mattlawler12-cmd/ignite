@@ -3,10 +3,12 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$eyebrow    = get_sub_field('eyebrow') ?: '';
-$headline   = get_sub_field('headline') ?: '';
-$paragraphs = get_sub_field('paragraphs') ?: [];
-$style      = get_sub_field('style') ?: 'single';
+$eyebrow       = get_sub_field('eyebrow') ?: '';
+$headline      = get_sub_field('headline') ?: '';
+$headline_lead = get_sub_field('headline_lead') ?: '';
+$headline_gap  = get_sub_field('headline_gap') ?: '';
+$paragraphs    = get_sub_field('paragraphs') ?: [];
+$style         = get_sub_field('style') ?: 'single';
 $variant    = iiq_section_variant();
 $is_dark    = ($variant === 'dark');
 ?>
@@ -48,19 +50,29 @@ $is_dark    = ($variant === 'dark');
             </div>
         </div>
     <?php else: ?>
-        <div style="position:relative;max-width:760px;margin:0 auto;">
+        <?php
+        // FIDELITY: matches export's WhyItMattersSection (SectionsA.js lines 7-49).
+        // Outer maxWidth 1040, padding 40px 0, centered flex. Headline maxWidth 980,
+        // two-tone (lead in fg-primary, gap inline span in fg-tertiary). Paragraph
+        // marginTop 56, maxWidth 720, fontSize 19, lineHeight 1.65, fg-secondary.
+        ?>
+        <div style="position:relative;max-width:1040px;margin:0 auto;padding:40px 0;display:flex;flex-direction:column;align-items:center;text-align:center;">
             <?php iiq_section_marker(); ?>
 
             <?php iiq_section_eyebrow($eyebrow); ?>
 
-            <?php if ($headline): ?>
-                <h2 class="iiq-display-lg" style="margin:18px 0 40px;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
+            <?php if ($headline_lead && $headline_gap): ?>
+                <h2 class="iiq-display-lg" style="margin:18px auto 0;font-family:var(--font-display);font-size:clamp(40px,4.8vw,76px);font-weight:600;letter-spacing:-0.035em;line-height:1.04;max-width:980px;text-wrap:balance;color:<?= $is_dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>;">
+                    <?= wp_kses_post($headline_lead) ?><span style="color:var(--fg-tertiary);"> <?= wp_kses_post($headline_gap) ?></span>
+                </h2>
+            <?php elseif ($headline): ?>
+                <h2 class="iiq-display-lg" style="margin:18px auto 0;font-family:var(--font-display);font-size:clamp(40px,4.8vw,76px);font-weight:600;letter-spacing:-0.035em;line-height:1.04;max-width:980px;text-wrap:balance;color:<?= $is_dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>;">
                     <?= wp_kses_post($headline) ?>
                 </h2>
             <?php endif; ?>
 
             <?php if (!empty($paragraphs) && is_array($paragraphs)): ?>
-                <div style="display:flex;flex-direction:column;gap:24px;font-size:18px;line-height:1.7;color:<?= $is_dark ? 'oklch(78% 0.005 286)' : 'var(--fg-primary)' ?>;">
+                <div style="margin:56px auto 0;max-width:720px;display:flex;flex-direction:column;gap:24px;font-size:19px;line-height:1.65;color:<?= $is_dark ? 'oklch(78% 0.005 286)' : 'var(--fg-secondary,#5A5A60)' ?>;text-wrap:pretty;">
                     <?php foreach ($paragraphs as $p):
                         $text = is_array($p) && isset($p['paragraph']) ? $p['paragraph'] : (is_string($p) ? $p : '');
                         if (!$text) continue;

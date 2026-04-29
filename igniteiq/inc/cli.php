@@ -193,6 +193,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'eyebrow'  => '',
                     'headline' => "The companies that win the next decade won't be the ones with the best software. They’ll be the ones who own their intelligence.",
+                    'headline_lead' => "The companies that win the next decade won't be the ones with the best software.",
+                    'headline_gap'  => "They’ll be the ones who own their intelligence.",
                     'style'    => 'single',
                     'paragraphs' => [
                         ['paragraph' => '<p>Every advantage in this industry gets copied. A new tool. A new tactic. A new vendor. The infrastructure underneath your business doesn’t. Owning your intelligence is the only advantage that compounds - and the operators who build it will outlast the ones who rent it.</p>'],
@@ -291,6 +293,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                     ],
                     'eyebrow'  => '',
                     'headline' => 'Invest in outcomes. Not experiments.',
+                    'headline_lead' => 'Invest in outcomes.',
+                    'headline_gap'  => 'Not experiments.',
                     'intro'    => 'Growth isn’t built on guesswork - it’s built on clarity, control, and systems that compound. A proven path from fragmented data to operational intelligence in weeks, with value that strengthens at every step.',
                     'columns'  => '3',
                     'style'    => 'bars',

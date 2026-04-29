@@ -3,9 +3,11 @@ if (!defined('ABSPATH')) exit;
 if (!function_exists('get_sub_field')) return;
 require_once __DIR__ . '/_helpers.php';
 
-$eyebrow   = get_sub_field('eyebrow') ?: '';
-$headline  = get_sub_field('headline') ?: '';
-$intro     = get_sub_field('intro') ?: '';
+$eyebrow       = get_sub_field('eyebrow') ?: '';
+$headline      = get_sub_field('headline') ?: '';
+$headline_lead = get_sub_field('headline_lead') ?: '';
+$headline_gap  = get_sub_field('headline_gap') ?: '';
+$intro         = get_sub_field('intro') ?: '';
 $columns   = (int) (get_sub_field('columns') ?: 3);
 if ($columns < 2 || $columns > 4) $columns = 3;
 $style     = get_sub_field('style') ?: 'cards';
@@ -20,7 +22,11 @@ $is_dark   = ($variant === 'dark');
 
         <div style="max-width:880px;margin:0 auto 64px;text-align:center;">
             <?php iiq_section_eyebrow($eyebrow); ?>
-            <?php if ($headline): ?>
+            <?php if ($headline_lead && $headline_gap): ?>
+                <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
+                    <?= wp_kses_post($headline_lead) ?><br><span style="color:var(--fg-tertiary);"><?= wp_kses_post($headline_gap) ?></span>
+                </h2>
+            <?php elseif ($headline): ?>
                 <h2 class="iiq-display-lg" style="margin:18px 0 0;font-family:var(--font-display);font-weight:600;letter-spacing:-0.035em;line-height:1.05;<?= $is_dark ? 'color:var(--ink-50);' : '' ?>">
                     <?= wp_kses_post($headline) ?>
                 </h2>
@@ -168,7 +174,14 @@ $is_dark   = ($variant === 'dark');
             </div>
         <?php endif; ?>
 
-        <?php if (!empty($scenarios) && is_array($scenarios)): ?>
+        <?php
+        // FIDELITY: bars-style sections in the export do not render scenarios.
+        // SectionsA.js WhatChangesSection (lines 286-429) defines a `scenarios`
+        // array but its JSX return only renders `values.map`. InvestInOutcomes.js
+        // InvestInOutcomesSection has no scenarios at all. Data is preserved in
+        // cli.php seed per "do not throw anything away" — we just skip the render.
+        ?>
+        <?php if ($style !== 'bars' && !empty($scenarios) && is_array($scenarios)): ?>
             <div style="margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
                 <?php foreach ($scenarios as $sc):
                     $sc_tag  = isset($sc['tag']) ? $sc['tag'] : '';
