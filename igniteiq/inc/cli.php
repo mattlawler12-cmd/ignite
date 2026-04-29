@@ -171,7 +171,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // WhyItMattersSection (SectionsA.js, index="01" label="Why this matters")
                 [
                     'acf_fc_layout' => 'section_prose',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'Why this matters',
                         'theme_variant' => 'light',
@@ -187,7 +187,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ProblemSection (SectionsA.js, index="02" label="The problem")
                 [
                     'acf_fc_layout' => 'section_gap_split',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '02',
                         'section_label' => 'The problem',
                         'theme_variant' => 'light',
@@ -204,7 +204,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchStackDiagram on home (App.js: index="03", label="The stack")
                 [
                     'acf_fc_layout' => 'diagram',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '03',
                         'section_label' => 'The stack',
                         'theme_variant' => 'light',
@@ -223,7 +223,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // WhatChangesSection (SectionsA.js, index="04" label="What changes for you")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '04',
                         'section_label' => 'What changes for you',
                         'theme_variant' => 'light',
@@ -269,7 +269,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // InvestInOutcomesSection (InvestInOutcomes.js, index="05" label="The path")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '05',
                         'section_label' => 'The path',
                         'theme_variant' => 'light',
@@ -302,7 +302,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // DeploymentSection (SectionsA.js, index="06" label="Deployment")
                 [
                     'acf_fc_layout' => 'section_stack',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '06',
                         'section_label' => 'Deployment',
                         'theme_variant' => 'light',
@@ -322,7 +322,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // CTASection (SectionsB.js)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '',
                         'section_label' => 'Get started today',
                         'theme_variant' => 'dark',
@@ -369,7 +369,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // Renders headline + body + ArchOntologyScene diagram below in vertical stack.
                 [
                     'acf_fc_layout' => 'section_stacked_prose_diagram',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'How it runs',
                         'theme_variant' => 'light',
@@ -389,7 +389,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // metadata so the section index/label render correctly.
                 [
                     'acf_fc_layout' => 'diagram',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '02',
                         'section_label' => 'The stack',
                         'theme_variant' => 'light',
@@ -408,7 +408,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchHeadless (Architecture.js, index="03" label="Headless by design")
                 [
                     'acf_fc_layout' => 'section_contrast',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '03',
                         'section_label' => 'Headless by design',
                         'theme_variant' => 'light',
@@ -432,7 +432,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchHowItDeploys (Architecture.js, index="04" label="How it deploys")
                 [
                     'acf_fc_layout' => 'section_stack',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '04',
                         'section_label' => 'How it deploys',
                         'theme_variant' => 'light',
@@ -453,7 +453,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchSecurity (Architecture.js, index="05" label="Security model")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '05',
                         'section_label' => 'Security model',
                         'theme_variant' => 'light',
@@ -477,7 +477,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchCTA (Architecture.js)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '',
                         'section_label' => 'Ready to deploy',
                         'theme_variant' => 'dark',
@@ -515,7 +515,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // WhatIsAnOntology (Ontology.js, index="01" label="The concept")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'The concept',
                         'theme_variant' => 'sunken',
@@ -536,7 +536,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // WhyHomeServices (Ontology.js, index="02" label="Why home services")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '02',
                         'section_label' => 'Why home services',
                         'theme_variant' => 'dark',
@@ -557,7 +557,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ArchStackDiagram on ontology page (Ontology.js: index="03", headerLabel="The flow")
                 [
                     'acf_fc_layout' => 'diagram',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '03',
                         'section_label' => 'The flow',
                         'theme_variant' => 'light',
@@ -576,7 +576,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // CoreEntities — KPI strip (Ontology.js, index="04" label="The 12 core entities")
                 [
                     'acf_fc_layout' => 'section_stats',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '04',
                         'section_label' => 'The 12 core entities',
                         'theme_variant' => 'light',
@@ -599,7 +599,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // schema layouts (section_stats + section_pillars).
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '04',
                         'section_label' => 'The 12 core entities',
                         'theme_variant' => 'light',
@@ -625,7 +625,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // HowItDeploys (Ontology.js, index="05" label="How it deploys")
                 [
                     'acf_fc_layout' => 'section_stats',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '05',
                         'section_label' => 'How it deploys',
                         'theme_variant' => 'sunken',
@@ -643,7 +643,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // CTASection (SectionsB.js, shared with home)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '',
                         'section_label' => 'Get started today',
                         'theme_variant' => 'dark',
@@ -681,7 +681,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // WhatWeAre (Company.js, index="01" label="We’re not an AI company")
                 [
                     'acf_fc_layout' => 'section_split',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'We’re not an AI company',
                         'theme_variant' => 'light',
@@ -697,7 +697,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // FoundingStory (Company.js, index="02" label="The founding story")
                 [
                     'acf_fc_layout' => 'section_prose',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '02',
                         'section_label' => 'The founding story',
                         'theme_variant' => 'sunken',
@@ -716,7 +716,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // MissionPrinciples (Company.js, index="03" label="What we believe")
                 [
                     'acf_fc_layout' => 'section_pillars',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '03',
                         'section_label' => 'What we believe',
                         'theme_variant' => 'light',
@@ -737,7 +737,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // TeamDeep (Company.js, index="03" label="The team")
                 [
                     'acf_fc_layout' => 'section_team',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '03',
                         'section_label' => 'The team',
                         'theme_variant' => 'light',
@@ -781,7 +781,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ContactSection (Company.js — same copy as ArchCTA)
                 [
                     'acf_fc_layout' => 'cta_banner',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '',
                         'section_label' => 'Ready to deploy',
                         'theme_variant' => 'dark',
@@ -822,7 +822,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // Contact form template / Site Settings instead.
                 [
                     'acf_fc_layout' => 'form',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'Send us a note',
                         'theme_variant' => 'light',
@@ -848,7 +848,7 @@ if (!class_exists('IgniteIQ_CLI')) {
                 ],
                 [
                     'acf_fc_layout' => 'form',
-                    '_settings' => [
+                    'settings' => [
                         'section_index' => '01',
                         'section_label' => 'Sign in',
                         'theme_variant' => 'light',

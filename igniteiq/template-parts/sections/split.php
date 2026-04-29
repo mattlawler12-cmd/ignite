@@ -12,10 +12,8 @@ $image       = get_sub_field('image');
 $reverse     = (bool) get_sub_field('reverse');
 $variant     = iiq_section_variant();
 
-// Optional asymmetric grid ratio sourced from _settings.column_ratio.
+// Optional asymmetric grid ratio sourced from settings.column_ratio.
 // Defaults to '1fr 1fr' so existing split sections render unchanged.
-// Use the shared resolver — `_settings` (underscore-prefixed) is filtered
-// out by ACF's `get_sub_field()` and must be retrieved by field key.
 $_split_settings = iiq_section_settings();
 $column_ratio    = is_array($_split_settings) && !empty($_split_settings['column_ratio'])
     ? (string) $_split_settings['column_ratio']

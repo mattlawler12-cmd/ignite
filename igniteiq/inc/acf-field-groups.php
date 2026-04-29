@@ -25,7 +25,7 @@ if (function_exists('acf_add_local_field_group')) {
     $iiq_settings_group = [
         'key'        => 'field_iiq_layout_settings',
         'label'      => 'Section settings',
-        'name'       => '_settings',
+        'name'       => 'settings',
         'type'       => 'group',
         'layout'     => 'block',
         'sub_fields' => [

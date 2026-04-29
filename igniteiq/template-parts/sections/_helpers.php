@@ -7,31 +7,10 @@ if (!defined('ABSPATH')) exit;
  */
 
 if (!function_exists('iiq_section_settings')) {
-    /**
-     * Retrieve the per-row "_settings" group sub-field as an array.
-     *
-     * NOTE: ACF treats field names beginning with an underscore as private
-     * meta and `get_sub_field('_settings')` returns null on the front end,
-     * even when the value is present in postmeta. We therefore look the
-     * group up by its registered field key (`field_iiq_layout_settings`)
-     * which bypasses the underscore filter, and fall back to the name only
-     * if the key lookup fails (e.g., during partial migrations or tests).
-     *
-     * Result is statically cached per request row so all three helpers
-     * (variant, variant_style, marker) only do the lookup once.
-     */
     function iiq_section_settings() {
         if (!function_exists('get_sub_field')) return null;
-
-        // Try by field key first — survives the underscore-name filter.
-        $by_key = get_sub_field('field_iiq_layout_settings');
-        if (is_array($by_key)) return $by_key;
-
-        // Fallback: name lookup (works on ACF builds that don't filter `_`).
-        $by_name = get_sub_field('_settings');
-        if (is_array($by_name)) return $by_name;
-
-        return null;
+        $val = get_sub_field('settings');
+        return is_array($val) ? $val : null;
     }
 }
 
@@ -58,7 +37,7 @@ if (!function_exists('iiq_section_variant_style')) {
 if (!function_exists('iiq_section_marker')) {
     /**
      * Echo the SectionFrame-style top-left index/label marker.
-     * Pulls from the _settings sub-field group when present.
+     * Pulls from the settings sub-field group when present.
      *
      * Matches the latest JSX SectionFrame helper (Reveal.jsx): two simple spans
      * separated by a 16px gap, no leading bullet, no right-aligned column.
@@ -90,7 +69,7 @@ if (!function_exists('iiq_section_eyebrow')) {
 }
 
 if (!function_exists('iiq_section_variant')) {
-    /** Returns the variant string from _settings.theme_variant or ''. */
+    /** Returns the variant string from settings.theme_variant or ''. */
     function iiq_section_variant() {
         $settings = iiq_section_settings();
         return is_array($settings) && !empty($settings['theme_variant']) ? $settings['theme_variant'] : '';
