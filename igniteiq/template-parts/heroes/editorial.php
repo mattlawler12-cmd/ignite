@@ -136,7 +136,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
     </div>
 
     <?php if (!empty($stats) && is_array($stats)): ?>
-      <div style="margin-top: 80px; padding-top: 32px; border-top: <?= $dark ? '1px solid oklch(22% 0.005 286)' : '1px solid var(--border-default)' ?>; display: grid; grid-template-columns: repeat(<?= count($stats) ?>, 1fr); gap: 24px;">
+      <div class="iiq-hero-stats" style="margin-top: 80px; padding-top: 32px; border-top: <?= $dark ? '1px solid oklch(22% 0.005 286)' : '1px solid var(--border-default)' ?>; display: grid; grid-template-columns: repeat(<?= count($stats) ?>, 1fr); gap: 24px;">
         <?php foreach ($stats as $stat):
           $label = is_array($stat) ? ($stat['label'] ?? '') : '';
           $value = is_array($stat) ? ($stat['value'] ?? '') : '';

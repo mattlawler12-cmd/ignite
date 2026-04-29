@@ -498,18 +498,21 @@ img[width], svg[width] { height: auto; }
   }
 }
 
-/* Hero KPI strip (hero_editorial.php:139 stats grid) — keep the eyebrow+value
-   pairs in 3-column on phones so each stat stays compact rather than collapsing
-   to a single column with massive empty whitespace. */
+/* Hero KPI strip — keep the eyebrow+value pairs in compact multi-column on
+   phones rather than collapsing to a single column with massive whitespace.
+   Tagged via `iiq-hero-stats` class on hero_statement.php and hero_editorial.php
+   stat grids; original repeat(3/4, 1fr) inline styles are otherwise caught by
+   the global repeat collapse rule above. */
 @media (max-width: 640px) {
-  [style*="margin-top: 80px; padding-top: 32px"][style*="display: grid"][style*="repeat(3"],
-  [style*="margin-top: 80px; padding-top: 32px"][style*="display: grid"][style*="repeat(2"],
-  [style*="margin-top:80px;padding-top:32px"][style*="display:grid"][style*="repeat(3"] {
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 12px !important;
+  .iiq-hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px 12px !important;
   }
-  /* Ensure the stat eyebrow + value don't overflow their narrow column */
-  [style*="margin-top: 80px; padding-top: 32px"] > div { min-width: 0 !important; }
+  .iiq-hero-stats > div { min-width: 0 !important; }
+  /* If the stat group has 3 children, fit them in 3-col; if 4, 2x2 grid. */
+  .iiq-hero-stats:has(> div:nth-child(3):last-child) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
 }
 
 /* "2 wks" / number+unit wrap fix on operator-stack stat numerics — the

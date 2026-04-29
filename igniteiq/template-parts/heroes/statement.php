@@ -68,7 +68,7 @@ if (empty($stats)) {
       <?php endif; ?>
 
       <?php if (!empty($stats)): ?>
-        <div data-iiq-parallax-coefficient="0.12" style="margin-top: 88px; padding-top: 28px; border-top: 1px solid var(--border-default); display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: left; max-width: 1200px; margin-left: auto; margin-right: auto; will-change: transform;">
+        <div class="iiq-hero-stats" data-iiq-parallax-coefficient="0.12" style="margin-top: 88px; padding-top: 28px; border-top: 1px solid var(--border-default); display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; text-align: left; max-width: 1200px; margin-left: auto; margin-right: auto; will-change: transform;">
           <?php foreach ($stats as $stat):
             $label = is_array($stat) ? ($stat['label'] ?? '') : '';
             $value = is_array($stat) ? ($stat['value'] ?? '') : '';
