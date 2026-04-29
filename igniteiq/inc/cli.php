@@ -697,7 +697,8 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // CompanyHero (Company.js)
                 [
                     'acf_fc_layout' => 'hero_editorial',
-                    'eyebrow'        => '● Company',
+                    // Template (heroes/editorial.php:38) renders its own bullet.
+                    'eyebrow'        => 'Company',
                     'headline_lines' => [
                         ['line' => 'Operators who ran the trucks.'],
                         ['line' => 'Architects who modernized the industry. Innovators building what’s next.'],
@@ -834,7 +835,9 @@ if (!class_exists('IgniteIQ_CLI')) {
                 // ContactHero (Contact.js)
                 [
                     'acf_fc_layout' => 'hero_minimal',
-                    'eyebrow'        => '● Contact',
+                    // Template (heroes/minimal.php:20) renders its own bullet
+                    // dot span; seed must NOT prefix `●` or it doubles.
+                    'eyebrow'        => 'Contact',
                     'headline_lines' => [
                         ['line' => 'Let’s talk.'],
                         ['line' => 'About your data, your decisions, and what compounds when both are yours.', 'muted' => true],
@@ -869,7 +872,8 @@ if (!class_exists('IgniteIQ_CLI')) {
             return [
                 [
                     'acf_fc_layout' => 'hero_minimal',
-                    'eyebrow'        => '● Customer access',
+                    // Template (heroes/minimal.php:20) renders its own bullet.
+                    'eyebrow'        => 'Customer access',
                     'headline_lines' => [
                         ['line' => 'Welcome back.'],
                         ['line' => 'Your intelligence is waiting.', 'muted' => true],
