@@ -43,15 +43,20 @@ Five user-scoped skills, all routed via `/<name>`:
 
 ## Connect GitHub (first run)
 
-The skills push edits using whatever GitHub auth Cowork's built-in
-connectors provide. The plugin doesn't bundle its own MCP config — Cowork
-manages connector lifecycle (auth refresh, scope management) for the whole
-project.
+The skills push edits using whatever GitHub auth Cowork provides. Two
+equivalent paths:
 
-1. In Cowork → Settings → Connectors → GitHub, click Connect and complete
-   the OAuth flow. Make sure the auth has push access to
-   `mattlawler12-cmd/ignite`.
-2. Verify the connector shows green before running `/port-iiq-diff`.
+- **GitHub MCP (recommended)** — Cowork → Settings → Connectors → add
+  GitHub's official MCP server. This gives Claude ~40 specific GitHub tools
+  (`create_or_update_file`, `push_files`, `create_pull_request`, etc.) for
+  fine-grained API operations.
+- **OAuth connector** — Cowork → Settings → Connectors → GitHub → Connect.
+  Generic auth that the local `git` CLI uses for `git push`.
+
+Either works; the skills will use whichever is available. Whichever you
+pick, ensure the auth has push access to `mattlawler12-cmd/ignite`.
+
+Verify the connector shows green before running `/port-iiq-diff`.
 
 ## Use
 

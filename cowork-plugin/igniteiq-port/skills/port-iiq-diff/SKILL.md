@@ -1,6 +1,6 @@
 ---
 name: port-iiq-diff
-description: Port the latest Claude Design export at exports/latest/ into the IgniteIQ WordPress theme. Reads exports/latest/DIFF.md as the porting backlog, edits igniteiq/inc/cli.php seed rows + template-parts byte-accurately, runs php -l, shows the diff. Does NOT auto-commit or auto-push — user reviews and pushes manually. Use after the watcher has dropped a fresh export and the user has clicked "Open in Claude Code".
+description: Port the latest Claude Design export into the IgniteIQ WordPress theme by editing seed rows and template-parts byte-accurately. Use when the user says "port the diff", "port iiq", or invokes "/port-iiq-diff".
 ---
 
 # port-iiq-diff

@@ -1,6 +1,6 @@
 ---
 name: verify-iiq-fidelity
-description: Verify that the live IgniteIQ WP staging build (https://igniteiqstg.wpenginepowered.com) contains every user-visible string from the latest Claude Design export at exports/latest/. Use after a deploy to enforce content fidelity. Triggers — "verify iiq fidelity", "did staging match the export", "audit staging vs export", "/verify-iiq-fidelity". READ-ONLY — scrapes URLs, reads exports, never edits.
+description: Verify the IgniteIQ WP staging build contains every user-visible string from the latest Claude Design export. Use after a deploy when the user says "verify iiq fidelity", "did staging match the export", or invokes "/verify-iiq-fidelity".
 ---
 
 # verify-iiq-fidelity

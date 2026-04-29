@@ -1,6 +1,6 @@
 ---
 name: fetch-iiq-design
-description: Fetch a Claude Design handoff URL and unpack it into exports/<dated>/ ready for porting. Replaces the zip-drop step in the IgniteIQ port loop. Use when the user pastes a `https://api.anthropic.com/v1/design/h/...` URL or asks to "implement this design". Triggers on the URL pattern, "fetch design", "handoff url", "implement design", "/fetch-iiq-design". Pre-generates DIFF.md so /port-iiq-diff can run immediately after. READ-ONLY for the repo (writes only into exports/, which is gitignored).
+description: Fetch a Claude Design handoff URL and unpack it into the IgniteIQ port workspace. Use when the user pastes a Claude Design URL or says "fetch design", "handoff url", "implement design", or "/fetch-iiq-design".
 ---
 
 # fetch-iiq-design
