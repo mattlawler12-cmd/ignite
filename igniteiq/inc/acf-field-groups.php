@@ -346,6 +346,15 @@ if (function_exists('acf_add_local_field_group')) {
                                 ],
                             ],
                             [
+                                'key' => 'field_iiq_sp_scenarios_layout',
+                                'label' => 'Scenarios layout',
+                                'name' => 'scenarios_layout',
+                                'type' => 'select',
+                                'choices' => ['cards' => 'Sunken cards (default)', 'pullquote' => 'Centered pull-quote with horizontal-line eyebrow'],
+                                'default_value' => 'cards',
+                                'return_format' => 'value',
+                            ],
+                            [
                                 'key'          => 'field_iiq_sp_scenarios',
                                 'label'        => 'Scenarios (optional)',
                                 'name'         => 'scenarios',

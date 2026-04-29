@@ -227,8 +227,40 @@ $is_dark   = ($variant === 'dark');
         // array but its JSX return only renders `values.map`. InvestInOutcomes.js
         // InvestInOutcomesSection has no scenarios at all. Data is preserved in
         // cli.php seed per "do not throw anything away" — we just skip the render.
+        $scenarios_layout = get_sub_field('scenarios_layout') ?: 'cards';
         ?>
-        <?php if ($style !== 'bars' && !empty($scenarios) && is_array($scenarios)): ?>
+        <?php if ($style !== 'bars' && !empty($scenarios) && is_array($scenarios) && $scenarios_layout === 'pullquote'):
+            // FIDELITY: centered pull-quote with horizontal-line eyebrow + an
+            // italic tertiary span on the second sentence. Mirrors Ontology.js
+            // 424-477 ("─ The point ─" + "What looks like fifteen disconnected
+            // systems on the surface is one business underneath. The ontology
+            // is the layer where it finally acts like one.").
+            $sc       = $scenarios[0];
+            $sc_tag   = isset($sc['tag']) ? $sc['tag'] : '';
+            $sc_body  = isset($sc['body']) ? $sc['body'] : '';
+            // Split the body on the first sentence boundary so the second
+            // sentence renders italic + tertiary (matches export `<em>`).
+            $hpos     = strpos($sc_body, '. ');
+            $sc_first = $hpos !== false ? substr($sc_body, 0, $hpos + 1) : $sc_body;
+            $sc_second = $hpos !== false ? trim(substr($sc_body, $hpos + 1)) : '';
+            $rule_color = $is_dark ? 'oklch(28% 0.005 286)' : 'var(--border-default,#C9C5BD)';
+            $tag_color  = $is_dark ? 'oklch(60% 0.005 286)' : 'var(--fg-tertiary)';
+            $h3_color   = $is_dark ? 'var(--ink-50)' : 'var(--fg-primary)';
+            $em_color   = $is_dark ? 'oklch(60% 0.005 286)' : 'var(--fg-tertiary)';
+        ?>
+            <div style="margin-top:96px;padding-top:56px;border-top:1px solid <?= esc_attr($rule_color) ?>;display:flex;flex-direction:column;align-items:center;text-align:center;">
+                <?php if ($sc_tag): ?>
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:<?= esc_attr($tag_color) ?>;">
+                        <span style="width:24px;height:1px;background:<?= esc_attr($rule_color) ?>;"></span>
+                        <span><?= esc_html($sc_tag) ?></span>
+                        <span style="width:24px;height:1px;background:<?= esc_attr($rule_color) ?>;"></span>
+                    </div>
+                <?php endif; ?>
+                <h3 style="margin:0;max-width:940px;font-family:var(--font-display);font-size:clamp(28px,3.4vw,44px);line-height:1.2;letter-spacing:-0.02em;font-weight:400;color:<?= esc_attr($h3_color) ?>;text-wrap:balance;">
+                    <?= wp_kses_post($sc_first) ?><?php if ($sc_second): ?> <em style="font-style:italic;color:<?= esc_attr($em_color) ?>;"><?= wp_kses_post($sc_second) ?></em><?php endif; ?>
+                </h3>
+            </div>
+        <?php elseif ($style !== 'bars' && !empty($scenarios) && is_array($scenarios)): ?>
             <div style="margin-top:48px;display:grid;grid-template-columns:repeat(3,1fr);gap:20px;">
                 <?php foreach ($scenarios as $sc):
                     $sc_tag  = isset($sc['tag']) ? $sc['tag'] : '';
