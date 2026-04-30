@@ -30,15 +30,6 @@ $default_columns = [
             ['label' => 'Terms',    'url' => '#'],
         ],
     ],
-    [
-        'heading' => 'Customers',
-        'links' => [
-            ['label' => 'Tapps Electric',         'url' => '#'],
-            ['label' => 'AirWorks',               'url' => '#'],
-            ['label' => "ComfortBro's H&A",       'url' => '#'],
-            ['label' => 'Powerhouse CG · partner', 'url' => '#'],
-        ],
-    ],
 ];
 
 $columns = function_exists('iiq_setting') ? iiq_setting('footer_columns', $default_columns) : $default_columns;
@@ -49,7 +40,7 @@ $copyright = function_exists('iiq_setting')
     : '© ' . date('Y') . ' IgniteIQ. Own your intelligence.';
 ?>
 <footer style="background:var(--ink-1000,#0b0b0c);color:var(--ink-200,#a0a0a0);padding:96px 32px 64px;border-top:1px solid var(--border-subtle);">
-  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1.2fr repeat(4,1fr);gap:64px;" class="iiq-grid-split">
+  <div style="max-width:1320px;margin:0 auto;display:grid;grid-template-columns:1.2fr repeat(3,1fr);gap:64px;" class="iiq-grid-split">
 
     <div>
       <a href="<?= esc_url(home_url('/')) ?>" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:#fff;">
