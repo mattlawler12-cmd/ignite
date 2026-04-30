@@ -59,10 +59,7 @@ $inner_padding = $is_inline_2tone
 $inner_max_width = $is_compact ? '1320px' : '1440px';
 ?>
 <section style="position: relative; min-height: <?= $section_min_height ?>; background: <?= $dark ? 'var(--ink-1000)' : 'var(--bg-canvas)' ?>; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>; overflow: hidden; border-bottom: <?= $dark ? '1px solid oklch(20% 0.005 286)' : '1px solid var(--border-subtle)' ?>; display: flex; align-items: <?= $section_align ?>;">
-  <?php if ($dark && $is_compact): ?>
-    <?php /* FIDELITY: ArchHero radial red glow (Architecture.js:78-86). */ ?>
-    <div aria-hidden="true" style="position:absolute;top:20%;right:-20%;width:60%;height:80%;background:radial-gradient(ellipse, oklch(57.5% 0.232 25 / 0.18), transparent 60%);pointer-events:none;"></div>
-  <?php endif; ?>
+  <?php /* FIDELITY EXCEPTION: ArchHero red radial glow (Architecture.js:78-86) removed per stakeholder direction — solid bg requested for visual calm. */ ?>
   <div style="max-width: <?= $inner_max_width ?>; margin: 0 auto; padding: <?= $inner_padding ?>; width: 100%; position: relative;">
     <?php if ($eyebrow): ?>
       <span class="iiq-eyebrow" style="font-family: 'Aeonik Fono', monospace; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ignite-500); display: inline-flex; align-items: center; gap: 8px;">
@@ -86,7 +83,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
           ? !empty($row['muted'])
           : (!$is_last && $total_lines > 1);
         $color = $is_muted
-          ? ($dark ? 'oklch(60% 0.005 286)' : 'var(--fg-tertiary)')
+          ? ($dark ? 'oklch(78% 0.005 286)' : 'var(--fg-tertiary)')
           : ($dark ? 'var(--ink-50)' : 'var(--fg-primary)');
         // Inline rendering: $is_inline_2tone emits an automatic separating
         // space between lines (Company convention — line text has no leading
@@ -105,7 +102,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
     // editorial heroes use 64px top + 640 max-width + oklch(75%) (legacy).
     $body_grid_margin = $is_compact ? '40px' : '64px';
     $body_max_width   = $is_compact ? '740px' : '640px';
-    $body_color_dark  = $is_compact ? 'oklch(78% 0.005 286)' : 'oklch(75% 0.005 286)';
+    $body_color_dark  = $is_compact ? 'oklch(85% 0.005 286)' : 'oklch(75% 0.005 286)';
     ?>
     <div style="margin-top: <?= $body_grid_margin ?>; display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: flex-end;">
       <?php if ($body): ?>
