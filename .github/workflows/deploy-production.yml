@@ -1,0 +1,90 @@
+# Deploy to WP Engine PRODUCTION + reseed content.
+#
+# Manual trigger only — there is no `push:` trigger here. To promote a
+# release: GitHub UI → Actions → "Deploy to WP Engine production" →
+# Run workflow → type DEPLOY-PRODUCTION in the confirm input → Run.
+# Or from CLI: `gh workflow run deploy-production.yml -f confirm=DEPLOY-PRODUCTION`.
+#
+# Before running:
+#   1. Verify staging looks right (https://igniteiqstg.wpenginepowered.com).
+#   2. Take a WPE backup of production (User Portal → Backups → Create).
+#   3. Confirm no one has edited the 6 cornerstone pages directly in
+#      production WP admin since the last seed — `wp igniteiq seed --force`
+#      will overwrite ACF flexible-content rows on home, how-it-works,
+#      ontology, company, contact, signin.
+#
+# Uses the same `WPE_SSH_KEY` secret as staging (one SSH key authorizes
+# all environments under the WPE account). If the prod environment uses a
+# distinct SSH user, set the `WPE_PROD_*` repo variables; otherwise the
+# defaults below assume the conventional WPE naming (`igniteiq`).
+#
+# `--exclude='exports/'` is intentional: local-only Claude Design exports
+# don't belong on production.
+
+name: Deploy to WP Engine production
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type DEPLOY-PRODUCTION to confirm'
+        required: true
+        type: string
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy theme + reseed
+    runs-on: ubuntu-latest
+    if: ${{ inputs.confirm == 'DEPLOY-PRODUCTION' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.WPE_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Rsync theme to production
+        run: |
+          rsync -azv --delete \
+            --exclude='.git' \
+            --exclude='*.bak*' \
+            --exclude='node_modules' \
+            --exclude='exports/' \
+            -e "ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ed25519" \
+            igniteiq/ \
+            igniteiq@igniteiq.ssh.wpengine.net:sites/igniteiq/wp-content/themes/igniteiq-v2/
+
+      - name: Reseed content
+        run: |
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ed25519 \
+            igniteiq@igniteiq.ssh.wpengine.net \
+            'cd sites/igniteiq && wp igniteiq seed --force'
+
+      - name: Flush WP Engine page cache
+        run: |
+          # WPE serves cached HTML by default; without this, visitors see
+          # stale content for several minutes after a seed.
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_ed25519 \
+            igniteiq@igniteiq.ssh.wpengine.net \
+            'cd sites/igniteiq && wp page-cache flush'
+
+      - name: Verify production URLs
+        run: |
+          set +e
+          fail=0
+          for path in / /how-it-works/ /ontology/ /company/ /contact/ /signin/; do
+            code=$(curl -o /dev/null -s -w "%{http_code}" -L "https://igniteiq.com${path}")
+            echo "${code}  ${path}"
+            if [ "$code" != "200" ]; then
+              echo "::error::Production URL ${path} returned $code"
+              fail=1
+            fi
+          done
+          exit ${fail:-0}
