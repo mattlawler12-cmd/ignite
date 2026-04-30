@@ -139,7 +139,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
           $value = is_array($stat) ? ($stat['value'] ?? '') : '';
         ?>
           <div>
-            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: <?= $dark ? 'oklch(50% 0.005 286)' : 'var(--fg-tertiary)' ?>;"><?= esc_html($label) ?></div>
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: <?= $dark ? 'var(--ignite-500)' : 'var(--fg-tertiary)' ?>;"><?= esc_html($label) ?></div>
             <div style="margin-top: 8px; font-family: var(--font-display); font-size: 20px; font-weight: 500; letter-spacing: -0.015em; color: <?= $dark ? 'var(--ink-50)' : 'var(--fg-primary)' ?>;"><?= esc_html($value) ?></div>
           </div>
         <?php endforeach; ?>
