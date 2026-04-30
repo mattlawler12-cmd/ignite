@@ -106,7 +106,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
     ?>
     <div style="margin-top: <?= $body_grid_margin ?>; display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: flex-end;">
       <?php if ($body): ?>
-        <div style="max-width: <?= $body_max_width ?>; font-size: 19px; line-height: 1.55; color: <?= $dark ? $body_color_dark : 'var(--fg-secondary)' ?>; letter-spacing: -0.005em; margin: 0;">
+        <div class="iiq-hero-body" style="max-width: <?= $body_max_width ?>; font-size: 19px; line-height: 1.55; color: <?= $dark ? $body_color_dark : 'var(--fg-secondary)' ?>; letter-spacing: -0.005em; margin: 0;">
           <?= wp_kses_post($body) ?>
         </div>
       <?php else: ?>

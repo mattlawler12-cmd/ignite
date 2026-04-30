@@ -147,3 +147,7 @@ body.iiq-nav-locked { overflow: hidden; }
   height: 1px;
   overflow: hidden;
 }
+
+/* Hero body inherits wrapper color so dark-hero `<p>` isn't overridden by tokens.css `p { color: var(--fg-secondary) }`. */
+.iiq-hero-body,
+.iiq-hero-body p { color: inherit; }
