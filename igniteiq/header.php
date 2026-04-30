@@ -18,7 +18,14 @@ if (function_exists('have_rows') && (is_singular() || is_front_page())) {
     if ($iiq_pid && have_rows('page_sections', $iiq_pid)) {
         while (have_rows('page_sections', $iiq_pid)) {
             the_row();
-            if (get_row_layout() === 'hero_cinematic') { $iiq_use_inverse_nav = true; break; }
+            $iiq_layout = get_row_layout();
+            if ($iiq_layout === 'hero_cinematic') {
+                $iiq_use_inverse_nav = true;
+            } elseif ($iiq_layout === 'hero_editorial' && get_sub_field('dark')) {
+                // Dark editorial hero (e.g. how-it-works ArchHero) — nav must
+                // render light-on-dark to stay legible.
+                $iiq_use_inverse_nav = true;
+            }
             // Only the first row matters (hero is always first); break after one row.
             break;
         }

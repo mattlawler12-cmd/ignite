@@ -27,7 +27,7 @@ if (!$inverse) {
 
 $logo_src   = $inverse ? IIQ_URI . '/assets/img/logo-white.png' : IIQ_URI . '/assets/img/logo-black.png';
 $fg         = $inverse ? 'var(--ink-50)' : 'var(--fg-primary)';
-$fg_muted   = $inverse ? 'oklch(70% 0.005 286)' : 'var(--fg-secondary)';
+$fg_muted   = $inverse ? 'var(--ink-50)' : 'var(--fg-secondary)';
 
 // Items — pulled from primary menu when assigned, else hardcoded fallback.
 $items = [];
