@@ -83,7 +83,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
           ? !empty($row['muted'])
           : (!$is_last && $total_lines > 1);
         $color = $is_muted
-          ? ($dark ? 'oklch(78% 0.005 286)' : 'var(--fg-tertiary)')
+          ? ($dark ? 'var(--ink-50)' : 'var(--fg-tertiary)')
           : ($dark ? 'var(--ink-50)' : 'var(--fg-primary)');
         // Inline rendering: $is_inline_2tone emits an automatic separating
         // space between lines (Company convention — line text has no leading
@@ -102,7 +102,7 @@ $inner_max_width = $is_compact ? '1320px' : '1440px';
     // editorial heroes use 64px top + 640 max-width + oklch(75%) (legacy).
     $body_grid_margin = $is_compact ? '40px' : '64px';
     $body_max_width   = $is_compact ? '740px' : '640px';
-    $body_color_dark  = $is_compact ? 'oklch(85% 0.005 286)' : 'oklch(75% 0.005 286)';
+    $body_color_dark  = $is_compact ? 'var(--ink-50)' : 'oklch(75% 0.005 286)';
     ?>
     <div style="margin-top: <?= $body_grid_margin ?>; display: grid; grid-template-columns: 1fr auto; gap: 64px; align-items: flex-end;">
       <?php if ($body): ?>
