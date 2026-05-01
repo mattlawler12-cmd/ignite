@@ -150,11 +150,11 @@ if (!class_exists('IgniteIQ_CLI')) {
         }
 
         // ───────────────────────────────────────────────────────────
-        // HOME — App.js render order:
-        // HeroStatement → HeroEditorial → WhyItMattersSection (01)
-        // → ProblemSection (02) → ArchStackDiagram (03 The stack)
-        // → WhatChangesSection (04) → InvestInOutcomesSection (05 The path)
-        // → DeploymentSection (06) → CTASection
+        // HOME — App.jsx render order (export 20260501-handoff-website-2-4):
+        // HeroStatement → WhyItMattersSection (01) → ProblemSection (02)
+        // → SolutionSection (03 The solution) → ArchStackDiagram (04 The stack)
+        // → WhatChangesSection (05) → InvestInOutcomesSection (06 The path)
+        // → DeploymentSection (07) → CTASection
         // ───────────────────────────────────────────────────────────
         private static function page_home() {
             return [
@@ -218,17 +218,65 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'diagram_key'   => 'operator-stack',
                 ],
 
-                // ArchStackDiagram on home (App.js: index="03", label="The stack")
+                // SolutionSection (SectionsA.jsx, index="03" label="The solution")
+                // FIDELITY EXCEPTION: The export's SolutionSection ships a
+                // bespoke 3-card layout with kicker (Data/Logic/Actions),
+                // headline, body, and a per-card "Components" bullet list,
+                // plus a colored top-strip on layer 02. This port renders it
+                // through `section_pillars` with style="bordered" + per-item
+                // `eyebrow_label`, with the components list embedded into
+                // each item's `body` HTML. The red top-strip on layer 02 and
+                // the "↓ Next — Each layer is real infrastructure…" closing
+                // transition line are not yet ported (follow-up: introduce a
+                // dedicated `section_solution` ACF layout + template-part).
+                [
+                    'acf_fc_layout' => 'section_pillars',
+                    'settings' => [
+                        'section_index' => '03',
+                        'section_label' => 'The solution',
+                        'theme_variant' => 'light',
+                    ],
+                    'eyebrow'  => 'What you actually get',
+                    'headline' => '',
+                    'headline_lead' => 'Real data infrastructure that turns blurry data into',
+                    'headline_gap'  => 'faster, sharper decisions.',
+                    'intro'    => 'A unified data foundation, a proprietary ontology that gives it meaning, and AI products that act on it. Each layer is operational on its own — together, they replace 15 to 25 disconnected systems with a foundation you can build on for years.',
+                    'columns'  => '3',
+                    'style'    => 'bordered',
+                    'items' => [
+                        [
+                            'index_number'  => '01',
+                            'eyebrow_label' => 'Data',
+                            'title' => 'Your data, unified.',
+                            'body'  => '<p>An enterprise-grade warehouse stood up inside your cloud. Forty-plus connectors pull every operational source — ServiceTitan, QuickBooks, marketing platforms, payroll, call tracking — into one queryable, cleaned model. No more conflicting reports. No more reconciling spreadsheets. One source of truth, owned by you.</p><p style="margin-top:24px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg-tertiary);font-weight:500;">Components</p><ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;color:var(--fg-primary);"><li>· Data warehouse in your cloud</li><li>· 40+ source connectors</li><li>· Cleaning, deduplication, hygiene</li><li>· Security and governance built in</li></ul>',
+                        ],
+                        [
+                            'index_number'  => '02',
+                            'eyebrow_label' => 'Logic',
+                            'title' => 'The ontology, on top.',
+                            'body'  => '<p>The proprietary IgniteIQ ontology resolves your operational entities — jobs, customers, technicians, trucks, invoices — into one shared model. It defines what things are and how they relate, so every analytics query, every agent, and every automation reads from the same logic. This is the layer that makes AI actually work.</p><p style="margin-top:24px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg-tertiary);font-weight:500;">Components</p><ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;color:var(--fg-primary);"><li>· Models, logic, and meaning</li><li>· Entity resolution across systems</li><li>· Shared definitions for every product</li><li>· Continuously improving framework</li></ul>',
+                        ],
+                        [
+                            'index_number'  => '03',
+                            'eyebrow_label' => 'Actions',
+                            'title' => 'Decisions, faster.',
+                            'body'  => '<p>Analytics and BI to understand. Workflows and automations to act. Agents that operate inside the ontology and write decisions back into the systems your team already uses. The unit of value isn’t a dashboard — it’s a better decision, made thousands of times a day across your business.</p><p style="margin-top:24px;font-family:var(--font-mono);font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:var(--fg-tertiary);font-weight:500;">Components</p><ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.45;color:var(--fg-primary);"><li>· Analytics and BI</li><li>· AI Workflows and automations</li><li>· Agentic AI agents with write-back</li><li>· Custom AI products and tools</li></ul>',
+                        ],
+                    ],
+                    'scenarios' => [],
+                ],
+
+                // ArchStackDiagram on home (App.jsx: index="04", label="The stack")
                 [
                     'acf_fc_layout' => 'diagram',
                     'settings' => [
-                        'section_index' => '03',
+                        'section_index' => '04',
                         'section_label' => 'The stack',
                         'theme_variant' => 'light',
                     ],
                     'diagram_key'    => 'stack',
                     'caption'        => '',
-                    'index'          => '03',
+                    'index'          => '04',
                     'label'          => 'The stack',
                     'header_label'   => 'How it all fits together',
                     'headline_left'  => 'One model of your business.',
@@ -237,59 +285,51 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'closing_line'   => 'Every decision — faster, smarter, and right.',
                 ],
 
-                // WhatChangesSection (SectionsA.js, index="04" label="What changes for you")
+                // WhatChangesSection (SectionsA.jsx, index="05" label="What changes for you")
+                // Per export 20260501: pillars rewritten Speed/Quality/Trust → Clarity/Control/Trust;
+                // headline retitled "What changes when the data actually works."; lived-examples
+                // (scenarios) block removed in source (SectionsA.jsx:313 "// (Lived examples block removed)").
                 [
                     'acf_fc_layout' => 'section_pillars',
                     'settings' => [
-                        'section_index' => '04',
+                        'section_index' => '05',
                         'section_label' => 'What changes for you',
                         'theme_variant' => 'light',
                     ],
                     'eyebrow'  => '',
-                    'headline' => 'Better decisions. What changes for you?',
-                    'headline_lead' => 'Better decisions.',
-                    'headline_gap'  => 'What changes for you?',
-                    'intro'    => 'When data is structured the right way, decisions change. Answers come faster, quality improves, and trust becomes automatic — turning everyday decisions into a competitive advantage.',
+                    'headline' => '',
+                    'headline_lead' => 'What changes when the data',
+                    'headline_gap'  => 'actually works.',
+                    'intro'    => 'When the data underneath actually works, the business gets simpler to run. Better answers come faster. The second-guessing stops. Operators move with conviction instead of guesswork.',
                     'columns'  => '3',
                     'style'    => 'bars',
                     'items' => [
                         [
                             'index_number' => '01',
-                            'title' => 'Speed',
-                            'body'  => 'Decisions in minutes instead of weeks. The data is already modeled, already current, already in your hands — so the answer comes back at the speed of the question.',
+                            'title' => 'Clarity',
+                            'body'  => 'You finally see what’s actually happening. Which jobs make money. Which technicians are bleeding margin. Which marketing dollars produce revenue and which ones lie to you. One picture of the business that doesn’t change depending on which report you open or which team you ask.',
                         ],
                         [
                             'index_number' => '02',
-                            'title' => 'Quality',
-                            'body'  => 'Clean, unified data that understands how your business actually runs and the goals you’re working toward. One model of the business, not fifteen disagreeing systems.',
+                            'title' => 'Control',
+                            'body'  => 'You stop running the business from yesterday’s reports. The platform surfaces the things hurting you right now — the unbilled work, the at-risk jobs, the calls your CSRs missed — while there’s still time to do something about them. You move from reacting to operating.',
                         ],
                         [
                             'index_number' => '03',
                             'title' => 'Trust',
-                            'body'  => 'A single source of truth. Every answer is traceable to the underlying data, scoped inside your environment, and consistent across every team that asks.',
+                            'body'  => 'Every number ties back to the data behind it. Every report agrees with the one next to it. When the answer is on your screen, you don’t have to call someone to verify it. You read it once, you act on it, and you don’t think about it again.',
                         ],
                     ],
-                    'scenarios' => [
-                        [
-                            'tag'  => 'Speed · Dispatch',
-                            'body' => 'A dispatcher reroutes a tech because the system saw the higher-margin job before they did. Margin per truck-hour goes up by Friday.',
-                        ],
-                        [
-                            'tag'  => 'Quality · Pricing',
-                            'body' => 'A regional price change ships in a day, and the downstream effect on margin is visible by the next service call — not the next quarter.',
-                        ],
-                        [
-                            'tag'  => 'Trust · Marketing',
-                            'body' => 'Last week’s spend gets attributed to the channel that actually drove revenue, not the one that claimed it. Next week’s budget shifts in an hour.',
-                        ],
-                    ],
+                    'scenarios' => [],
                 ],
 
-                // InvestInOutcomesSection (InvestInOutcomes.js, index="05" label="The path")
+                // InvestInOutcomesSection (InvestInOutcomes.jsx, index="06" label="The path")
+                // Per export 20260501: pillars rewritten CLARITY/CONTROL/CONFIDENCE →
+                // FOUND MARGIN / CAPTURED REVENUE / FORCE MULTIPLIER. New intro copy.
                 [
                     'acf_fc_layout' => 'section_pillars',
                     'settings' => [
-                        'section_index' => '05',
+                        'section_index' => '06',
                         'section_label' => 'The path',
                         'theme_variant' => 'light',
                     ],
@@ -298,34 +338,34 @@ if (!class_exists('IgniteIQ_CLI')) {
                     'headline_lead'  => 'Invest in outcomes.',
                     'headline_gap'   => 'Not experiments.',
                     'headline_break' => true,
-                    'intro'    => 'Growth isn’t built on guesswork - it’s built on clarity, control, and systems that compound. A proven path from fragmented data to operational intelligence in weeks, with value that strengthens at every step.',
+                    'intro'    => 'The platform doesn’t just give you better answers. It changes the economic reality of the business — surfacing the margin you’re losing, capturing the revenue already inside your walls, and giving every person on your team the leverage to do their best work.',
                     'columns'  => '3',
                     'style'    => 'bars',
                     'items' => [
                         [
                             'index_number' => '01',
-                            'title' => 'CLARITY',
-                            'body'  => "We unify your data across FSM's, marketing, call center, operations, and more — cleaning, structuring, and connecting it into a single source of truth. No more conflicting reports or blind spots. You see exactly what’s driving revenue, where you’re losing it, and what actually matters.",
+                            'title' => 'FOUND MARGIN',
+                            'body'  => 'The money you’re losing right now becomes visible — and recoverable. The unbilled jobs sitting in dispatch. The marketing channels burning cash without producing revenue. The technicians and trucks running below their potential. The maintenance agreements aging out without follow-up. The platform surfaces every leak in the business and gives you a path to close it. Not someday. Inside the first 90 days.',
                         ],
                         [
                             'index_number' => '02',
-                            'title' => 'CONTROL',
-                            'body'  => 'We turn your business into a system you can actively manage — surfacing the exact levers that impact performance across marketing, booking, and operations. Spot issues early, make faster decisions, and align your team around one clear view of reality.',
+                            'title' => 'CAPTURED REVENUE',
+                            'body'  => 'The revenue already inside the business gets captured. The leads your team didn’t follow up on get followed up on. The customers due for service get reached before your competitor reaches them. The upgrade conversations that should have happened, happen. The platform finds the revenue you’ve been leaving on the table and turns it into closed work — without adding ad spend, without adding pressure, without forcing your team to work harder.',
                         ],
                         [
                             'index_number' => '03',
-                            'title' => 'CONFIDENCE',
-                            'body'  => 'We give you the insight and predictability to make high-stakes decisions without hesitation — from budget allocation to hiring to expansion. When the data is right and the system is clear, you move with conviction instead of guesswork.',
+                            'title' => 'FORCE MULTIPLIER',
+                            'body'  => 'Every person on your team becomes more powerful. CSRs answering calls with the full customer history in front of them. Dispatchers seeing the next-best move before they ask. Technicians showing up with context that makes them faster and sharper. Managers operating with one clean picture instead of five disagreeing reports. The platform doesn’t replace your team — it gives them the leverage to do their best work, every day, on every job.',
                         ],
                     ],
                     'scenarios' => [],
                 ],
 
-                // DeploymentSection (SectionsA.js, index="06" label="Deployment")
+                // DeploymentSection (SectionsA.jsx, index="07" label="Deployment")
                 [
                     'acf_fc_layout' => 'section_stack',
                     'settings' => [
-                        'section_index' => '06',
+                        'section_index' => '07',
                         'section_label' => 'Deployment',
                         'theme_variant' => 'light',
                     ],
